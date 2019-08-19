@@ -1,0 +1,14 @@
+*.checkstyle
+*.classpath
+*.DS_Store
+*.idea
+*.iml
+*.log
+*.metadata
+*.project
+*.settings
+node/
+node_modules/
+/package-lock.json
+target/*
+!target/webapp/

@@ -1,0 +1,34 @@
+import * as turf from '@turf/turf'
+import { GeometryJSON, LengthUnit, Extent, bboxToExtent } from '../geometry'
+import { getDistanceInMeters } from '../internal/distance'
+
+const updateCircleGeo = (
+  geo: GeometryJSON,
+  lat: number,
+  lon: number,
+  radius: number,
+  radiusUnit: LengthUnit
+): GeometryJSON => {
+  const center: [number, number] = [lon, lat]
+  let bbox: Extent = [lon, lat, lon, lat]
+  if (radius > 0) {
+    const meters = getDistanceInMeters(radius, radiusUnit)
+    const circle = turf.circle(center, meters, { units: 'meters' })
+    bbox = bboxToExtent(turf.bbox(circle))
+  }
+  return {
+    ...geo,
+    geometry: {
+      ...geo.geometry,
+      coordinates: center,
+    } as turf.Point,
+    bbox,
+    properties: {
+      ...geo.properties,
+      buffer: radius,
+      bufferUnit: radiusUnit,
+    },
+  }
+}
+
+export { updateCircleGeo }
