@@ -19,13 +19,11 @@ import BasicDrawingControl from './basic-drawing-control'
 import { GeometryJSON } from '../geometry'
 
 abstract class ModifiableDrawingControl extends BasicDrawingControl {
-  drawInteraction: ol.interaction.Draw | null
   protected constructor(context: DrawingContext, receiver: UpdatedGeoReceiver) {
     super(context, receiver)
     this.onCompleteDrawing = this.onCompleteDrawing.bind(this)
     this.onStartDrawing = this.onStartDrawing.bind(this)
     this.onCompleteModify = this.onCompleteModify.bind(this)
-    this.drawInteraction = null
   }
 
   getGeoJSONFromCompleteDrawEvent(e: any): GeometryJSON {
@@ -88,26 +86,26 @@ abstract class ModifiableDrawingControl extends BasicDrawingControl {
     this.applyPropertiesToFeature(feature)
     this.context.updateFeature(feature)
     this.context.updateBufferFeature(feature)
-    this.startDrawingStyle(this.getStaticStyle(feature))
+    const drawInteraction = new ol.interaction.Draw({
+      type: this.getGeoType(),
+      style: this.getStaticStyle(feature),
+    })
+    this.startDrawingInteraction(drawInteraction)
   }
 
   startDrawing(): void {
-    this.startDrawingStyle()
+    this.context.removeFeature()
+    const drawInteraction = new ol.interaction.Draw({
+      type: this.getGeoType(),
+    })
+    this.startDrawingInteraction(drawInteraction)
   }
 
-  private startDrawingStyle(
-    style:
-      | ol.style.Style
-      | ol.style.Style[]
-      | ol.StyleFunction
-      | undefined = undefined
+  private startDrawingInteraction(
+    drawInteraction: ol.interaction.Interaction
   ): void {
     this.drawingActive = true
-    this.drawInteraction = new ol.interaction.Draw({
-      type: this.getGeoType(),
-      style,
-    })
-    this.context.setDrawInteraction(this.drawInteraction)
+    this.context.setDrawInteraction(drawInteraction)
     this.context.setEvent('draw', 'drawend', this.onCompleteDrawing)
     this.context.setEvent('draw', 'drawstart', this.onStartDrawing)
     this.context.setEvent('modify', 'modifyend', this.onCompleteModify)

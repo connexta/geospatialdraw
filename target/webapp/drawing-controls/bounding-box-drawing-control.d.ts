@@ -25,15 +25,13 @@ declare type ExtentEvent = {
  * Drawing Control for drawing a bounding box
  */
 declare class BoundingBoxDrawingControl extends BasicDrawingControl {
-    extentInteraction: ol.interaction.Interaction | null;
     constructor(context: DrawingContext, receiver: UpdatedGeoReceiver);
     getGeoType(): ol.geom.GeometryType;
     getShape(): Shape;
     setGeo(geoJSON: GeometryJSON): void;
-    setExtent(extent: Extent): void;
     startDrawing(): void;
+    private startDrawingInteraction;
     extentChanged(e: ExtentEvent): void;
-    extentToFeature(extent: Extent): ol.Feature;
     extentToGeoJSON(bbox: Extent): GeometryJSON;
 }
 export default BoundingBoxDrawingControl;

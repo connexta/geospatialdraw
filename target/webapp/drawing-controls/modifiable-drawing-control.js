@@ -36,7 +36,6 @@ var ModifiableDrawingControl = /** @class */ (function (_super) {
         _this.onCompleteDrawing = _this.onCompleteDrawing.bind(_this);
         _this.onStartDrawing = _this.onStartDrawing.bind(_this);
         _this.onCompleteModify = _this.onCompleteModify.bind(_this);
-        _this.drawInteraction = null;
         return _this;
     }
     ModifiableDrawingControl.prototype.getGeoJSONFromCompleteDrawEvent = function (e) {
@@ -90,19 +89,22 @@ var ModifiableDrawingControl = /** @class */ (function (_super) {
         this.applyPropertiesToFeature(feature);
         this.context.updateFeature(feature);
         this.context.updateBufferFeature(feature);
-        this.startDrawingStyle(this.getStaticStyle(feature));
+        var drawInteraction = new ol.interaction.Draw({
+            type: this.getGeoType(),
+            style: this.getStaticStyle(feature),
+        });
+        this.startDrawingInteraction(drawInteraction);
     };
     ModifiableDrawingControl.prototype.startDrawing = function () {
-        this.startDrawingStyle();
-    };
-    ModifiableDrawingControl.prototype.startDrawingStyle = function (style) {
-        if (style === void 0) { style = undefined; }
-        this.drawingActive = true;
-        this.drawInteraction = new ol.interaction.Draw({
+        this.context.removeFeature();
+        var drawInteraction = new ol.interaction.Draw({
             type: this.getGeoType(),
-            style: style,
         });
-        this.context.setDrawInteraction(this.drawInteraction);
+        this.startDrawingInteraction(drawInteraction);
+    };
+    ModifiableDrawingControl.prototype.startDrawingInteraction = function (drawInteraction) {
+        this.drawingActive = true;
+        this.context.setDrawInteraction(drawInteraction);
         this.context.setEvent('draw', 'drawend', this.onCompleteDrawing);
         this.context.setEvent('draw', 'drawstart', this.onStartDrawing);
         this.context.setEvent('modify', 'modifyend', this.onCompleteModify);

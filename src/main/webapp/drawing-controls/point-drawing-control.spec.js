@@ -93,6 +93,7 @@ describe('PointDrawingControl', () => {
     it('default', () => {
       control.setGeo(makeGeoJSON())
       expect(context.getMethodCalls().updateFeature.length).to.equal(1)
+      expect(context.getMethodCalls().removeFeature.length).to.equal(0)
       expect(control.isDrawing()).to.equal(true)
     })
   })
@@ -103,6 +104,7 @@ describe('PointDrawingControl', () => {
       expect(context.getMethodCalls().setEvent.length).to.equal(4)
       expect(context.getMethodCalls().setDrawInteraction.length).to.equal(1)
       expect(context.getMethodCalls().updateFeature.length).to.equal(0)
+      expect(context.getMethodCalls().removeFeature.length).to.equal(1)
       expect(control.isDrawing()).to.equal(true)
     })
   })

@@ -18,7 +18,6 @@ import UpdatedGeoReceiver from './geo-receiver';
 import BasicDrawingControl from './basic-drawing-control';
 import { GeometryJSON } from '../geometry';
 declare abstract class ModifiableDrawingControl extends BasicDrawingControl {
-    drawInteraction: ol.interaction.Draw | null;
     protected constructor(context: DrawingContext, receiver: UpdatedGeoReceiver);
     getGeoJSONFromCompleteDrawEvent(e: any): GeometryJSON;
     getGeoJSONFromCompleteModifyEvent(e: any): GeometryJSON;
@@ -30,6 +29,6 @@ declare abstract class ModifiableDrawingControl extends BasicDrawingControl {
     getStaticStyle(feature: ol.Feature): ol.style.Style | ol.style.Style[];
     setGeo(geoJSON: GeometryJSON): void;
     startDrawing(): void;
-    private startDrawingStyle;
+    private startDrawingInteraction;
 }
 export default ModifiableDrawingControl;

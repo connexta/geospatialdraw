@@ -28,12 +28,9 @@ type ExtentEvent = {
  * Drawing Control for drawing a bounding box
  */
 class BoundingBoxDrawingControl extends BasicDrawingControl {
-  extentInteraction: ol.interaction.Interaction | null
-
   constructor(context: DrawingContext, receiver: UpdatedGeoReceiver) {
     super(context, receiver)
     this.extentChanged = this.extentChanged.bind(this)
-    this.extentInteraction = null
   }
 
   getGeoType(): ol.geom.GeometryType {
@@ -45,51 +42,45 @@ class BoundingBoxDrawingControl extends BasicDrawingControl {
   }
 
   setGeo(geoJSON: GeometryJSON): void {
-    if (!this.isDrawing()) {
-      this.startDrawing()
-    }
+    this.cancelDrawing()
+    this.setProperties((geoJSON as GeometryJSON).properties || {})
     const feature = this.geoFormat.readFeature(geoJSON)
     const extent = feature.getGeometry().getExtent()
-    this.setProperties((geoJSON as GeometryJSON).properties || {})
-    this.setExtent(extent)
-  }
-
-  setExtent(extent: Extent): void {
-    const geoJSON = this.extentToGeoJSON(extent)
-    const feature = this.geoFormat.readFeature(geoJSON)
     this.applyPropertiesToFeature(feature)
     this.context.updateFeature(feature)
     this.context.updateBufferFeature(feature)
-    if (this.extentInteraction !== null) {
-      this.extentInteraction.setProperties({
-        extent,
-      })
-    }
+    // @ts-ignore ol.interaction.Extent is not in typescript for this version of Open Layers
+    const drawInteraction = new ol.interaction.Extent({
+      extent,
+    })
+    this.startDrawingInteraction(drawInteraction)
   }
 
   startDrawing(): void {
-    this.drawingActive = true
     this.context.removeFeature()
     // @ts-ignore ol.interaction.Extent is not in typescript for this version of Open Layers
-    this.extentInteraction = new ol.interaction.Extent()
-    // @ts-ignore ol.interaction.Extent is not in typescript for this version of Open Layers
-    this.context.setDrawInteraction(this.extentInteraction)
+    const drawInteraction = new ol.interaction.Extent()
+    this.startDrawingInteraction(drawInteraction)
+  }
+
+  private startDrawingInteraction(
+    drawInteraction: ol.interaction.Interaction
+  ): void {
+    this.drawingActive = true
+    this.context.setDrawInteraction(drawInteraction)
     this.context.setEvent('draw', 'extentchanged', this.extentChanged)
     this.context.addInteractionsWithoutModify()
   }
 
   extentChanged(e: ExtentEvent): void {
     if (e.extent !== null) {
-      this.receiver(this.extentToGeoJSON(e.extent))
-      const feature = this.extentToFeature(e.extent)
+      const geoJSON = this.extentToGeoJSON(e.extent)
+      this.receiver(geoJSON)
+      const feature = this.geoFormat.readFeature(geoJSON)
       this.applyPropertiesToFeature(feature)
       this.context.updateFeature(feature)
       this.context.updateBufferFeature(feature)
     }
-  }
-
-  extentToFeature(extent: Extent): ol.Feature {
-    return this.geoFormat.readFeature(this.extentToGeoJSON(extent))
   }
 
   extentToGeoJSON(bbox: Extent): GeometryJSON {
