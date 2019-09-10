@@ -18,6 +18,9 @@ import UpdatedGeoReceiver from './geo-receiver';
 import ModifiableDrawingControl from './modifiable-drawing-control';
 import { Shape } from '../shape-utils';
 import { GeometryJSON } from '../geometry';
+/**
+ * Drawing Control for a circle/point radius
+ */
 declare class PointRadiusDrawingControl extends ModifiableDrawingControl {
     animationFrameId: number;
     animationFrame: () => void;

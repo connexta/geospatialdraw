@@ -23,7 +23,6 @@ import {
   number,
   boolean,
 } from '../internal/storybook'
-import { makeEmptyGeometry } from '../geometry'
 import { Map, shapeList } from '../internal/storybook-helpers'
 import DrawingMenu from './drawing-menu'
 import styled from 'styled-components'
@@ -77,9 +76,6 @@ stories.add('full featured', () => {
   const id = 'someID'
   const color = text('color', '#0000FF')
   const shape = select('shape', shapeList, 'Polygon')
-  const geometry = makeEmptyGeometry(id, shape, {
-    color,
-  })
   const DrawingMenuWithMap = ({ map }) => (
     <MenuContainer class="menu-container">
       <DrawingMenu
@@ -89,7 +85,7 @@ stories.add('full featured', () => {
         showCoordinateEditor={showCoordinateEditor}
         saveAndContinue={saveAndContinue}
         title={title}
-        geometry={geometry}
+        geometry={null}
         toggleCoordinateEditor={action('toggleCoordinateEditor')}
         onCancel={action('Cancel')}
         onOk={action('Ok')}
@@ -107,17 +103,13 @@ stories.add('simplified', () => {
   const id = 'someID'
   const color = text('color', '#0000FF')
   const shape = select('shape', shapeList, 'Polygon')
-  const geometry = makeEmptyGeometry(id, shape, {
-    id,
-    color,
-  })
   const DrawingMenuWithMap = ({ map }) => (
     <MenuContainer class="menu-container">
       <DrawingMenu
         shape={shape}
         map={map}
         isActive={isActive}
-        geometry={geometry}
+        geometry={null}
         onCancel={action('Cancel')}
         onOk={action('Ok')}
         onSetShape={action('setShape')}
@@ -134,10 +126,6 @@ stories.add('minimal', () => {
   const id = 'someID'
   const color = text('color', '#0000FF')
   const shape = select('shape', ['Line', 'Polygon'], 'Polygon')
-  const geometry = makeEmptyGeometry(id, shape, {
-    id,
-    color,
-  })
   const DrawingMenuWithMap = ({ map }) => (
     <MenuContainer class="menu-container">
       <DrawingMenu
@@ -145,7 +133,7 @@ stories.add('minimal', () => {
         map={map}
         disabledShapes={['Bounding Box', 'Point Radius', 'Point']}
         isActive={isActive}
-        geometry={geometry}
+        geometry={null}
         onCancel={action('Cancel')}
         onOk={action('Ok')}
         onSetShape={action('setShape')}

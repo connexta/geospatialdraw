@@ -51,13 +51,16 @@ abstract class BasicDrawingControl implements DrawingControl {
   drawingActive: boolean
   protected properties: GeoProps
 
-  abstract startDrawing(geoJSON: GeometryJSON): void
+  abstract setGeo(geoJSON: GeometryJSON): void
+
+  abstract startDrawing(): void
 
   protected constructor(context: DrawingContext, receiver: UpdatedGeoReceiver) {
     this.context = context
     this.receiver = receiver
     this.geoFormat = new ol.format.GeoJSON()
     this.mouseDragActive = false
+    this.drawingActive = false
     this.setProperties(makeEmptyGeometry('', this.getShape()).properties)
   }
 
@@ -132,13 +135,6 @@ abstract class BasicDrawingControl implements DrawingControl {
 
   isDrawing(): boolean {
     return this.drawingActive
-  }
-
-  isEmptyFeature(feature: ol.Feature): boolean {
-    return feature
-      .getGeometry()
-      .getExtent()
-      .every(value => value <= Number.MIN_VALUE && value >= -Number.MIN_VALUE)
   }
 }
 

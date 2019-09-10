@@ -16,7 +16,17 @@ Object.defineProperty(exports, "__esModule", { value: true });
  **/
 var ol = require("openlayers");
 var geometry_1 = require("../geometry");
+/**
+ * Open Layers drawing context provides a layer between the drawing controls
+ * and the openlayers map, normalizing interactions with the openlayers map
+ * accross all drawing controls.
+ */
 var DrawingContext = /** @class */ (function () {
+    /**
+     * Constructs an instance of the drawing context
+     * @param map - reference to openlayers map
+     * @param drawingStyle - drawingStyle to be used by all drawing controls
+     */
     function DrawingContext(_a) {
         var map = _a.map, drawingStyle = _a.drawingStyle;
         this.bufferUpdateEvent = this.bufferUpdateEvent.bind(this);
@@ -49,8 +59,11 @@ var DrawingContext = /** @class */ (function () {
     DrawingContext.prototype.getStyle = function () {
         return this.style;
     };
-    DrawingContext.prototype.updateFeature = function (feature) {
+    DrawingContext.prototype.removeFeature = function () {
         this.drawLayer.getSource().clear();
+    };
+    DrawingContext.prototype.updateFeature = function (feature) {
+        this.removeFeature();
         this.drawLayer.getSource().addFeature(feature);
     };
     DrawingContext.prototype.updateBufferFeature = function (feature) {

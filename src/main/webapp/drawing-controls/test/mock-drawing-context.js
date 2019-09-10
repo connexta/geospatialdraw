@@ -28,6 +28,7 @@ class MockDrawingContext {
       'setEvent',
       'updateBufferFeature',
       'updateFeature',
+      'removeFeature',
     ]
     methodList.forEach(functionName => {
       this.methodCalls[functionName] = []

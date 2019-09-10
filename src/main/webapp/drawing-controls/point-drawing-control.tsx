@@ -18,6 +18,9 @@ import UpdatedGeoReceiver from './geo-receiver'
 import ModifiableDrawingControl from './modifiable-drawing-control'
 import { Shape } from '../shape-utils'
 
+/**
+ * Drawing Control for drawing a point
+ */
 class PointDrawingControl extends ModifiableDrawingControl {
   constructor(context: DrawingContext, receiver: UpdatedGeoReceiver) {
     super(context, receiver)

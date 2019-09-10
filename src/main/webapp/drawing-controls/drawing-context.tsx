@@ -25,6 +25,11 @@ type ListenerRecord = {
   listener: EventListener
 }
 
+/**
+ * Open Layers drawing context provides a layer between the drawing controls
+ * and the openlayers map, normalizing interactions with the openlayers map
+ * accross all drawing controls.
+ */
 class DrawingContext {
   map: ol.Map
   drawLayer: ol.layer.Vector
@@ -37,6 +42,11 @@ class DrawingContext {
   geoFormat: ol.format.GeoJSON
   animationFrameId: number
 
+  /**
+   * Constructs an instance of the drawing context
+   * @param map - reference to openlayers map
+   * @param drawingStyle - drawingStyle to be used by all drawing controls
+   */
   constructor({
     map,
     drawingStyle,
@@ -76,8 +86,12 @@ class DrawingContext {
     return this.style
   }
 
-  updateFeature(feature: ol.Feature): void {
+  removeFeature(): void {
     this.drawLayer.getSource().clear()
+  }
+
+  updateFeature(feature: ol.Feature): void {
+    this.removeFeature()
     this.drawLayer.getSource().addFeature(feature)
   }
 

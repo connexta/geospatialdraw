@@ -41,11 +41,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var ol = require("openlayers");
 var turf = require("@turf/turf");
 var basic_drawing_control_1 = require("./basic-drawing-control");
+/**
+ * Drawing Control for drawing a bounding box
+ */
 var BoundingBoxDrawingControl = /** @class */ (function (_super) {
     __extends(BoundingBoxDrawingControl, _super);
     function BoundingBoxDrawingControl(context, receiver) {
         var _this = _super.call(this, context, receiver) || this;
         _this.extentChanged = _this.extentChanged.bind(_this);
+        _this.extentInteraction = null;
         return _this;
     }
     BoundingBoxDrawingControl.prototype.getGeoType = function () {
@@ -54,26 +58,34 @@ var BoundingBoxDrawingControl = /** @class */ (function (_super) {
     BoundingBoxDrawingControl.prototype.getShape = function () {
         return 'Bounding Box';
     };
-    BoundingBoxDrawingControl.prototype.startDrawing = function (geoJSON) {
+    BoundingBoxDrawingControl.prototype.setGeo = function (geoJSON) {
+        if (!this.isDrawing()) {
+            this.startDrawing();
+        }
         var feature = this.geoFormat.readFeature(geoJSON);
         var extent = feature.getGeometry().getExtent();
         this.setProperties(geoJSON.properties || {});
-        this.startDrawingExtent(extent);
+        this.setExtent(extent);
     };
-    BoundingBoxDrawingControl.prototype.startDrawingExtent = function (extent) {
-        this.drawingActive = true;
+    BoundingBoxDrawingControl.prototype.setExtent = function (extent) {
         var geoJSON = this.extentToGeoJSON(extent);
         var feature = this.geoFormat.readFeature(geoJSON);
-        // @ts-ignore ol.interaction.Extent is not in typescript for this version of Open Layers
-        var draw = new ol.interaction.Extent({
-            extent: feature.getGeometry().getExtent(),
-        });
         this.applyPropertiesToFeature(feature);
-        if (!this.isEmptyFeature(feature)) {
-            this.context.updateFeature(feature);
-            this.context.updateBufferFeature(feature);
+        this.context.updateFeature(feature);
+        this.context.updateBufferFeature(feature);
+        if (this.extentInteraction !== null) {
+            this.extentInteraction.setProperties({
+                extent: extent,
+            });
         }
-        this.context.setDrawInteraction(draw);
+    };
+    BoundingBoxDrawingControl.prototype.startDrawing = function () {
+        this.drawingActive = true;
+        this.context.removeFeature();
+        // @ts-ignore ol.interaction.Extent is not in typescript for this version of Open Layers
+        this.extentInteraction = new ol.interaction.Extent();
+        // @ts-ignore ol.interaction.Extent is not in typescript for this version of Open Layers
+        this.context.setDrawInteraction(this.extentInteraction);
         this.context.setEvent('draw', 'extentchanged', this.extentChanged);
         this.context.addInteractionsWithoutModify();
     };

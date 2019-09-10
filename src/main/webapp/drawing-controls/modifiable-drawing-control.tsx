@@ -19,11 +19,13 @@ import BasicDrawingControl from './basic-drawing-control'
 import { GeometryJSON } from '../geometry'
 
 abstract class ModifiableDrawingControl extends BasicDrawingControl {
+  drawInteraction: ol.interaction.Draw | null
   protected constructor(context: DrawingContext, receiver: UpdatedGeoReceiver) {
     super(context, receiver)
     this.onCompleteDrawing = this.onCompleteDrawing.bind(this)
     this.onStartDrawing = this.onStartDrawing.bind(this)
     this.onCompleteModify = this.onCompleteModify.bind(this)
+    this.drawInteraction = null
   }
 
   getGeoJSONFromCompleteDrawEvent(e: any): GeometryJSON {
@@ -45,6 +47,10 @@ abstract class ModifiableDrawingControl extends BasicDrawingControl {
   }
 
   onStartDrawing(_e: any) {
+    this.mouseDragActive = true
+  }
+
+  onStartModify(_e: any) {
     this.mouseDragActive = true
   }
 
@@ -75,23 +81,37 @@ abstract class ModifiableDrawingControl extends BasicDrawingControl {
     }
   }
 
-  startDrawing(geoJSON: GeometryJSON) {
-    this.drawingActive = true
+  setGeo(geoJSON: GeometryJSON): void {
+    this.cancelDrawing()
     this.setProperties((geoJSON as GeometryJSON).properties || {})
     const feature = this.makeFeature(geoJSON)
     this.applyPropertiesToFeature(feature)
-    if (!this.isEmptyFeature(feature)) {
-      this.context.updateFeature(feature)
-      this.context.updateBufferFeature(feature)
-    }
-    const draw = new ol.interaction.Draw({
+    this.context.updateFeature(feature)
+    this.context.updateBufferFeature(feature)
+    this.startDrawingStyle(this.getStaticStyle(feature))
+  }
+
+  startDrawing(): void {
+    this.startDrawingStyle()
+  }
+
+  private startDrawingStyle(
+    style:
+      | ol.style.Style
+      | ol.style.Style[]
+      | ol.StyleFunction
+      | undefined = undefined
+  ): void {
+    this.drawingActive = true
+    this.drawInteraction = new ol.interaction.Draw({
       type: this.getGeoType(),
-      style: this.getStaticStyle(feature),
+      style,
     })
-    this.context.setDrawInteraction(draw)
+    this.context.setDrawInteraction(this.drawInteraction)
     this.context.setEvent('draw', 'drawend', this.onCompleteDrawing)
     this.context.setEvent('draw', 'drawstart', this.onStartDrawing)
     this.context.setEvent('modify', 'modifyend', this.onCompleteModify)
+    this.context.setEvent('modify', 'modifystart', this.onStartModify)
     this.context.addInteractions()
   }
 }

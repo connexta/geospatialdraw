@@ -36,6 +36,7 @@ var ModifiableDrawingControl = /** @class */ (function (_super) {
         _this.onCompleteDrawing = _this.onCompleteDrawing.bind(_this);
         _this.onStartDrawing = _this.onStartDrawing.bind(_this);
         _this.onCompleteModify = _this.onCompleteModify.bind(_this);
+        _this.drawInteraction = null;
         return _this;
     }
     ModifiableDrawingControl.prototype.getGeoJSONFromCompleteDrawEvent = function (e) {
@@ -54,6 +55,9 @@ var ModifiableDrawingControl = /** @class */ (function (_super) {
         this.receiver(geoJSON);
     };
     ModifiableDrawingControl.prototype.onStartDrawing = function (_e) {
+        this.mouseDragActive = true;
+    };
+    ModifiableDrawingControl.prototype.onStartModify = function (_e) {
         this.mouseDragActive = true;
     };
     ModifiableDrawingControl.prototype.onCompleteModify = function (e) {
@@ -79,23 +83,30 @@ var ModifiableDrawingControl = /** @class */ (function (_super) {
             return style;
         }
     };
-    ModifiableDrawingControl.prototype.startDrawing = function (geoJSON) {
-        this.drawingActive = true;
+    ModifiableDrawingControl.prototype.setGeo = function (geoJSON) {
+        this.cancelDrawing();
         this.setProperties(geoJSON.properties || {});
         var feature = this.makeFeature(geoJSON);
         this.applyPropertiesToFeature(feature);
-        if (!this.isEmptyFeature(feature)) {
-            this.context.updateFeature(feature);
-            this.context.updateBufferFeature(feature);
-        }
-        var draw = new ol.interaction.Draw({
+        this.context.updateFeature(feature);
+        this.context.updateBufferFeature(feature);
+        this.startDrawingStyle(this.getStaticStyle(feature));
+    };
+    ModifiableDrawingControl.prototype.startDrawing = function () {
+        this.startDrawingStyle();
+    };
+    ModifiableDrawingControl.prototype.startDrawingStyle = function (style) {
+        if (style === void 0) { style = undefined; }
+        this.drawingActive = true;
+        this.drawInteraction = new ol.interaction.Draw({
             type: this.getGeoType(),
-            style: this.getStaticStyle(feature),
+            style: style,
         });
-        this.context.setDrawInteraction(draw);
+        this.context.setDrawInteraction(this.drawInteraction);
         this.context.setEvent('draw', 'drawend', this.onCompleteDrawing);
         this.context.setEvent('draw', 'drawstart', this.onStartDrawing);
         this.context.setEvent('modify', 'modifyend', this.onCompleteModify);
+        this.context.setEvent('modify', 'modifystart', this.onStartModify);
         this.context.addInteractions();
     };
     return ModifiableDrawingControl;

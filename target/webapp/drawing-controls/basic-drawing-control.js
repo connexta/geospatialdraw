@@ -47,6 +47,7 @@ var BasicDrawingControl = /** @class */ (function () {
         this.receiver = receiver;
         this.geoFormat = new ol.format.GeoJSON();
         this.mouseDragActive = false;
+        this.drawingActive = false;
         this.setProperties(geometry_1.makeEmptyGeometry('', this.getShape()).properties);
     }
     BasicDrawingControl.prototype.setProperties = function (properties) {
@@ -92,12 +93,6 @@ var BasicDrawingControl = /** @class */ (function () {
     };
     BasicDrawingControl.prototype.isDrawing = function () {
         return this.drawingActive;
-    };
-    BasicDrawingControl.prototype.isEmptyFeature = function (feature) {
-        return feature
-            .getGeometry()
-            .getExtent()
-            .every(function (value) { return value <= Number.MIN_VALUE && value >= -Number.MIN_VALUE; });
     };
     return BasicDrawingControl;
 }());

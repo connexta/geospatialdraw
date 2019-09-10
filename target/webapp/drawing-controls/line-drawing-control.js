@@ -14,6 +14,9 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var modifiable_drawing_control_1 = require("./modifiable-drawing-control");
+/**
+ * Drawing Control for drawing a line
+ */
 var LineDrawingControl = /** @class */ (function (_super) {
     __extends(LineDrawingControl, _super);
     function LineDrawingControl(context, receiver) {

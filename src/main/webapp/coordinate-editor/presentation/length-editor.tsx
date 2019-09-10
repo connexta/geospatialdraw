@@ -47,8 +47,8 @@ const UnitContainer = styled.div`
 
 type SelectEvent = React.FormEvent<HTMLSelectElement>
 
-const renderLengthUnitOption = (unit: LengthUnit, selected: LengthUnit) => (
-  <option value={unit} key={unit} selected={selected === unit}>
+const renderLengthUnitOption = (unit: LengthUnit) => (
+  <option value={unit} key={unit}>
     {unit}
   </option>
 )
@@ -71,13 +71,14 @@ const LengthEditor: React.SFC<Props> = ({
         onChange={({ currentTarget: { value } }: SelectEvent) =>
           setUnit(value as LengthUnit)
         }
+        value={unit}
       >
-        {renderLengthUnitOption(Units.METERS, unit)}
-        {renderLengthUnitOption(Units.KILOMETERS, unit)}
-        {renderLengthUnitOption(Units.MILES, unit)}
-        {renderLengthUnitOption(Units.NAUTICAL_MILES, unit)}
-        {renderLengthUnitOption(Units.YARDS, unit)}
-        {renderLengthUnitOption(Units.FEET, unit)}
+        {renderLengthUnitOption(Units.METERS)}
+        {renderLengthUnitOption(Units.KILOMETERS)}
+        {renderLengthUnitOption(Units.MILES)}
+        {renderLengthUnitOption(Units.NAUTICAL_MILES)}
+        {renderLengthUnitOption(Units.YARDS)}
+        {renderLengthUnitOption(Units.FEET)}
       </select>
     </UnitContainer>
   </Root>

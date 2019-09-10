@@ -102,6 +102,7 @@ class UTMPointEditor extends React.Component<Props> {
         <InputGroup>
           <Label>Zone</Label>
           <select
+            value={zone}
             onChange={({ currentTarget: { value } }: SelectEvent) => {
               const { lat, lon } = this.unitConverter.UTMtoLLwithNS(
                 northing,

@@ -23,6 +23,9 @@ import {
   getDistanceFromMeters,
 } from '../internal/distance'
 
+/**
+ * Drawing Control for a circle/point radius
+ */
 class PointRadiusDrawingControl extends ModifiableDrawingControl {
   animationFrameId: number
   animationFrame: () => void

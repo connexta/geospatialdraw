@@ -217,15 +217,14 @@ class DrawingMenu extends React.Component<Props> {
   }
 
   drawShape() {
-    if (
-      this.props.isActive &&
-      this.props.shape !== null &&
-      this.props.geometry !== null
-    ) {
+    if (this.props.isActive && this.props.shape !== null) {
       this.cancelShapeDrawing()
       const control = this.controlsMap.get(this.props.shape)
       if (control !== undefined) {
-        control.startDrawing(this.props.geometry)
+        control.startDrawing()
+        if (this.props.geometry !== null) {
+          control.setGeo(this.props.geometry)
+        }
       }
     }
   }
@@ -281,8 +280,6 @@ class DrawingMenu extends React.Component<Props> {
     ) {
       this.cancelShapeDrawing()
       this.drawShape()
-      // Note: If we refactor drawing controls to separate start drawing from update feature
-      // it may be possible to update the geometry features live.
     }
   }
 

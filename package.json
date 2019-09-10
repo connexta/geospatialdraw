@@ -1,6 +1,6 @@
 {
   "name": "geospatialdraw",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Geospatial Map Drawing Library",
   "types": "./target/webapp/index.d.ts",
   "main": "./target/webapp/index.js",
@@ -45,13 +45,13 @@
     "install:m2": "ace clean && ace bundle && ace package && ace install"
   },
   "dependencies": {
-    "@types/openlayers": "4.3.11",
     "@fortawesome/fontawesome-svg-core": "1.2.21",
     "@fortawesome/free-solid-svg-icons": "5.10.1",
     "@fortawesome/react-fontawesome": "0.1.4",
     "@turf/nearest-point-to-line": "6.0.0",
     "@turf/point-to-line-distance": "6.0.0",
     "@turf/turf": "5.1.6",
+    "@types/openlayers": "4.3.11",
     "font-awesome": "4.7",
     "lodash": "4.17.15",
     "openlayers": "4.6.5",

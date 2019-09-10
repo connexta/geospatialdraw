@@ -69,8 +69,8 @@ describe('PointRadiusDrawingControl', () => {
       expect(context.getMethodCalls().updateFeature.length).to.equal(1)
     })
     it('startDrawing -> onCompleteDrawing', () => {
-      const startGeo = makeGeoJSON()
-      control.startDrawing(startGeo)
+      control.startDrawing()
+      control.setGeo(makeGeoJSON())
       control.onCompleteDrawing({
         feature: makeFeature(),
       })
@@ -89,13 +89,20 @@ describe('PointRadiusDrawingControl', () => {
       expect(recievedGeo).to.deep.equal(expected)
     })
   })
+  describe('setGeo', () => {
+    it('default', () => {
+      control.setGeo(makeGeoJSON())
+      expect(context.getMethodCalls().updateFeature.length).to.equal(1)
+      expect(control.isDrawing()).to.equal(true)
+    })
+  })
   describe('startDrawing', () => {
     it('default', () => {
-      control.startDrawing(makeGeoJSON())
+      control.startDrawing()
       expect(context.getMethodCalls().addInteractions.length).to.equal(1)
-      expect(context.getMethodCalls().setEvent.length).to.equal(3)
+      expect(context.getMethodCalls().setEvent.length).to.equal(4)
       expect(context.getMethodCalls().setDrawInteraction.length).to.equal(1)
-      expect(context.getMethodCalls().updateFeature.length).to.equal(1)
+      expect(context.getMethodCalls().updateFeature.length).to.equal(0)
       expect(control.isDrawing()).to.equal(true)
     })
   })

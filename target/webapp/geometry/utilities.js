@@ -79,7 +79,10 @@ var makeBufferedGeo = function (geo) {
         var bufferedGeo = turf.buffer(geo, distance_1.getDistanceInMeters(geo.properties.buffer || 0, geo.properties.bufferUnit), {
             units: 'meters',
         });
-        if (bufferedGeo && bufferedGeo.properties) {
+        if (bufferedGeo === undefined) {
+            return geo;
+        }
+        else if (bufferedGeo.properties) {
             bufferedGeo.properties[geometry_1.BUFFER_SHAPE_PROPERTY] =
                 geo.geometry.type === 'Point'
                     ? geometry_1.CIRCLE_BUFFER_PROPERTY_VALUE

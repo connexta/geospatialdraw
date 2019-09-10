@@ -24,10 +24,16 @@ type ExtentEvent = {
   extent: Extent
 }
 
+/**
+ * Drawing Control for drawing a bounding box
+ */
 class BoundingBoxDrawingControl extends BasicDrawingControl {
+  extentInteraction: ol.interaction.Interaction | null
+
   constructor(context: DrawingContext, receiver: UpdatedGeoReceiver) {
     super(context, receiver)
     this.extentChanged = this.extentChanged.bind(this)
+    this.extentInteraction = null
   }
 
   getGeoType(): ol.geom.GeometryType {
@@ -38,27 +44,36 @@ class BoundingBoxDrawingControl extends BasicDrawingControl {
     return 'Bounding Box'
   }
 
-  startDrawing(geoJSON: GeometryJSON): void {
+  setGeo(geoJSON: GeometryJSON): void {
+    if (!this.isDrawing()) {
+      this.startDrawing()
+    }
     const feature = this.geoFormat.readFeature(geoJSON)
     const extent = feature.getGeometry().getExtent()
     this.setProperties((geoJSON as GeometryJSON).properties || {})
-    this.startDrawingExtent(extent)
+    this.setExtent(extent)
   }
 
-  startDrawingExtent(extent: Extent): void {
-    this.drawingActive = true
+  setExtent(extent: Extent): void {
     const geoJSON = this.extentToGeoJSON(extent)
     const feature = this.geoFormat.readFeature(geoJSON)
-    // @ts-ignore ol.interaction.Extent is not in typescript for this version of Open Layers
-    const draw = new ol.interaction.Extent({
-      extent: feature.getGeometry().getExtent(),
-    })
     this.applyPropertiesToFeature(feature)
-    if (!this.isEmptyFeature(feature)) {
-      this.context.updateFeature(feature)
-      this.context.updateBufferFeature(feature)
+    this.context.updateFeature(feature)
+    this.context.updateBufferFeature(feature)
+    if (this.extentInteraction !== null) {
+      this.extentInteraction.setProperties({
+        extent,
+      })
     }
-    this.context.setDrawInteraction(draw)
+  }
+
+  startDrawing(): void {
+    this.drawingActive = true
+    this.context.removeFeature()
+    // @ts-ignore ol.interaction.Extent is not in typescript for this version of Open Layers
+    this.extentInteraction = new ol.interaction.Extent()
+    // @ts-ignore ol.interaction.Extent is not in typescript for this version of Open Layers
+    this.context.setDrawInteraction(this.extentInteraction)
     this.context.setEvent('draw', 'extentchanged', this.extentChanged)
     this.context.addInteractionsWithoutModify()
   }

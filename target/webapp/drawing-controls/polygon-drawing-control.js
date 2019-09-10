@@ -14,6 +14,9 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var modifiable_drawing_control_1 = require("./modifiable-drawing-control");
+/**
+ * Drawing Control for drawing a polygon
+ */
 var PolygonDrawingControl = /** @class */ (function (_super) {
     __extends(PolygonDrawingControl, _super);
     function PolygonDrawingControl(context, receiver) {

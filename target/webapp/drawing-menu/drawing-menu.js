@@ -111,13 +111,14 @@ var DrawingMenu = /** @class */ (function (_super) {
         return _this;
     }
     DrawingMenu.prototype.drawShape = function () {
-        if (this.props.isActive &&
-            this.props.shape !== null &&
-            this.props.geometry !== null) {
+        if (this.props.isActive && this.props.shape !== null) {
             this.cancelShapeDrawing();
             var control = this.controlsMap.get(this.props.shape);
             if (control !== undefined) {
-                control.startDrawing(this.props.geometry);
+                control.startDrawing();
+                if (this.props.geometry !== null) {
+                    control.setGeo(this.props.geometry);
+                }
             }
         }
     };
@@ -167,8 +168,6 @@ var DrawingMenu = /** @class */ (function (_super) {
             this.props.showCoordinateEditor === false) {
             this.cancelShapeDrawing();
             this.drawShape();
-            // Note: If we refactor drawing controls to separate start drawing from update feature
-            // it may be possible to update the geometry features live.
         }
     };
     DrawingMenu.prototype.renderShapeButton = function (shape, icon) {

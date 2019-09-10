@@ -74,7 +74,7 @@ var UTMPointEditor = /** @class */ (function (_super) {
                     } })),
             React.createElement(InputGroup, null,
                 React.createElement(Label, null, "Zone"),
-                React.createElement("select", { onChange: function (_a) {
+                React.createElement("select", { value: zone, onChange: function (_a) {
                         var value = _a.currentTarget.value;
                         var _b = _this.unitConverter.UTMtoLLwithNS(northing, easting, parseInt(value), null, hemisphere), lat = _b.lat, lon = _b.lon;
                         setCoordinate(lat, lon);

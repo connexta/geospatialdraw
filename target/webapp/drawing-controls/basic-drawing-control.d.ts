@@ -42,7 +42,8 @@ declare abstract class BasicDrawingControl implements DrawingControl {
     mouseDragActive: boolean;
     drawingActive: boolean;
     protected properties: GeoProps;
-    abstract startDrawing(geoJSON: GeometryJSON): void;
+    abstract setGeo(geoJSON: GeometryJSON): void;
+    abstract startDrawing(): void;
     protected constructor(context: DrawingContext, receiver: UpdatedGeoReceiver);
     setProperties(properties: GeoProps): void;
     getProperties(): GeoProps;
@@ -56,6 +57,5 @@ declare abstract class BasicDrawingControl implements DrawingControl {
     isActive(): boolean;
     isMouseDragActive(): boolean;
     isDrawing(): boolean;
-    isEmptyFeature(feature: ol.Feature): boolean;
 }
 export default BasicDrawingControl;

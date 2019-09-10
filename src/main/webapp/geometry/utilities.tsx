@@ -99,7 +99,9 @@ const makeBufferedGeo = (geo: GeometryJSON): GeometryJSON => {
         units: 'meters',
       }
     )
-    if (bufferedGeo && bufferedGeo.properties) {
+    if (bufferedGeo === undefined) {
+      return geo
+    } else if (bufferedGeo.properties) {
       bufferedGeo.properties[BUFFER_SHAPE_PROPERTY] =
         geo.geometry.type === 'Point'
           ? CIRCLE_BUFFER_PROPERTY_VALUE

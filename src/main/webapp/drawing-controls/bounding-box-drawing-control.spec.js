@@ -39,12 +39,12 @@ describe('BoundingBoxDrawingControl', () => {
       const control = new BoundingBoxDrawingControl(context, receiver)
     })
   })
-  describe('startDrawing', () => {
+  describe('setGeo', () => {
     it('default', () => {
       const context = new MockDrawingContext()
       const receiver = geoJSON => {}
       const control = new BoundingBoxDrawingControl(context, receiver)
-      control.startDrawing(makePolygonJSON())
+      control.setGeo(makePolygonJSON())
       const expected = makePolygonJSON()
       expect(
         context
@@ -52,13 +52,23 @@ describe('BoundingBoxDrawingControl', () => {
           .updateFeature[0][0].getGeometry()
           .getCoordinates()
       ).to.deep.equal(expected.geometry.coordinates)
+      expect(context.getMethodCalls().updateFeature.length).to.equal(1)
+      expect(control.isDrawing()).to.equal(true)
+    })
+  })
+  describe('startDrawing', () => {
+    it('default', () => {
+      const context = new MockDrawingContext()
+      const receiver = geoJSON => {}
+      const control = new BoundingBoxDrawingControl(context, receiver)
+      control.startDrawing()
       expect(context.getMethodCalls().addInteractions.length).to.equal(0)
       expect(
         context.getMethodCalls().addInteractionsWithoutModify.length
       ).to.equal(1)
       expect(context.getMethodCalls().setEvent.length).to.equal(1)
       expect(context.getMethodCalls().setDrawInteraction.length).to.equal(1)
-      expect(context.getMethodCalls().updateFeature.length).to.equal(1)
+      expect(context.getMethodCalls().updateFeature.length).to.equal(0)
       expect(control.isDrawing()).to.equal(true)
     })
   })
@@ -110,7 +120,8 @@ describe('BoundingBoxDrawingControl', () => {
         updated = geoJSON
       }
       const control = new BoundingBoxDrawingControl(context, receiver)
-      control.startDrawing(makePolygonJSON())
+      control.startDrawing()
+      control.setGeo(makePolygonJSON())
       control.extentChanged({
         extent: makeExtent(),
       })

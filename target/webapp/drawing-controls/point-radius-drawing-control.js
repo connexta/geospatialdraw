@@ -42,6 +42,9 @@ var ol = require("openlayers");
 var modifiable_drawing_control_1 = require("./modifiable-drawing-control");
 var geometry_1 = require("../geometry");
 var distance_1 = require("../internal/distance");
+/**
+ * Drawing Control for a circle/point radius
+ */
 var PointRadiusDrawingControl = /** @class */ (function (_super) {
     __extends(PointRadiusDrawingControl, _super);
     function PointRadiusDrawingControl(context, receiver) {
