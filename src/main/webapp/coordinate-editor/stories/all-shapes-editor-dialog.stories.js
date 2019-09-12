@@ -34,10 +34,7 @@ const TableComponent = tableComponentFactory({
   },
 })
 
-const stories = storiesOf(
-  'coordinate-editor/AllShapesEditorDialog',
-  module
-)
+const stories = storiesOf('coordinate-editor/AllShapesEditorDialog', module)
 
 stories.addParameters({
   info: {

@@ -2,16 +2,31 @@ import * as ol from 'openlayers'
 import { GeometryJSON, Extent } from '../geometry'
 import { makeBufferedGeo } from '../geometry'
 
+/**
+ * Object containing a GeometryJSON object
+ */
 type Renderable = {
+  /**
+   * GeometryJSON object to render on map
+   */
   geo: GeometryJSON
 }
 
+/**
+ * Renders Renderable objects on an Open Layers Map
+ */
 class Renderer {
-  map: ol.Map
-  vectorLayer: ol.layer.Vector
-  geoFormat: ol.format.GeoJSON
-  maxZoom: number
+  private map: ol.Map
+  private vectorLayer: ol.layer.Vector
+  private geoFormat: ol.format.GeoJSON
+  private maxZoom: number
 
+  /**
+   * Constructs renderer
+   * @param map - Open Layers map to render to
+   * @param style - style to apply to rendered geometries
+   * @param maxZoom - maximum zoom to allow when panning on map
+   */
   constructor(
     map: ol.Map,
     style: ol.style.Style | ol.StyleFunction | ol.style.Style[],
@@ -30,6 +45,9 @@ class Renderer {
     this.vectorLayer.setStyle(style)
     this.map.addLayer(this.vectorLayer)
   }
+
+  // TODO continue documenting
+
   renderList(geometryList: Renderable[]): void {
     for (const geometry of geometryList) {
       this.addGeo(geometry)

@@ -34,10 +34,7 @@ const TableComponent = tableComponentFactory({
   },
 })
 
-const stories = storiesOf(
-  'coordinate-editor/PointGeoEditor',
-  module
-)
+const stories = storiesOf('coordinate-editor/PointGeoEditor', module)
 
 stories.addParameters({
   info: {

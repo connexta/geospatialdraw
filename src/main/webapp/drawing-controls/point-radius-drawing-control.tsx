@@ -13,9 +13,14 @@ import {
  * Drawing Control for a circle/point radius
  */
 class PointRadiusDrawingControl extends ModifiableDrawingControl {
-  animationFrameId: number
-  animationFrame: () => void
+  private animationFrameId: number
+  private animationFrame: () => void
 
+  /**
+   * Creates drawing control
+   * @param context - Drawing context
+   * @param receiver - callback for returning updates to GeometryJSON
+   */
   constructor(context: DrawingContext, receiver: UpdatedGeoReceiver) {
     super(context, receiver)
     this.animationFrameId = 0

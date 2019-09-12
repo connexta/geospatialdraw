@@ -16,11 +16,11 @@ type GeoProps = GeometryJSONProperties & {
 }
 
 abstract class BasicDrawingControl implements DrawingControl {
-  context: DrawingContext
-  receiver: UpdatedGeoReceiver
-  geoFormat: ol.format.GeoJSON
-  mouseDragActive: boolean
-  drawingActive: boolean
+  protected context: DrawingContext
+  protected receiver: UpdatedGeoReceiver
+  protected geoFormat: ol.format.GeoJSON
+  protected mouseDragActive: boolean
+  protected drawingActive: boolean
   protected properties: GeoProps
 
   abstract setGeo(geoJSON: GeometryJSON): void

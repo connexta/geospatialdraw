@@ -14,6 +14,11 @@ type ExtentEvent = {
  * Drawing Control for drawing a bounding box
  */
 class BoundingBoxDrawingControl extends BasicDrawingControl {
+  /**
+   * Creates drawing control
+   * @param context - Drawing context
+   * @param receiver - callback for returning updates to GeometryJSON
+   */
   constructor(context: DrawingContext, receiver: UpdatedGeoReceiver) {
     super(context, receiver)
     this.extentChanged = this.extentChanged.bind(this)

@@ -19,6 +19,11 @@ var modifiable_drawing_control_1 = require("./modifiable-drawing-control");
  */
 var PolygonDrawingControl = /** @class */ (function (_super) {
     __extends(PolygonDrawingControl, _super);
+    /**
+     * Creates drawing control
+     * @param context - Drawing context
+     * @param receiver - callback for returning updates to GeometryJSON
+     */
     function PolygonDrawingControl(context, receiver) {
         return _super.call(this, context, receiver) || this;
     }

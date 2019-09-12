@@ -3,18 +3,34 @@ import * as turf from '@turf/turf'
 import { GeometryJSON } from '../geometry'
 import Shape from './shape'
 
+/**
+ * Detects shapes of GeometryJSON objects by evaluating their geometric contents
+ */
 class ShapeDetector {
-  geoFormat: ol.format.GeoJSON
+  private geoFormat: ol.format.GeoJSON
 
+  /**
+   * Constructs an instance of the ShapeDetector
+   */
   constructor() {
     this.geoFormat = new ol.format.GeoJSON()
   }
 
+  /**
+   * Gets the shape of GeometryJSON object
+   * @param geoJSON - GeometryJSON object
+   * @returns Shape of geometry
+   */
   shapeFromGeoJSON(geoJSON: GeometryJSON): Shape {
     const feature = this.geoFormat.readFeature(geoJSON)
     return this.shapeFromFeature(feature)
   }
 
+  /**
+   * Gets the shape of an Open Layers feature
+   * @param feature - Open Layers feature
+   * @returns Shape of geometry
+   */
   shapeFromFeature(feature: ol.Feature): Shape {
     if (this.isLineFeature(feature)) {
       return 'Line'
@@ -29,10 +45,20 @@ class ShapeDetector {
     }
   }
 
+  /**
+   * Checks if feature matches shape
+   * @param feature - Open Layers feature
+   * @returns true if geometry is a line
+   */
   isLineFeature(feature: ol.Feature): boolean {
     return feature.getGeometry().getType() === 'LineString'
   }
 
+  /**
+   * Checks if feature matches shape
+   * @param feature - Open Layers feature
+   * @returns true if geometry is a point
+   */
   isPointFeature(feature: ol.Feature): boolean {
     return (
       feature.getGeometry().getType() === 'Point' &&
@@ -40,6 +66,11 @@ class ShapeDetector {
     )
   }
 
+  /**
+   * Checks if feature matches shape
+   * @param feature - Open Layers feature
+   * @returns true if geometry is a bounding box
+   */
   isBoundingBoxFeature(feature: ol.Feature): boolean {
     if (!this.isPolygonFeature(feature)) {
       return false
@@ -60,12 +91,22 @@ class ShapeDetector {
     }
   }
 
+  /**
+   * Checks if feature matches shape
+   * @param feature - Open Layers feature
+   * @returns true if geometry is a point radius
+   */
   isPointRadiusFeature(feature: ol.Feature): boolean {
     return (
       feature.getGeometry().getType() === 'Point' && feature.get('buffer') > 0
     )
   }
 
+  /**
+   * Checks if feature matches shape
+   * @param feature - Open Layers feature
+   * @returns true if geometry is a polygon
+   */
   isPolygonFeature(feature: ol.Feature): boolean {
     return feature.getGeometry().getType() === 'Polygon'
   }

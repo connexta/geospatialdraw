@@ -25,6 +25,7 @@ interface DrawingControl {
 
   /**
    * Pauses and un-pauses the drawing interaction while continuing to render the drawn geometries
+   * @param active - true if the drawing interaction should be active
    */
   setActive(active: boolean): void
 

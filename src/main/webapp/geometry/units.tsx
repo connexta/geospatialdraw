@@ -1,3 +1,6 @@
+/**
+ * All supported units of length measurement
+ */
 type LengthUnit =
   | 'meters'
   | 'kilometers'

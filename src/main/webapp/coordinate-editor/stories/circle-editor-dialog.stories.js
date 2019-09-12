@@ -26,10 +26,7 @@ const TableComponent = tableComponentFactory({
   },
 })
 
-const stories = storiesOf(
-  'coordinate-editor/CircleEditorDialog',
-  module
-)
+const stories = storiesOf('coordinate-editor/CircleEditorDialog', module)
 
 stories.addParameters({
   info: {

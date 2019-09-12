@@ -19,6 +19,11 @@ var modifiable_drawing_control_1 = require("./modifiable-drawing-control");
  */
 var PointDrawingControl = /** @class */ (function (_super) {
     __extends(PointDrawingControl, _super);
+    /**
+     * Creates drawing control
+     * @param context - Drawing context
+     * @param receiver - callback for returning updates to GeometryJSON
+     */
     function PointDrawingControl(context, receiver) {
         return _super.call(this, context, receiver) || this;
     }

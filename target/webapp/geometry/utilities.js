@@ -11,26 +11,24 @@ var __assign = (this && this.__assign) || function () {
     return __assign.apply(this, arguments);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-/**
- * Copyright (c) Codice Foundation
- *
- * This is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser
- * General Public License as published by the Free Software Foundation, either version 3 of the
- * License, or any later version.
- *
- * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
- * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details. A copy of the GNU Lesser General Public License
- * is distributed along with this program and can be found at
- * <http://www.gnu.org/licenses/lgpl.html>.
- *
- **/
 var turf = require("@turf/turf");
 var _ = require("lodash");
 var units_1 = require("./units");
 var geometry_1 = require("./geometry");
 var distance_1 = require("../internal/distance");
 var MINIMUM_POLYGON_OR_LINE_COORDINATE_LENGTH_FOR_TURF_JS = 2;
+/**
+ * Creates a full GeometryJSON object from GeoJSON
+ *
+ * @param id - unique id for geometry
+ * @param geometryJSON - base GeoJSON object to extend
+ * @param color - CSS color for geometry
+ * @param shape - geometry shape
+ * @param buffer - buffer size
+ * @param bufferUnit - buffer size unit of measurement
+ *
+ * @returns GeometryJSON
+ */
 var makeGeometry = function (id, geometryJSON, color, shape, buffer, bufferUnit) {
     if (buffer === void 0) { buffer = 0; }
     if (bufferUnit === void 0) { bufferUnit = units_1.METERS; }
@@ -51,6 +49,15 @@ var makeGeometry = function (id, geometryJSON, color, shape, buffer, bufferUnit)
     return json;
 };
 exports.makeGeometry = makeGeometry;
+/**
+ * Creates an empty GeometryJSON object
+ *
+ * @param id - unique id for geometry
+ * @param shape - geometry shape
+ * @param initialProperties - hash of properties to pass to new GeometryJSON
+ *
+ * @returns GeometryJSON
+ */
 var makeEmptyGeometry = function (id, shape, initialProperties) {
     if (initialProperties === void 0) { initialProperties = {}; }
     return ({
@@ -62,6 +69,14 @@ var makeEmptyGeometry = function (id, shape, initialProperties) {
     });
 };
 exports.makeEmptyGeometry = makeEmptyGeometry;
+/**
+ * Creates a buffered GeometryJSON object from a source
+ * GeometryJSON object using it's geometry and buffer values
+ *
+ * @param geo - source GeometryJSON object
+ *
+ * @returns GeometryJSON with buffer applied
+ */
 var makeBufferedGeo = function (geo) {
     if (((geo.geometry.type === 'Polygon' &&
         geo.geometry.coordinates[0].length >=
@@ -93,6 +108,13 @@ var makeBufferedGeo = function (geo) {
     return geo;
 };
 exports.makeBufferedGeo = makeBufferedGeo;
+/**
+ * Converts an arbitrary bbox value from GeoJSON to a 2D extent value
+ *
+ * @param bbox - 2D/3D GeoJSON bbox value
+ *
+ * @returns Extent
+ */
 var bboxToExtent = function (bbox) { return [
     bbox[0],
     bbox[1],
@@ -100,6 +122,13 @@ var bboxToExtent = function (bbox) { return [
     bbox[3],
 ]; };
 exports.bboxToExtent = bboxToExtent;
+/**
+ * Calculates the 2D extent of a GeometryJSON object
+ *
+ * @param geo - GeometryJSON object
+ *
+ * @returns Extent
+ */
 var geoToExtent = function (geo) {
     return bboxToExtent(turf.bbox(geo));
 };

@@ -11,28 +11,34 @@ var __assign = (this && this.__assign) || function () {
     return __assign.apply(this, arguments);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-/**
- * Copyright (c) Codice Foundation
- *
- * This is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser
- * General Public License as published by the Free Software Foundation, either version 3 of the
- * License, or any later version.
- *
- * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
- * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details. A copy of the GNU Lesser General Public License
- * is distributed along with this program and can be found at
- * <http://www.gnu.org/licenses/lgpl.html>.
- *
- **/
 var turf = require("@turf/turf");
 var utilities_1 = require("./utilities");
 var geometry_1 = require("./geometry");
+/**
+ * Creates a GeometryJSON object from a GeoJSON Geometry object
+ *
+ * @param id - unique id for geometry
+ * @param geometry - GeoJSON Geometry object
+ * @param shape - geometry shape
+ * @param buffer - buffer size
+ * @param bufferUnit - buffer size unit of measurement
+ *
+ * @returns GeometryJSON
+ */
 var makeGeometryJSONFromGeometry = function (id, geometry, shape, buffer, bufferUnit) {
     if (buffer === void 0) { buffer = 0; }
     if (bufferUnit === void 0) { bufferUnit = geometry_1.DEFAULT_PROPERTIES.bufferUnit; }
     return utilities_1.makeGeometry(id, geometry, geometry_1.DEFAULT_PROPERTIES.color, shape, buffer, bufferUnit);
 };
+/**
+ * Creates a Point GeometryJSON object
+ *
+ * @param id - unique id for geometry
+ * @param lat - center lattitude
+ * @param lon - center longitude
+ *
+ * @returns GeometryJSON
+ */
 var makePointGeo = function (id, lat, lon) {
     return makeGeometryJSONFromGeometry(id, {
         type: 'Point',
@@ -40,6 +46,17 @@ var makePointGeo = function (id, lat, lon) {
     }, 'Point');
 };
 exports.makePointGeo = makePointGeo;
+/**
+ * Creates a Point Radius GeometryJSON object
+ *
+ * @param id - unique id for geometry
+ * @param lat - center lattitude
+ * @param lon - center longitude
+ * @param radius - radius length
+ * @param radiusUnit - radius length unit of measurement
+ *
+ * @returns GeometryJSON
+ */
 var makePointRadiusGeo = function (id, lat, lon, radius, radiusUnit) {
     return makeGeometryJSONFromGeometry(id, {
         type: 'Point',
@@ -47,6 +64,16 @@ var makePointRadiusGeo = function (id, lat, lon, radius, radiusUnit) {
     }, 'Point Radius', radius, radiusUnit);
 };
 exports.makePointRadiusGeo = makePointRadiusGeo;
+/**
+ * Creates a Polygon GeometryJSON object
+ *
+ * @param id - unique id for geometry
+ * @param lonLatCoordinateList - array of coordinates in the format of [[longitude, lattitude], ...]
+ * @param buffer - buffer size
+ * @param bufferUnit - buffer size unit of measurement
+ *
+ * @returns GeometryJSON
+ */
 var makePolygonGeo = function (id, lonLatCoordinateList, buffer, bufferUnit) {
     return makeGeometryJSONFromGeometry(id, {
         type: 'Polygon',
@@ -54,6 +81,16 @@ var makePolygonGeo = function (id, lonLatCoordinateList, buffer, bufferUnit) {
     }, 'Polygon', buffer, bufferUnit);
 };
 exports.makePolygonGeo = makePolygonGeo;
+/**
+ * Creates a Line GeometryJSON object
+ *
+ * @param id - unique id for geometry
+ * @param lonLatCoordinateList - array of coordinates in the format of [[longitude, lattitude], ...]
+ * @param buffer - buffer size
+ * @param bufferUnit - buffer size unit of measurement
+ *
+ * @returns GeometryJSON
+ */
 var makeLineGeo = function (id, lonLatCoordinateList, buffer, bufferUnit) {
     return makeGeometryJSONFromGeometry(id, {
         type: 'LineString',
@@ -61,6 +98,14 @@ var makeLineGeo = function (id, lonLatCoordinateList, buffer, bufferUnit) {
     }, 'Line', buffer, bufferUnit);
 };
 exports.makeLineGeo = makeLineGeo;
+/**
+ * Creates a Bounding Box GeometryJSON object
+ *
+ * @param id - unique id for geometry
+ * @param extent - Extent of bounding box
+ *
+ * @returns GeometryJSON
+ */
 var makeBBoxGeo = function (id, extent) {
     return makeGeometryJSONFromGeometry(id, __assign({}, turf.bboxPolygon(extent).geometry), 'Bounding Box');
 };

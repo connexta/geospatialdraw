@@ -26,10 +26,7 @@ const TableComponent = tableComponentFactory({
   },
 })
 
-const stories = storiesOf(
-  'coordinate-editor/PointEditorDialog',
-  module
-)
+const stories = storiesOf('coordinate-editor/PointEditorDialog', module)
 
 stories.addParameters({
   info: {

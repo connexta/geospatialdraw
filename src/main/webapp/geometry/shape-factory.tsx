@@ -4,6 +4,17 @@ import { GeometryJSON, Geometry, Extent, DEFAULT_PROPERTIES } from './geometry'
 import { Shape } from '../shape-utils'
 import { LengthUnit } from './units'
 
+/**
+ * Creates a GeometryJSON object from a GeoJSON Geometry object
+ *
+ * @param id - unique id for geometry
+ * @param geometry - GeoJSON Geometry object
+ * @param shape - geometry shape
+ * @param buffer - buffer size
+ * @param bufferUnit - buffer size unit of measurement
+ *
+ * @returns GeometryJSON
+ */
 const makeGeometryJSONFromGeometry = (
   id: string,
   geometry: Geometry,
@@ -20,6 +31,15 @@ const makeGeometryJSONFromGeometry = (
     bufferUnit
   )
 
+/**
+ * Creates a Point GeometryJSON object
+ *
+ * @param id - unique id for geometry
+ * @param lat - center lattitude
+ * @param lon - center longitude
+ *
+ * @returns GeometryJSON
+ */
 const makePointGeo = (id: string, lat: number, lon: number): GeometryJSON =>
   makeGeometryJSONFromGeometry(
     id,
@@ -30,6 +50,17 @@ const makePointGeo = (id: string, lat: number, lon: number): GeometryJSON =>
     'Point'
   )
 
+/**
+ * Creates a Point Radius GeometryJSON object
+ *
+ * @param id - unique id for geometry
+ * @param lat - center lattitude
+ * @param lon - center longitude
+ * @param radius - radius length
+ * @param radiusUnit - radius length unit of measurement
+ *
+ * @returns GeometryJSON
+ */
 const makePointRadiusGeo = (
   id: string,
   lat: number,
@@ -48,6 +79,16 @@ const makePointRadiusGeo = (
     radiusUnit
   )
 
+/**
+ * Creates a Polygon GeometryJSON object
+ *
+ * @param id - unique id for geometry
+ * @param lonLatCoordinateList - array of coordinates in the format of [[longitude, lattitude], ...]
+ * @param buffer - buffer size
+ * @param bufferUnit - buffer size unit of measurement
+ *
+ * @returns GeometryJSON
+ */
 const makePolygonGeo = (
   id: string,
   lonLatCoordinateList: [number, number][],
@@ -65,6 +106,16 @@ const makePolygonGeo = (
     bufferUnit
   )
 
+/**
+ * Creates a Line GeometryJSON object
+ *
+ * @param id - unique id for geometry
+ * @param lonLatCoordinateList - array of coordinates in the format of [[longitude, lattitude], ...]
+ * @param buffer - buffer size
+ * @param bufferUnit - buffer size unit of measurement
+ *
+ * @returns GeometryJSON
+ */
 const makeLineGeo = (
   id: string,
   lonLatCoordinateList: [number, number][],
@@ -82,6 +133,14 @@ const makeLineGeo = (
     bufferUnit
   )
 
+/**
+ * Creates a Bounding Box GeometryJSON object
+ *
+ * @param id - unique id for geometry
+ * @param extent - Extent of bounding box
+ *
+ * @returns GeometryJSON
+ */
 const makeBBoxGeo = (id: string, extent: Extent): GeometryJSON =>
   makeGeometryJSONFromGeometry(
     id,
