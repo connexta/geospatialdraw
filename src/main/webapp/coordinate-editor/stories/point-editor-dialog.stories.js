@@ -41,7 +41,7 @@ const TableComponent = tableComponentFactory({
 })
 
 const stories = storiesOf(
-  'map-drawing/coordinate-editor/PointEditorDialog',
+  'coordinate-editor/PointEditorDialog',
   module
 )
 

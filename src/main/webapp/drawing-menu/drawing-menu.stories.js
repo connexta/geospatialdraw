@@ -135,7 +135,7 @@ const TableComponent = tableComponentFactory({
   },
 })
 
-const stories = storiesOf('map-drawing/drawing-menu/DrawingMenu', module)
+const stories = storiesOf('drawing-menu/DrawingMenu', module)
 
 stories.addParameters({
   info: {

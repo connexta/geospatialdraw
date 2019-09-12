@@ -49,7 +49,7 @@ const TableComponent = tableComponentFactory({
 })
 
 const stories = storiesOf(
-  'map-drawing/coordinate-editor/PointGeoEditor',
+  'coordinate-editor/PointGeoEditor',
   module
 )
 

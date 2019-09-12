@@ -50,7 +50,7 @@ const TableComponent = tableComponentFactory({
 })
 
 const stories = storiesOf(
-  'map-drawing/coordinate-editor/CircleGeoEditor',
+  'coordinate-editor/CircleGeoEditor',
   module
 )
 
