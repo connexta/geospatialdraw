@@ -43,7 +43,7 @@ Library of tools to draw and edit geometric shapes on a map.
 **shapes**
 : The GeospatialDraw GeoJSON format only supports a limited set of geometric shapes. To aid in identifying the correct geometric shape a shape detector is provided in the shapes package.
 
- * [Shape](./target/docs/classes/modules/_shape_utils_shape_.html#shape)
+ * [Shape](./target/docs/modules/_shape_utils_shape_.html#shape)
  * [ShapeDetector](./target/docs/classes/_shape_utils_shape_detector_.shapedetector.html)
 
 **coordinates**
