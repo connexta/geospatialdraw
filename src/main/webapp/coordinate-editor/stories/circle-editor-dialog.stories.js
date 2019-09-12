@@ -25,11 +25,31 @@ import {
 } from '../../internal/storybook'
 import { makeEmptyGeometry } from '../../geometry'
 import { CircleEditorDialog } from '../'
+import { tableComponentFactory } from '../../internal/storybook-helpers'
+
+const TableComponent = tableComponentFactory({
+  geo: {
+    propType: 'GeometryJSON',
+    required: true,
+    description: 'GeometryJSON to edit',
+  },
+  onOk: {
+    propType: '(geo: GeometryJSON) => void',
+    required: true,
+    description: 'Ok button handler',
+  },
+})
 
 const stories = storiesOf(
   'map-drawing/coordinate-editor/CircleEditorDialog',
   module
 )
+
+stories.addParameters({
+  info: {
+    TableComponent,
+  },
+})
 
 const makeGeometry = () => makeEmptyGeometry('id', 'Point Radius')
 

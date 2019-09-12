@@ -58,6 +58,9 @@ const finalizeGeo: FinalizeGeo = geo => {
   return updateGeoWithExtentBBox(geo, orientationCorrectedBBox)
 }
 
+/**
+ * Some comment that should show up
+ */
 class BBoxGeoEditor extends React.Component<Props> {
   render() {
     const { geo, coordinateUnit, onUpdateGeo } = this.props

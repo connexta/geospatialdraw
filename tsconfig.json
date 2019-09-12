@@ -15,6 +15,11 @@
     "module": "CommonJS",
     "outDir": "target/webapp"
   },
+  "typedocOptions": {
+    "mode": "modules",
+    "out": "./target/docs",
+    "categorizeByGroup": true
+  },
   "include": ["src/main/webapp/**/*.tsx"],
   "exclude": [
     "node_modules",

@@ -1,6 +1,6 @@
 {
   "name": "geospatialdraw",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Geospatial Map Drawing Library",
   "types": "./target/webapp/index.d.ts",
   "main": "./target/webapp/index.js",
@@ -40,6 +40,8 @@
     "storybook": "ace storybook",
     "prebuild": "rimraf ./target",
     "build": "tsc -p tsconfig.json",
+    "build:docs": "typedoc",
+    "docs": "yarn run build:docs && markserv README.md",
     "build:verify": "yarn run fmt && yarn run test && yarn run build",
     "m2": "yarn install:m2",
     "install:m2": "ace clean && ace bundle && ace package && ace install"
@@ -82,6 +84,7 @@
     "react-textarea-autosize": "7.1.0",
     "recompose": "0.30.0",
     "rimraf": "3.0.0",
+    "typedoc": "0.15.0",
     "typescript-bundle": "1.0.16"
   }
 }

@@ -12,7 +12,15 @@
  * <http://www.gnu.org/licenses/lgpl.html>.
  *
  **/
-import Map from './map';
-import { coordinateUnitList, lengthUnitList, shapeList } from './options-lists';
-import tableComponentFactory from './propTable';
-export { Map, coordinateUnitList, lengthUnitList, shapeList, tableComponentFactory, };
+import * as React from 'react';
+declare type PropDefinition = {
+    required?: boolean;
+    propType?: string;
+    defaultValue?: string;
+    description?: string;
+};
+interface PropTypes {
+    [key: string]: PropDefinition;
+}
+declare const tableComponentFactory: (propTypes: PropTypes) => React.FunctionComponent<{}>;
+export default tableComponentFactory;

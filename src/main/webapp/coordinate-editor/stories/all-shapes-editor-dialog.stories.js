@@ -25,12 +25,39 @@ import {
 } from '../../internal/storybook'
 import { makeEmptyGeometry } from '../../geometry'
 import { AllShapesEditorDialog } from '../'
-import { shapeList } from '../../internal/storybook-helpers'
+import {
+  shapeList,
+  tableComponentFactory,
+} from '../../internal/storybook-helpers'
+
+const TableComponent = tableComponentFactory({
+  geo: {
+    propType: 'GeometryJSON',
+    required: true,
+    description: 'GeometryJSON to edit',
+  },
+  onOk: {
+    propType: '(geo: GeometryJSON) => void',
+    required: true,
+    description: 'Okay button handler',
+  },
+  shape: {
+    propType: 'Shape',
+    required: true,
+    description: 'Geometry shape to edit',
+  },
+})
 
 const stories = storiesOf(
   'map-drawing/coordinate-editor/AllShapesEditorDialog',
   module
 )
+
+stories.addParameters({
+  info: {
+    TableComponent,
+  },
+})
 
 const makeGeometry = shape => makeEmptyGeometry('id', shape)
 

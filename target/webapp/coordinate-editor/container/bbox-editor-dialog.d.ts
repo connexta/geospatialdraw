@@ -26,6 +26,9 @@ declare type Props = {
 };
 declare const updateGeoWithExtentBBox: (geo: GeometryJSON, extent: [number, number, number, number]) => GeometryJSON;
 declare const finalizeGeo: FinalizeGeo;
+/**
+ * Some comment that should show up
+ */
 declare class BBoxGeoEditor extends React.Component<Props> {
     render(): JSX.Element;
 }

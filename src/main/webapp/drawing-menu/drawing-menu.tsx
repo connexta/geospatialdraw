@@ -38,33 +38,19 @@ import PointIcon from './icons/point'
 import { GeometryJSON } from '../geometry'
 
 type Props = HTMLAttributes & {
-  /** Geometry Shape to draw */
   shape: Shape | null
-  /** Open Layers Map to draw on */
   map: ol.Map
-  /** True if the draw menu should be displayed */
   isActive: boolean
-  /** True if the coordinate editor popup should be displayed */
   showCoordinateEditor?: boolean
-  /** True if the Apply button should be replaced with a Save & Continue button */
   saveAndContinue?: boolean
-  /** Title of Geometry being edited */
   title?: string
-  /** Geometry JSON to edit */
   geometry: GeometryJSON | null
-  /** Called when show coordinate editor button is clicked (should set `showCoordinateEditor` flag) */
   toggleCoordinateEditor?: () => void
-  /** Called when cancel button is clicked */
   onCancel: () => void
-  /** Called when ok button is clicked */
   onOk: () => void
-  /** Called when the shape changes (should set `shape`) */
-  onSetShape: (shape: string) => void
-  /** Called when the Geometry JSON is updated */
+  onSetShape: (shape: Shape) => void
   onUpdate: UpdatedGeoReceiver
-  /** List of shapes to hide from menu */
   disabledShapes?: Shape[]
-  /** Style to apply to geometries drawn on the map */
   mapStyle: ol.StyleFunction | ol.style.Style | ol.style.Style[]
 }
 
@@ -172,7 +158,7 @@ const DrawingBackground = styled.div`
 class DrawingMenu extends React.Component<Props> {
   drawingContext: DrawingContext
   controlsMap: DrawingControlMap
-  setShape: (shape: string) => void
+  setShape: (shape: Shape) => void
   acceptEdit: () => void
   cancelClick: () => void
 
@@ -203,7 +189,7 @@ class DrawingMenu extends React.Component<Props> {
       'Bounding Box',
       new BoundingBoxDrawingControl(this.drawingContext, this.props.onUpdate)
     )
-    this.setShape = (shape: string) => {
+    this.setShape = (shape: Shape) => {
       this.props.onSetShape(shape)
     }
     this.acceptEdit = () => {

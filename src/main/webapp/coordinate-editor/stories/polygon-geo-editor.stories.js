@@ -28,12 +28,38 @@ import { PolygonGeoEditor } from '../'
 import {
   coordinateUnitList,
   lengthUnitList,
+  tableComponentFactory,
 } from '../../internal/storybook-helpers'
+
+const TableComponent = tableComponentFactory({
+  geo: {
+    propType: 'GeometryJSON',
+    required: true,
+    description: 'GeometryJSON to edit',
+  },
+  coordinateUnit: {
+    propType: 'CoordinateUnit',
+    required: true,
+    description: 'Coordinate unit',
+  },
+  onUpdateGeo: {
+    propType: '(geo: GeometryJSON) => void',
+    required: true,
+    description: 'Called when GeometryJSON changes',
+  },
+})
 
 const stories = storiesOf(
   'map-drawing/coordinate-editor/PolygonGeoEditor',
   module
 )
+
+stories.addParameters({
+  info: {
+    TableComponent,
+    propTablesExclude: [React.Fragment, Map],
+  },
+})
 
 coordinateUnitList.forEach(coordinateUnit => {
   stories.add(coordinateUnit, () => {
