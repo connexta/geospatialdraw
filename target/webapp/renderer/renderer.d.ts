@@ -1,15 +1,6 @@
 import * as ol from 'openlayers';
 import { GeometryJSON, Extent } from '../geometry';
 /**
- * Object containing a GeometryJSON object
- */
-declare type Renderable = {
-    /**
-     * GeometryJSON object to render on map
-     */
-    geo: GeometryJSON;
-};
-/**
  * Renders Renderable objects on an Open Layers Map
  */
 declare class Renderer {
@@ -24,14 +15,40 @@ declare class Renderer {
      * @param maxZoom - maximum zoom to allow when panning on map
      */
     constructor(map: ol.Map, style: ol.style.Style | ol.StyleFunction | ol.style.Style[], maxZoom: number);
-    renderList(geometryList: Renderable[]): void;
-    makeGeometryFeature(geometry: Renderable): ol.Feature;
-    addGeo(geometry: Renderable): void;
+    /**
+     * Renders array of GeometryJSON objects
+     * @param geometryList - array of geometry JSON
+     */
+    renderList(geometryList: GeometryJSON[]): void;
+    private makeGeometryFeature;
+    /**
+     * Renders a GeometryJSON object
+     * @param geometry - GeometryJSON object
+     */
+    addGeo(geometry: GeometryJSON): void;
+    /**
+     * Removes all rendered geometry
+     */
     clearGeos(): void;
-    panToGeo(geometry: Renderable): void;
-    panToGeoList(geometryList: Renderable[]): void;
+    /**
+     * Pans to GeometryJSON
+     * @param geometry - GeometryJSON
+     */
+    panToGeo(geometry: GeometryJSON): void;
+    /**
+     * Pans to array of GeometryJSON
+     * @param geometryList - array of geometry JSON
+     */
+    panToGeoList(geometryList: GeometryJSON[]): void;
+    /**
+     * Pans to extent
+     * @param extent - Extent
+     */
     panToExtent(extent: Extent): void;
-    protected getExtent(geometry: Renderable): Extent;
+    private getExtent;
+    /**
+     * Resizes map after the map container has changed size
+     */
     resizeMap(): void;
 }
 export default Renderer;

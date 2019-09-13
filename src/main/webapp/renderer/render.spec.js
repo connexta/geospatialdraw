@@ -21,35 +21,32 @@ define('-Renderer', () => {
       const renderer = new Renderer(map)
       renderer.renderList([
         {
-          color: 'blue',
-          geo: {
-            type: 'Feature',
-            geometry: {
-              type: 'Point',
-              coordinates: [125.6, 10.1],
-            },
-            properties: {
-              name: 'Dinagat Islands',
-            },
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: [125.6, 10.1],
+          },
+          properties: {
+            name: 'Dinagat Islands',
+            color: 'blue',
           },
         },
         {
-          color: 'white',
-          geo: {
-            type: 'Feature',
-            properties: {},
-            geometry: {
-              type: 'Polygon',
-              coordinates: [
-                [
-                  [29.53125, 18.979025953255267],
-                  [24.960937499999996, 6.315298538330033],
-                  [42.1875, 7.013667927566642],
-                  [50.2734375, 18.646245142670608],
-                  [29.53125, 18.979025953255267],
-                ],
+          type: 'Feature',
+          properties: {
+            color: 'white',
+          },
+          geometry: {
+            type: 'Polygon',
+            coordinates: [
+              [
+                [29.53125, 18.979025953255267],
+                [24.960937499999996, 6.315298538330033],
+                [42.1875, 7.013667927566642],
+                [50.2734375, 18.646245142670608],
+                [29.53125, 18.979025953255267],
               ],
-            },
+            ],
           },
         },
       ])
@@ -61,16 +58,14 @@ define('-Renderer', () => {
       const map = new MockMap()
       const renderer = new Renderer(map)
       renderer.addGeo({
-        color: 'blue',
-        geo: {
-          type: 'Feature',
-          geometry: {
-            type: 'Point',
-            coordinates: [125.6, 10.1],
-          },
-          properties: {
-            name: 'Dinagat Islands',
-          },
+        type: 'Feature',
+        geometry: {
+          type: 'Point',
+          coordinates: [125.6, 10.1],
+        },
+        properties: {
+          name: 'Dinagat Islands',
+          color: 'blue',
         },
       })
       expect(map.layer.getSource().getFeatures().length).to.equal(1)
@@ -82,35 +77,32 @@ define('-Renderer', () => {
       const renderer = new Renderer(map)
       renderer.renderList([
         {
-          color: 'blue',
-          geo: {
-            type: 'Feature',
-            geometry: {
-              type: 'Point',
-              coordinates: [125.6, 10.1],
-            },
-            properties: {
-              name: 'Dinagat Islands',
-            },
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: [125.6, 10.1],
+          },
+          properties: {
+            name: 'Dinagat Islands',
+            color: 'blue',
           },
         },
         {
-          color: 'white',
-          geo: {
-            type: 'Feature',
-            properties: {},
-            geometry: {
-              type: 'Polygon',
-              coordinates: [
-                [
-                  [29.53125, 18.979025953255267],
-                  [24.960937499999996, 6.315298538330033],
-                  [42.1875, 7.013667927566642],
-                  [50.2734375, 18.646245142670608],
-                  [29.53125, 18.979025953255267],
-                ],
+          type: 'Feature',
+          properties: {
+            color: 'white',
+          },
+          geometry: {
+            type: 'Polygon',
+            coordinates: [
+              [
+                [29.53125, 18.979025953255267],
+                [24.960937499999996, 6.315298538330033],
+                [42.1875, 7.013667927566642],
+                [50.2734375, 18.646245142670608],
+                [29.53125, 18.979025953255267],
               ],
-            },
+            ],
           },
         },
       ])

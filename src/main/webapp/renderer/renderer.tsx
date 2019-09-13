@@ -3,16 +3,6 @@ import { GeometryJSON, Extent } from '../geometry'
 import { makeBufferedGeo } from '../geometry'
 
 /**
- * Object containing a GeometryJSON object
- */
-type Renderable = {
-  /**
-   * GeometryJSON object to render on map
-   */
-  geo: GeometryJSON
-}
-
-/**
  * Renders Renderable objects on an Open Layers Map
  */
 class Renderer {
@@ -46,38 +36,60 @@ class Renderer {
     this.map.addLayer(this.vectorLayer)
   }
 
-  // TODO continue documenting
-
-  renderList(geometryList: Renderable[]): void {
+  /**
+   * Renders array of GeometryJSON objects
+   * @param geometryList - array of geometry JSON
+   */
+  renderList(geometryList: GeometryJSON[]): void {
     for (const geometry of geometryList) {
       this.addGeo(geometry)
     }
   }
-  makeGeometryFeature(geometry: Renderable): ol.Feature {
-    const buffered = makeBufferedGeo(geometry.geo)
+
+  private makeGeometryFeature(geometry: GeometryJSON): ol.Feature {
+    const buffered = makeBufferedGeo(geometry)
     return this.geoFormat.readFeature(buffered)
   }
-  addGeo(geometry: Renderable): void {
+
+  /**
+   * Renders a GeometryJSON object
+   * @param geometry - GeometryJSON object
+   */
+  addGeo(geometry: GeometryJSON): void {
     const feature = this.makeGeometryFeature(geometry)
-    feature.setId(geometry.geo.properties.id)
+    feature.setId(geometry.properties.id)
     // Note: In the future we may want to optimize performance
     // here by using feature ids to update only what has
     // changed and remove only what has been removed.
     this.vectorLayer.getSource().addFeature(feature)
   }
+
+  /**
+   * Removes all rendered geometry
+   */
   clearGeos(): void {
     this.vectorLayer.getSource().clear()
   }
-  panToGeo(geometry: Renderable) {
+
+  /**
+   * Pans to GeometryJSON
+   * @param geometry - GeometryJSON
+   */
+  panToGeo(geometry: GeometryJSON) {
     this.panToExtent(this.getExtent(geometry))
   }
-  panToGeoList(geometryList: Renderable[]) {
+
+  /**
+   * Pans to array of GeometryJSON
+   * @param geometryList - array of geometry JSON
+   */
+  panToGeoList(geometryList: GeometryJSON[]) {
     if (geometryList.length > 0) {
       let minX = Number.MAX_SAFE_INTEGER
       let minY = Number.MAX_SAFE_INTEGER
       let maxX = Number.MIN_SAFE_INTEGER
       let maxY = Number.MIN_SAFE_INTEGER
-      geometryList.forEach((geometry: Renderable) => {
+      geometryList.forEach((geometry: GeometryJSON) => {
         const extent = this.getExtent(geometry)
         minX = Math.min(minX, extent[0])
         minY = Math.min(minY, extent[1])
@@ -87,6 +99,11 @@ class Renderer {
       this.panToExtent([minX, minY, maxX, maxY])
     }
   }
+
+  /**
+   * Pans to extent
+   * @param extent - Extent
+   */
   panToExtent(extent: Extent) {
     this.map.getView().fit(extent, {
       size: this.map.getSize(),
@@ -94,14 +111,19 @@ class Renderer {
       maxZoom: this.maxZoom,
     })
   }
-  protected getExtent(geometry: Renderable): Extent {
-    if (geometry.geo.bbox) {
-      return geometry.geo.bbox
+
+  private getExtent(geometry: GeometryJSON): Extent {
+    if (geometry.bbox) {
+      return geometry.bbox
     } else {
-      const feature = this.geoFormat.readFeature(geometry.geo)
+      const feature = this.geoFormat.readFeature(geometry)
       return feature.getGeometry().getExtent()
     }
   }
+
+  /**
+   * Resizes map after the map container has changed size
+   */
   resizeMap() {
     this.map.updateSize()
   }

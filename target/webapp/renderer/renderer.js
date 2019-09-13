@@ -26,7 +26,10 @@ var Renderer = /** @class */ (function () {
         this.vectorLayer.setStyle(style);
         this.map.addLayer(this.vectorLayer);
     }
-    // TODO continue documenting
+    /**
+     * Renders array of GeometryJSON objects
+     * @param geometryList - array of geometry JSON
+     */
     Renderer.prototype.renderList = function (geometryList) {
         for (var _i = 0, geometryList_1 = geometryList; _i < geometryList_1.length; _i++) {
             var geometry = geometryList_1[_i];
@@ -34,23 +37,38 @@ var Renderer = /** @class */ (function () {
         }
     };
     Renderer.prototype.makeGeometryFeature = function (geometry) {
-        var buffered = geometry_1.makeBufferedGeo(geometry.geo);
+        var buffered = geometry_1.makeBufferedGeo(geometry);
         return this.geoFormat.readFeature(buffered);
     };
+    /**
+     * Renders a GeometryJSON object
+     * @param geometry - GeometryJSON object
+     */
     Renderer.prototype.addGeo = function (geometry) {
         var feature = this.makeGeometryFeature(geometry);
-        feature.setId(geometry.geo.properties.id);
+        feature.setId(geometry.properties.id);
         // Note: In the future we may want to optimize performance
         // here by using feature ids to update only what has
         // changed and remove only what has been removed.
         this.vectorLayer.getSource().addFeature(feature);
     };
+    /**
+     * Removes all rendered geometry
+     */
     Renderer.prototype.clearGeos = function () {
         this.vectorLayer.getSource().clear();
     };
+    /**
+     * Pans to GeometryJSON
+     * @param geometry - GeometryJSON
+     */
     Renderer.prototype.panToGeo = function (geometry) {
         this.panToExtent(this.getExtent(geometry));
     };
+    /**
+     * Pans to array of GeometryJSON
+     * @param geometryList - array of geometry JSON
+     */
     Renderer.prototype.panToGeoList = function (geometryList) {
         var _this = this;
         if (geometryList.length > 0) {
@@ -68,6 +86,10 @@ var Renderer = /** @class */ (function () {
             this.panToExtent([minX_1, minY_1, maxX_1, maxY_1]);
         }
     };
+    /**
+     * Pans to extent
+     * @param extent - Extent
+     */
     Renderer.prototype.panToExtent = function (extent) {
         this.map.getView().fit(extent, {
             size: this.map.getSize(),
@@ -76,14 +98,17 @@ var Renderer = /** @class */ (function () {
         });
     };
     Renderer.prototype.getExtent = function (geometry) {
-        if (geometry.geo.bbox) {
-            return geometry.geo.bbox;
+        if (geometry.bbox) {
+            return geometry.bbox;
         }
         else {
-            var feature = this.geoFormat.readFeature(geometry.geo);
+            var feature = this.geoFormat.readFeature(geometry);
             return feature.getGeometry().getExtent();
         }
     };
+    /**
+     * Resizes map after the map container has changed size
+     */
     Renderer.prototype.resizeMap = function () {
         this.map.updateSize();
     };
