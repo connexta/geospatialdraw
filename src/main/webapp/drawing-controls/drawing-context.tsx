@@ -1,14 +1,14 @@
 import * as ol from 'openlayers'
 import { GeometryJSON, makeBufferedGeo } from '../geometry'
 
-type EventListener = (e: any) => void
+type EventHandler = (e: any) => void
 
-type ListenerTarget = 'draw' | 'snap' | 'modify'
+type ListenerTarget = 'draw' | 'snap' | 'modify' | 'map'
 
 type ListenerRecord = {
   target: ListenerTarget
   event: string
-  listener: EventListener
+  handler: EventHandler
 }
 
 /**
@@ -90,7 +90,7 @@ class DrawingContext {
       const bufferFeature = this.geoFormat.readFeature(bufferedGeo)
       this.bufferLayer.getSource().addFeature(bufferFeature)
       if (animate) {
-        this.map.on('pointerdrag', this.bufferUpdateEvent)
+        this.setEvent('map', 'pointerdrag', this.bufferUpdateEvent)
       }
     }
   }
@@ -105,6 +105,14 @@ class DrawingContext {
     }
   }
 
+  setModifyInteraction(modify: ol.interaction.Modify): void {
+    this.modify = modify
+  }
+
+  getSource(): ol.source.Vector {
+    return this.drawLayer.getSource()
+  }
+
   setDrawInteraction(draw: ol.interaction.Interaction): void {
     this.draw = draw
   }
@@ -112,29 +120,46 @@ class DrawingContext {
   setEvent(
     target: ListenerTarget,
     event: string,
-    listener: EventListener
+    handler: EventHandler
   ): void {
     const listenerTarget = this[target]
     if (listenerTarget !== null) {
-      listenerTarget.on(event, listener)
+      listenerTarget.on(event, handler)
       this.listenerList.push({
         target,
         event,
-        listener,
+        handler,
       })
+    }
+  }
+
+
+
+  removeListener(
+    target: ListenerTarget,
+    event: string,
+    handler: EventHandler
+  ): void {
+    if (target === 'map') {
+      this.map.un(event, handler)
+    } else {
+      const listenerTarget = this[target]
+      if (listenerTarget !== null) {
+        listenerTarget.un(event, handler)
+      }
     }
   }
 
   removeListeners(): void {
     for (const listener of this.listenerList) {
-      const listenerTarget = this[listener.target]
-      if (listenerTarget !== null) {
-        listenerTarget.un(listener.event, listener.listener)
-      }
+      this.removeListener(
+        listener.target,
+        listener.event,
+        listener.handler
+      )
     }
     this.listenerList = []
     cancelAnimationFrame(this.animationFrameId)
-    this.map.un('pointerdrag', this.bufferUpdateEvent)
   }
 
   addInteractions(): void {

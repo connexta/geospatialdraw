@@ -104,16 +104,29 @@ const makeBufferedGeo = (geo: GeometryJSON): GeometryJSON => {
   ) {
     // Copy JSON since turf.buffer has side effects
     geo = _.cloneDeep(geo)
-    const bufferedGeo = turf.buffer(
-      geo,
-      getDistanceInMeters(
-        geo.properties.buffer || 0,
-        geo.properties.bufferUnit
-      ),
-      {
-        units: 'meters',
-      }
+    const radius = getDistanceInMeters(
+      geo.properties.buffer || 0,
+      geo.properties.bufferUnit
     )
+    let bufferedGeo
+    if (geo.geometry.type === 'Point') {
+      const point = geo.geometry as turf.Point
+      bufferedGeo = turf.circle(point.coordinates, radius, {
+        units: 'meters'
+      })
+      bufferedGeo = {
+        ...geo,
+        geometry: bufferedGeo.geometry
+      }
+    } else {
+      bufferedGeo = turf.buffer(
+        geo,
+        radius,
+        {
+          units: 'meters',
+        }
+      )
+    }
     if (bufferedGeo === undefined) {
       return geo
     } else if (bufferedGeo.properties) {

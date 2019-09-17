@@ -4,7 +4,7 @@ import DrawingContext from './drawing-context'
 import UpdatedGeoReceiver from './geo-receiver'
 import BasicDrawingControl from './basic-drawing-control'
 import { Shape } from '../shape-utils'
-import { GeometryJSON, METERS, KILOMETERS, geoToExtent } from '../geometry'
+import { GeometryJSON, METERS, KILOMETERS } from '../geometry'
 import {
   getDistanceInMeters,
   getDistanceFromMeters,
@@ -36,6 +36,7 @@ class PointRadiusDrawingControl extends BasicDrawingControl {
     this.onStartDrawing = this.onStartDrawing.bind(this)
     this.onStartModify = this.onStartModify.bind(this)
     this.onCompleteModify = this.onCompleteModify.bind(this)
+    this.onMouseMove = this.onMouseMove.bind(this)
     this.initalCenter = [0, 0]
   }
 
@@ -93,35 +94,56 @@ class PointRadiusDrawingControl extends BasicDrawingControl {
   }
 
   onCompleteDrawing(e: any) {
+    console.log('onCompleteDrawing')
     this.mouseDragActive = false
     const feature = this.getFeatureFromDrawEvent(e)
     const geoJSON = this.stopDrawAnimation(feature)
-    this.reorientRadiusLineFeature(this.initalCenter)
+    this.applyPropertiesToFeature(feature)
+    this.context.updateFeature(feature)
     this.receiver(geoJSON)
   }
 
   onStartDrawing(e: any) {
+    console.log('onStartDrawing')
     this.mouseDragActive = true
     const feature = this.getFeatureFromDrawEvent(e)
+    const source = this.context.getSource()
+    source.getFeatures().forEach(f => source.removeFeature(f))
     this.initalCenter = this.toLine(feature).getCoordinates()[0]
     this.startDrawAnimation(feature)
   }
 
   onStartModify(e: any) {
+    console.log('onStartModify')
     this.mouseDragActive = true
     const feature = this.getFeatureModifyEvent(e)
+    const line = this.toLine(feature)
+    const clickedPoint = line.getClosestPoint(e.mapBrowserEvent.coordinate)
+    const distanceMap = line.getCoordinates().map(point => turf.distance(point, clickedPoint))
+    feature.set('hidden', distanceMap[0] < distanceMap[1])
     this.startDrawAnimation(feature)
   }
 
   onCompleteModify(e: any) {
     this.mouseDragActive = false
     const feature = this.getFeatureModifyEvent(e)
+    feature.set('hidden', false)
     const geoJSON = this.stopDrawAnimation(feature)
     const center = this.toLine(feature).getCoordinates()[0]
     if (!this.pointsEqual(center, this.initalCenter)) {
       this.reorientRadiusLineFeature(center)
     }
     this.receiver(geoJSON)
+  }
+
+  onMouseMove(e: any) {
+    if (!this.isMouseDragActive() && e.dragging === false) {
+      const bearing = turf.rhumbBearing(this.initalCenter, e.coordinate)
+      const line = this.makeRadiusLineFromPoint(this.initalCenter, bearing)
+      const feature = new ol.Feature(line)
+      this.applyPropertiesToFeature(feature)
+      this.context.updateFeature(feature)
+    }
   }
 
   makeFeatures(geoJSON: GeometryJSON): DrawingFeatures {
@@ -136,10 +158,10 @@ class PointRadiusDrawingControl extends BasicDrawingControl {
     }
   }
 
-  private makeRadiusLineFromPoint(point: [number, number]): ol.geom.LineString {
+  private makeRadiusLineFromPoint(point: [number, number], bearing: number = 90): ol.geom.LineString {
     const bufferUnit = this.properties.bufferUnit || METERS
     const meters = getDistanceInMeters(this.properties.buffer || 0, bufferUnit)
-    const destination = turf.destination(point, meters, 90, {
+    const destination = turf.rhumbDestination(point, meters, bearing, {
       units: 'meters',
     })
     const end = (destination.geometry as turf.Point).coordinates as [
@@ -166,7 +188,7 @@ class PointRadiusDrawingControl extends BasicDrawingControl {
   ): ol.geom.Point {
     const center = line.getCoordinates()[0]
     if (this.pointsEqual(center, this.initalCenter)) {
-      const distance = turf.distance(
+      const distance = turf.rhumbDistance(
         line.getCoordinates()[0],
         line.getCoordinates()[1],
         {
@@ -203,6 +225,7 @@ class PointRadiusDrawingControl extends BasicDrawingControl {
       type: this.getGeoType(),
       style: this.getStaticStyle(feature),
       maxPoints: 2,
+      source: this.context.getSource(),
     })
     this.startDrawingInteraction(drawInteraction)
   }
@@ -223,6 +246,7 @@ class PointRadiusDrawingControl extends BasicDrawingControl {
     const drawInteraction = new ol.interaction.Draw({
       type: this.getGeoType(),
       maxPoints: 2,
+      source: this.context.getSource(),
     })
     this.startDrawingInteraction(drawInteraction)
   }
@@ -231,11 +255,17 @@ class PointRadiusDrawingControl extends BasicDrawingControl {
     drawInteraction: ol.interaction.Interaction
   ): void {
     this.drawingActive = true
+    this.context.setModifyInteraction(new ol.interaction.Modify({
+      insertVertexCondition: () => false,
+      deleteCondition: () => false,
+      source: this.context.getSource()
+    }))
     this.context.setDrawInteraction(drawInteraction)
     this.context.setEvent('draw', 'drawend', this.onCompleteDrawing)
     this.context.setEvent('draw', 'drawstart', this.onStartDrawing)
     this.context.setEvent('modify', 'modifyend', this.onCompleteModify)
     this.context.setEvent('modify', 'modifystart', this.onStartModify)
+    this.context.setEvent('map', 'pointermove', this.onMouseMove)
     this.context.addInteractions()
   }
 
@@ -245,6 +275,12 @@ class PointRadiusDrawingControl extends BasicDrawingControl {
 
   getGeoType(): ol.geom.GeometryType {
     return 'LineString'
+  }
+
+  cancelDrawing() {
+    // uses custom modify interaction
+    this.context.remakeInteractions()
+    super.cancelDrawing()
   }
 }
 

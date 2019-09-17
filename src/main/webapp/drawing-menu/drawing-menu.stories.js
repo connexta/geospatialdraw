@@ -14,11 +14,12 @@ import { decodeHtml } from '../internal/html'
 import {
   Map,
   shapeList,
+  lengthUnitList,
   tableComponentFactory,
 } from '../internal/storybook-helpers'
 import DrawingMenu from './drawing-menu'
 import styled from 'styled-components'
-import { makeEmptyGeometry, KILOMETERS } from '../geometry'
+import { makeEmptyGeometry, KILOMETERS, METERS } from '../geometry'
 
 const MenuContainer = styled.div`
   display: flex;
@@ -29,10 +30,12 @@ const MenuContainer = styled.div`
   height: 45px;
 `
 
+const featureColor = feature => feature.get('hidden') ? 'rgba(0, 0, 0, 0)' : feature.get('color')
+
 const STYLE = feature =>
   new ol.style.Style({
     stroke: new ol.style.Stroke({
-      color: feature.get('color'),
+      color: featureColor(feature),
       width: 2,
     }),
     fill: new ol.style.Fill({
@@ -41,7 +44,7 @@ const STYLE = feature =>
     image: new ol.style.Circle({
       radius: 4,
       fill: new ol.style.Fill({
-        color: feature.get('color'),
+        color: featureColor(feature),
       }),
     }),
   })
@@ -149,7 +152,6 @@ stories.add('full featured', () => {
   const isActive = boolean('isActive', true)
   const showCoordinateEditor = boolean('showCoordinateEditor', false)
   const id = 'someID'
-  const color = text('color', '#0000FF')
   const shape = select('shape', shapeList, 'Polygon')
   const DrawingMenuWithMap = ({ map }) => (
     <MenuContainer class="menu-container">
@@ -181,6 +183,8 @@ stories.add('editing a geo', () => {
   const showCoordinateEditor = boolean('showCoordinateEditor', false)
   const id = 'someID'
   const color = text('color', '#0000FF')
+  const buffer = number('buffer', 0)
+  const bufferUnit = select('bufferUnit', lengthUnitList, METERS)
   const shape = select('shape', shapeList, 'Polygon')
   const geoJSON = makeEmptyGeometry(id, shape)
   switch (shape) {
@@ -189,6 +193,8 @@ stories.add('editing a geo', () => {
         [[-92, 43], [-98, 50], [-103, 39], [-100, 33], [-92, 43]],
       ]
       geoJSON.bbox = turf.bbox(geoJSON)
+      geoJSON.properties.buffer = buffer
+      geoJSON.properties.bufferUnit = bufferUnit
       break
     case 'Bounding Box':
       geoJSON.bbox = [-107, 40, -90, 30]
@@ -205,6 +211,8 @@ stories.add('editing a geo', () => {
         [-100, 33],
       ]
       geoJSON.bbox = turf.bbox(geoJSON)
+      geoJSON.properties.buffer = buffer
+      geoJSON.properties.bufferUnit = bufferUnit
       break
     case 'Point Radius':
       geoJSON.geometry.coordinates = [-92, 43]
@@ -222,6 +230,7 @@ stories.add('editing a geo', () => {
     default:
       break
   }
+  geoJSON.properties.color = color
   const DrawingMenuWithMap = ({ map }) => (
     <MenuContainer class="menu-container">
       <DrawingMenu
@@ -248,7 +257,6 @@ stories.add('editing a geo', () => {
 stories.add('simplified', () => {
   const isActive = boolean('isActive', true)
   const id = 'someID'
-  const color = text('color', '#0000FF')
   const shape = select('shape', shapeList, 'Polygon')
   const DrawingMenuWithMap = ({ map }) => (
     <MenuContainer class="menu-container">
@@ -272,7 +280,6 @@ stories.add('simplified', () => {
 stories.add('minimal', () => {
   const isActive = boolean('isActive', true)
   const id = 'someID'
-  const color = text('color', '#0000FF')
   const shape = select('shape', ['Line', 'Polygon'], 'Polygon')
   const DrawingMenuWithMap = ({ map }) => (
     <MenuContainer class="menu-container">
