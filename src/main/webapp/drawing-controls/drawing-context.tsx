@@ -17,16 +17,16 @@ type ListenerRecord = {
  * accross all drawing controls.
  */
 class DrawingContext {
-  map: ol.Map
-  drawLayer: ol.layer.Vector
-  bufferLayer: ol.layer.Vector
-  modify: ol.interaction.Modify
-  snap: ol.interaction.Snap
-  draw: ol.interaction.Interaction | null
-  listenerList: ListenerRecord[]
-  style: ol.style.Style | ol.StyleFunction | ol.style.Style[]
-  geoFormat: ol.format.GeoJSON
-  animationFrameId: number
+  private map: ol.Map
+  private drawLayer: ol.layer.Vector
+  private bufferLayer: ol.layer.Vector
+  private modify: ol.interaction.Modify
+  private snap: ol.interaction.Snap
+  private draw: ol.interaction.Interaction | null
+  private listenerList: ListenerRecord[]
+  private style: ol.style.Style | ol.StyleFunction | ol.style.Style[]
+  private geoFormat: ol.format.GeoJSON
+  private animationFrameId: number
 
   /**
    * Constructs an instance of the drawing context
@@ -81,7 +81,7 @@ class DrawingContext {
     this.drawLayer.getSource().addFeature(feature)
   }
 
-  updateBufferFeature(feature: ol.Feature): void {
+  updateBufferFeature(feature: ol.Feature, animate: boolean = true): void {
     this.bufferLayer.getSource().clear()
     const buffer: number | undefined = feature.get('buffer')
     if (buffer !== undefined && buffer > 0) {
@@ -89,7 +89,9 @@ class DrawingContext {
       const bufferedGeo = makeBufferedGeo(geo)
       const bufferFeature = this.geoFormat.readFeature(bufferedGeo)
       this.bufferLayer.getSource().addFeature(bufferFeature)
-      this.map.on('pointerdrag', this.bufferUpdateEvent)
+      if (animate) {
+        this.map.on('pointerdrag', this.bufferUpdateEvent)
+      }
     }
   }
 
