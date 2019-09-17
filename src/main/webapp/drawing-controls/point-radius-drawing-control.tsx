@@ -36,7 +36,6 @@ class PointRadiusDrawingControl extends BasicDrawingControl {
     this.onStartDrawing = this.onStartDrawing.bind(this)
     this.onStartModify = this.onStartModify.bind(this)
     this.onCompleteModify = this.onCompleteModify.bind(this)
-    this.onMouseMove = this.onMouseMove.bind(this)
     this.initalCenter = [0, 0]
   }
 
@@ -134,16 +133,6 @@ class PointRadiusDrawingControl extends BasicDrawingControl {
       this.reorientRadiusLineFeature(center)
     }
     this.receiver(geoJSON)
-  }
-
-  onMouseMove(e: any) {
-    if (!this.isMouseDragActive() && e.dragging === false) {
-      const bearing = turf.rhumbBearing(this.initalCenter, e.coordinate)
-      const line = this.makeRadiusLineFromPoint(this.initalCenter, bearing)
-      const feature = new ol.Feature(line)
-      this.applyPropertiesToFeature(feature)
-      this.context.updateFeature(feature)
-    }
   }
 
   makeFeatures(geoJSON: GeometryJSON): DrawingFeatures {
@@ -265,7 +254,6 @@ class PointRadiusDrawingControl extends BasicDrawingControl {
     this.context.setEvent('draw', 'drawstart', this.onStartDrawing)
     this.context.setEvent('modify', 'modifyend', this.onCompleteModify)
     this.context.setEvent('modify', 'modifystart', this.onStartModify)
-    this.context.setEvent('map', 'pointermove', this.onMouseMove)
     this.context.addInteractions()
   }
 
