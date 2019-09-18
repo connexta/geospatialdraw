@@ -117,11 +117,7 @@ class DrawingContext {
     this.draw = draw
   }
 
-  setEvent(
-    target: ListenerTarget,
-    event: string,
-    handler: EventHandler
-  ): void {
+  setEvent(target: ListenerTarget, event: string, handler: EventHandler): void {
     const listenerTarget = this[target]
     if (listenerTarget !== null) {
       listenerTarget.on(event, handler)
@@ -132,8 +128,6 @@ class DrawingContext {
       })
     }
   }
-
-
 
   removeListener(
     target: ListenerTarget,
@@ -152,11 +146,7 @@ class DrawingContext {
 
   removeListeners(): void {
     for (const listener of this.listenerList) {
-      this.removeListener(
-        listener.target,
-        listener.event,
-        listener.handler
-      )
+      this.removeListener(listener.target, listener.event, listener.handler)
     }
     this.listenerList = []
     cancelAnimationFrame(this.animationFrameId)

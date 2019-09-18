@@ -91,9 +91,25 @@ var makeBufferedGeo = function (geo) {
         geo.properties.buffer > 0) {
         // Copy JSON since turf.buffer has side effects
         geo = _.cloneDeep(geo);
-        var bufferedGeo = turf.buffer(geo, distance_1.getDistanceInMeters(geo.properties.buffer || 0, geo.properties.bufferUnit), {
-            units: 'meters',
-        });
+        var radius = distance_1.getDistanceInMeters(geo.properties.buffer || 0, geo.properties.bufferUnit);
+        var bufferedGeo = void 0;
+        if (geo.geometry.type === 'Point') {
+            if (radius > 0) {
+                var point = geo.geometry;
+                bufferedGeo = turf.circle(point.coordinates, radius, {
+                    units: 'meters',
+                });
+                bufferedGeo = __assign({}, geo, { geometry: bufferedGeo.geometry });
+            }
+            else {
+                bufferedGeo = geo;
+            }
+        }
+        else {
+            bufferedGeo = turf.buffer(geo, radius, {
+                units: 'meters',
+            });
+        }
         if (bufferedGeo === undefined) {
             return geo;
         }

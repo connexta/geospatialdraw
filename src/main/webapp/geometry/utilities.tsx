@@ -110,22 +110,22 @@ const makeBufferedGeo = (geo: GeometryJSON): GeometryJSON => {
     )
     let bufferedGeo
     if (geo.geometry.type === 'Point') {
-      const point = geo.geometry as turf.Point
-      bufferedGeo = turf.circle(point.coordinates, radius, {
-        units: 'meters'
-      })
-      bufferedGeo = {
-        ...geo,
-        geometry: bufferedGeo.geometry
+      if (radius > 0) {
+        const point = geo.geometry as turf.Point
+        bufferedGeo = turf.circle(point.coordinates, radius, {
+          units: 'meters',
+        })
+        bufferedGeo = {
+          ...geo,
+          geometry: bufferedGeo.geometry,
+        }
+      } else {
+        bufferedGeo = geo
       }
     } else {
-      bufferedGeo = turf.buffer(
-        geo,
-        radius,
-        {
-          units: 'meters',
-        }
-      )
+      bufferedGeo = turf.buffer(geo, radius, {
+        units: 'meters',
+      })
     }
     if (bufferedGeo === undefined) {
       return geo

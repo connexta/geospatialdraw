@@ -47,9 +47,7 @@ class PointRadiusDrawingControl extends BasicDrawingControl {
         if (update !== revision) {
           revision = update
           const pointFeature = new ol.Feature(
-            this.updatePointFromRadiusLine(
-              this.toLine(feature),
-            )
+            this.updatePointFromRadiusLine(this.toLine(feature))
           )
           this.applyPropertiesToFeature(pointFeature)
           this.context.updateBufferFeature(pointFeature, false)
@@ -63,9 +61,7 @@ class PointRadiusDrawingControl extends BasicDrawingControl {
   private stopDrawAnimation(feature: ol.Feature): GeometryJSON {
     cancelAnimationFrame(this.animationFrameId)
     this.animationFrame = () => {}
-    const point = this.updatePointFromRadiusLine(
-      this.toLine(feature)
-    )
+    const point = this.updatePointFromRadiusLine(this.toLine(feature))
     const pointFeature = new ol.Feature(point)
     const bufferUnit = this.properties.bufferUnit || METERS
     const radius = getDistanceInMeters(this.properties.buffer || 0, bufferUnit)
@@ -93,7 +89,6 @@ class PointRadiusDrawingControl extends BasicDrawingControl {
   }
 
   onCompleteDrawing(e: any) {
-    console.log('onCompleteDrawing')
     this.mouseDragActive = false
     const feature = this.getFeatureFromDrawEvent(e)
     const geoJSON = this.stopDrawAnimation(feature)
@@ -103,7 +98,6 @@ class PointRadiusDrawingControl extends BasicDrawingControl {
   }
 
   onStartDrawing(e: any) {
-    console.log('onStartDrawing')
     this.mouseDragActive = true
     const feature = this.getFeatureFromDrawEvent(e)
     const source = this.context.getSource()
@@ -113,12 +107,13 @@ class PointRadiusDrawingControl extends BasicDrawingControl {
   }
 
   onStartModify(e: any) {
-    console.log('onStartModify')
     this.mouseDragActive = true
     const feature = this.getFeatureModifyEvent(e)
     const line = this.toLine(feature)
     const clickedPoint = line.getClosestPoint(e.mapBrowserEvent.coordinate)
-    const distanceMap = line.getCoordinates().map(point => turf.distance(point, clickedPoint))
+    const distanceMap = line
+      .getCoordinates()
+      .map(point => turf.distance(point, clickedPoint))
     feature.set('hidden', distanceMap[0] < distanceMap[1])
     this.startDrawAnimation(feature)
   }
@@ -147,7 +142,10 @@ class PointRadiusDrawingControl extends BasicDrawingControl {
     }
   }
 
-  private makeRadiusLineFromPoint(point: [number, number], bearing: number = 90): ol.geom.LineString {
+  private makeRadiusLineFromPoint(
+    point: [number, number],
+    bearing: number = 90
+  ): ol.geom.LineString {
     const bufferUnit = this.properties.bufferUnit || METERS
     const meters = getDistanceInMeters(this.properties.buffer || 0, bufferUnit)
     const destination = turf.rhumbDestination(point, meters, bearing, {
@@ -160,7 +158,7 @@ class PointRadiusDrawingControl extends BasicDrawingControl {
     return new ol.geom.LineString([point, end])
   }
 
-  private pointsEqual(a:[number, number], b:[number, number]) {
+  private pointsEqual(a: [number, number], b: [number, number]) {
     return a[0] === b[0] && a[1] === b[1]
   }
 
@@ -172,9 +170,7 @@ class PointRadiusDrawingControl extends BasicDrawingControl {
     return feature.getGeometry() as ol.geom.Point
   }
 
-  private updatePointFromRadiusLine(
-    line: ol.geom.LineString
-  ): ol.geom.Point {
+  private updatePointFromRadiusLine(line: ol.geom.LineString): ol.geom.Point {
     const center = line.getCoordinates()[0]
     if (this.pointsEqual(center, this.initalCenter)) {
       const distance = turf.rhumbDistance(
@@ -244,11 +240,13 @@ class PointRadiusDrawingControl extends BasicDrawingControl {
     drawInteraction: ol.interaction.Interaction
   ): void {
     this.drawingActive = true
-    this.context.setModifyInteraction(new ol.interaction.Modify({
-      insertVertexCondition: () => false,
-      deleteCondition: () => false,
-      source: this.context.getSource()
-    }))
+    this.context.setModifyInteraction(
+      new ol.interaction.Modify({
+        insertVertexCondition: () => false,
+        deleteCondition: () => false,
+        source: this.context.getSource(),
+      })
+    )
     this.context.setDrawInteraction(drawInteraction)
     this.context.setEvent('draw', 'drawend', this.onCompleteDrawing)
     this.context.setEvent('draw', 'drawstart', this.onStartDrawing)

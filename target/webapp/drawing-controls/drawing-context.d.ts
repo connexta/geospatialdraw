@@ -1,27 +1,22 @@
 import * as ol from 'openlayers';
-declare type EventListener = (e: any) => void;
-declare type ListenerTarget = 'draw' | 'snap' | 'modify';
-declare type ListenerRecord = {
-    target: ListenerTarget;
-    event: string;
-    listener: EventListener;
-};
+declare type EventHandler = (e: any) => void;
+declare type ListenerTarget = 'draw' | 'snap' | 'modify' | 'map';
 /**
  * Open Layers drawing context provides a layer between the drawing controls
  * and the openlayers map, normalizing interactions with the openlayers map
  * accross all drawing controls.
  */
 declare class DrawingContext {
-    map: ol.Map;
-    drawLayer: ol.layer.Vector;
-    bufferLayer: ol.layer.Vector;
-    modify: ol.interaction.Modify;
-    snap: ol.interaction.Snap;
-    draw: ol.interaction.Interaction | null;
-    listenerList: ListenerRecord[];
-    style: ol.style.Style | ol.StyleFunction | ol.style.Style[];
-    geoFormat: ol.format.GeoJSON;
-    animationFrameId: number;
+    private map;
+    private drawLayer;
+    private bufferLayer;
+    private modify;
+    private snap;
+    private draw;
+    private listenerList;
+    private style;
+    private geoFormat;
+    private animationFrameId;
     /**
      * Constructs an instance of the drawing context
      * @param map - reference to openlayers map
@@ -34,10 +29,13 @@ declare class DrawingContext {
     getStyle(): ol.style.Style | ol.StyleFunction | ol.style.Style[];
     removeFeature(): void;
     updateFeature(feature: ol.Feature): void;
-    updateBufferFeature(feature: ol.Feature): void;
+    updateBufferFeature(feature: ol.Feature, animate?: boolean): void;
     protected bufferUpdateEvent(): void;
+    setModifyInteraction(modify: ol.interaction.Modify): void;
+    getSource(): ol.source.Vector;
     setDrawInteraction(draw: ol.interaction.Interaction): void;
-    setEvent(target: ListenerTarget, event: string, listener: EventListener): void;
+    setEvent(target: ListenerTarget, event: string, handler: EventHandler): void;
+    removeListener(target: ListenerTarget, event: string, handler: EventHandler): void;
     removeListeners(): void;
     addInteractions(): void;
     addInteractionsWithoutModify(): void;

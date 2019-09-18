@@ -30,7 +30,8 @@ const MenuContainer = styled.div`
   height: 45px;
 `
 
-const featureColor = feature => feature.get('hidden') ? 'rgba(0, 0, 0, 0)' : feature.get('color')
+const featureColor = feature =>
+  feature.get('hidden') ? 'rgba(0, 0, 0, 0)' : feature.get('color')
 
 const STYLE = feature =>
   new ol.style.Style({
