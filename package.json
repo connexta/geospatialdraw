@@ -1,6 +1,6 @@
 {
   "name": "geospatialdraw",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "Geospatial Map Drawing Library",
   "types": "./target/webapp/index.d.ts",
   "main": "./target/webapp/index.js",
@@ -44,7 +44,7 @@
     "build:docs": "ace storybook --static && typedoc",
     "build:verify": "yarn run fmt && yarn run test && yarn run build",
     "build:all": "yarn run build:verify && yarn run build:docs",
-    "publish": "yarn build:all && npm publish dist",
+    "prepublish": "yarn build:all",
     "m2": "yarn install:m2",
     "install:m2": "ace clean && ace bundle && ace package && ace install"
   },
