@@ -17,7 +17,7 @@
   },
   "typedocOptions": {
     "mode": "modules",
-    "out": "./target/docs",
+    "out": "./target/storybook/docs",
     "categorizeByGroup": true
   },
   "include": ["src/main/webapp/**/*.tsx"],
