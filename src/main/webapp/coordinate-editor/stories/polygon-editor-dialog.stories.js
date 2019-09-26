@@ -26,7 +26,7 @@ const TableComponent = tableComponentFactory({
   },
 })
 
-const stories = storiesOf('coordinate-editor/PolygonEditorDialog', module)
+const stories = storiesOf('coordinates/PolygonEditorDialog', module)
 
 stories.addParameters({
   info: {

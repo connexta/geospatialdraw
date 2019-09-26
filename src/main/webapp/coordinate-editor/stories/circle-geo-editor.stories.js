@@ -35,7 +35,7 @@ const TableComponent = tableComponentFactory({
   },
 })
 
-const stories = storiesOf('coordinate-editor/CircleGeoEditor', module)
+const stories = storiesOf('coordinates/CircleGeoEditor', module)
 
 stories.addParameters({
   info: {

@@ -26,7 +26,7 @@ const TableComponent = tableComponentFactory({
   },
 })
 
-const stories = storiesOf('coordinate-editor/BBoxEditorDialog', module)
+const stories = storiesOf('coordinates/BBoxEditorDialog', module)
 
 stories.addParameters({
   info: {
