@@ -94,7 +94,6 @@ var PointRadiusDrawingControl = /** @class */ (function (_super) {
         var feature = this.getFeatureFromDrawEvent(e);
         var geoJSON = this.stopDrawAnimation(feature);
         this.applyPropertiesToFeature(feature);
-        this.context.updateFeature(feature);
         this.receiver(geoJSON);
     };
     PointRadiusDrawingControl.prototype.onStartDrawing = function (e) {

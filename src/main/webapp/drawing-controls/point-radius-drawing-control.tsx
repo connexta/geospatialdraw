@@ -93,7 +93,6 @@ class PointRadiusDrawingControl extends BasicDrawingControl {
     const feature = this.getFeatureFromDrawEvent(e)
     const geoJSON = this.stopDrawAnimation(feature)
     this.applyPropertiesToFeature(feature)
-    this.context.updateFeature(feature)
     this.receiver(geoJSON)
   }
 
