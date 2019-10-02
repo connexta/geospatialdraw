@@ -13,6 +13,7 @@ declare abstract class ModifiableDrawingControl extends BasicDrawingControl {
     onCompleteModify(e: any): void;
     makeFeature(geoJSON: GeometryJSON): ol.Feature;
     getStaticStyle(feature: ol.Feature): ol.style.Style | ol.style.Style[];
+    protected abstract makeEmptyFeature(): ol.Feature;
     getDefaultStaticStyle(): ol.style.Style | ol.style.Style[];
     setGeo(geoJSON: GeometryJSON): void;
     startDrawing(): void;

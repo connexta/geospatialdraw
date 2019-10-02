@@ -13,6 +13,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
+var ol = require("openlayers");
 var modifiable_drawing_control_1 = require("./modifiable-drawing-control");
 /**
  * Drawing Control for drawing a line
@@ -32,6 +33,9 @@ var LineDrawingControl = /** @class */ (function (_super) {
     };
     LineDrawingControl.prototype.getGeoType = function () {
         return 'LineString';
+    };
+    LineDrawingControl.prototype.makeEmptyFeature = function () {
+        return new ol.Feature(new ol.geom.LineString([[0, 0]]));
     };
     return LineDrawingControl;
 }(modifiable_drawing_control_1.default));

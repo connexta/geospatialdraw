@@ -24,6 +24,10 @@ class LineDrawingControl extends ModifiableDrawingControl {
   getGeoType(): ol.geom.GeometryType {
     return 'LineString'
   }
+
+  protected makeEmptyFeature(): ol.Feature {
+    return new ol.Feature(new ol.geom.LineString([[0, 0]]))
+  }
 }
 
 export default LineDrawingControl

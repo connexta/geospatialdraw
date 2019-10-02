@@ -65,8 +65,10 @@ abstract class ModifiableDrawingControl extends BasicDrawingControl {
     }
   }
 
+  protected abstract makeEmptyFeature(): ol.Feature
+
   getDefaultStaticStyle(): ol.style.Style | ol.style.Style[] {
-    const feature = new ol.Feature()
+    const feature = this.makeEmptyFeature()
     this.applyPropertiesToFeature(feature)
     return this.getStaticStyle(feature)
   }

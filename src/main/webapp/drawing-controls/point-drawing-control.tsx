@@ -30,6 +30,10 @@ class PointDrawingControl extends ModifiableDrawingControl {
     this.context.remakeInteractions()
     super.cancelDrawing()
   }
+
+  protected makeEmptyFeature(): ol.Feature {
+    return new ol.Feature(new ol.geom.Point([0, 0]))
+  }
 }
 
 export default PointDrawingControl

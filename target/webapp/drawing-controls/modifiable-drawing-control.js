@@ -69,7 +69,7 @@ var ModifiableDrawingControl = /** @class */ (function (_super) {
         }
     };
     ModifiableDrawingControl.prototype.getDefaultStaticStyle = function () {
-        var feature = new ol.Feature();
+        var feature = this.makeEmptyFeature();
         this.applyPropertiesToFeature(feature);
         return this.getStaticStyle(feature);
     };

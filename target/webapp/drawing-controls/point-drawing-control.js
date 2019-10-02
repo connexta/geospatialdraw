@@ -13,6 +13,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
+var ol = require("openlayers");
 var modifiable_drawing_control_1 = require("./modifiable-drawing-control");
 /**
  * Drawing Control for drawing a point
@@ -37,6 +38,9 @@ var PointDrawingControl = /** @class */ (function (_super) {
         // the snap interaction breaks after using point drawing
         this.context.remakeInteractions();
         _super.prototype.cancelDrawing.call(this);
+    };
+    PointDrawingControl.prototype.makeEmptyFeature = function () {
+        return new ol.Feature(new ol.geom.Point([0, 0]));
     };
     return PointDrawingControl;
 }(modifiable_drawing_control_1.default));
