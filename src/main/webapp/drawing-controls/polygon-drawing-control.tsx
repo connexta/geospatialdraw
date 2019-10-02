@@ -24,6 +24,10 @@ class PolygonDrawingControl extends ModifiableDrawingControl {
   getGeoType(): ol.geom.GeometryType {
     return 'Polygon'
   }
+
+  protected makeEmptyFeature(): ol.Feature {
+    return new ol.Feature(new ol.geom.Polygon([[[0, 0], [0, 0]]]))
+  }
 }
 
 export default PolygonDrawingControl

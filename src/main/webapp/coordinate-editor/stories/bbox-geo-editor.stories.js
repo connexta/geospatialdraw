@@ -34,7 +34,7 @@ const TableComponent = tableComponentFactory({
   },
 })
 
-const stories = storiesOf('coordinate-editor/BBoxGeoEditor', module)
+const stories = storiesOf('coordinates/BBoxGeoEditor', module)
 
 stories.addParameters({
   info: {

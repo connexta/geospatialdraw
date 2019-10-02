@@ -16,5 +16,6 @@ declare class PointDrawingControl extends ModifiableDrawingControl {
     getShape(): Shape;
     getGeoType(): ol.geom.GeometryType;
     cancelDrawing(): void;
+    protected makeEmptyFeature(): ol.Feature;
 }
 export default PointDrawingControl;

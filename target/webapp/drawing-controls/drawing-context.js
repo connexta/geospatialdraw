@@ -52,7 +52,8 @@ var DrawingContext = /** @class */ (function () {
         this.removeFeature();
         this.drawLayer.getSource().addFeature(feature);
     };
-    DrawingContext.prototype.updateBufferFeature = function (feature) {
+    DrawingContext.prototype.updateBufferFeature = function (feature, animate) {
+        if (animate === void 0) { animate = true; }
         this.bufferLayer.getSource().clear();
         var buffer = feature.get('buffer');
         if (buffer !== undefined && buffer > 0) {
@@ -60,7 +61,9 @@ var DrawingContext = /** @class */ (function () {
             var bufferedGeo = geometry_1.makeBufferedGeo(geo);
             var bufferFeature = this.geoFormat.readFeature(bufferedGeo);
             this.bufferLayer.getSource().addFeature(bufferFeature);
-            this.map.on('pointerdrag', this.bufferUpdateEvent);
+            if (animate) {
+                this.setEvent('map', 'pointerdrag', this.bufferUpdateEvent);
+            }
         }
     };
     DrawingContext.prototype.bufferUpdateEvent = function () {
@@ -73,31 +76,44 @@ var DrawingContext = /** @class */ (function () {
             });
         }
     };
+    DrawingContext.prototype.setModifyInteraction = function (modify) {
+        this.modify = modify;
+    };
+    DrawingContext.prototype.getSource = function () {
+        return this.drawLayer.getSource();
+    };
     DrawingContext.prototype.setDrawInteraction = function (draw) {
         this.draw = draw;
     };
-    DrawingContext.prototype.setEvent = function (target, event, listener) {
+    DrawingContext.prototype.setEvent = function (target, event, handler) {
         var listenerTarget = this[target];
         if (listenerTarget !== null) {
-            listenerTarget.on(event, listener);
+            listenerTarget.on(event, handler);
             this.listenerList.push({
                 target: target,
                 event: event,
-                listener: listener,
+                handler: handler,
             });
+        }
+    };
+    DrawingContext.prototype.removeListener = function (target, event, handler) {
+        if (target === 'map') {
+            this.map.un(event, handler);
+        }
+        else {
+            var listenerTarget = this[target];
+            if (listenerTarget !== null) {
+                listenerTarget.un(event, handler);
+            }
         }
     };
     DrawingContext.prototype.removeListeners = function () {
         for (var _i = 0, _a = this.listenerList; _i < _a.length; _i++) {
             var listener = _a[_i];
-            var listenerTarget = this[listener.target];
-            if (listenerTarget !== null) {
-                listenerTarget.un(listener.event, listener.listener);
-            }
+            this.removeListener(listener.target, listener.event, listener.handler);
         }
         this.listenerList = [];
         cancelAnimationFrame(this.animationFrameId);
-        this.map.un('pointerdrag', this.bufferUpdateEvent);
     };
     DrawingContext.prototype.addInteractions = function () {
         if (this.draw !== null) {

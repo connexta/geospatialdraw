@@ -25,7 +25,8 @@ var __assign = (this && this.__assign) || function () {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var ol = require("openlayers");
-var modifiable_drawing_control_1 = require("./modifiable-drawing-control");
+var turf = require("@turf/turf");
+var basic_drawing_control_1 = require("./basic-drawing-control");
 var geometry_1 = require("../geometry");
 var distance_1 = require("../internal/distance");
 /**
@@ -42,77 +43,146 @@ var PointRadiusDrawingControl = /** @class */ (function (_super) {
         var _this = _super.call(this, context, receiver) || this;
         _this.animationFrameId = 0;
         _this.animationFrame = function () { };
+        _this.onCompleteDrawing = _this.onCompleteDrawing.bind(_this);
+        _this.onStartDrawing = _this.onStartDrawing.bind(_this);
+        _this.onStartModify = _this.onStartModify.bind(_this);
+        _this.onCompleteModify = _this.onCompleteModify.bind(_this);
+        _this.initalCenter = [0, 0];
         return _this;
     }
-    PointRadiusDrawingControl.prototype.onCompleteDrawing = function (e) {
-        cancelAnimationFrame(this.animationFrameId);
-        this.animationFrame = function () { };
-        _super.prototype.onCompleteDrawing.call(this, e);
-    };
-    PointRadiusDrawingControl.prototype.onStartDrawing = function (e) {
+    PointRadiusDrawingControl.prototype.startDrawAnimation = function (feature) {
         var _this = this;
-        _super.prototype.onStartDrawing.call(this, e);
         if (this.properties.buffer) {
+            var revision_1 = feature.getRevision();
             this.animationFrame = function () {
-                var geoJSON = _this.getGeoJSONFromCompleteDrawEvent(e);
-                var feature = _this.makeFeature(geoJSON);
-                _this.applyPropertiesToFeature(feature);
-                _this.context.updateBufferFeature(feature);
+                var update = feature.getRevision();
+                if (update !== revision_1) {
+                    revision_1 = update;
+                    var pointFeature = new ol.Feature(_this.updatePointFromRadiusLine(_this.toLine(feature)));
+                    _this.applyPropertiesToFeature(pointFeature);
+                    _this.context.updateBufferFeature(pointFeature, false);
+                }
                 _this.animationFrameId = requestAnimationFrame(_this.animationFrame);
             };
             this.animationFrame();
         }
     };
-    PointRadiusDrawingControl.prototype.getShape = function () {
-        return 'Point Radius';
-    };
-    PointRadiusDrawingControl.prototype.getGeoJSONFromCompleteDrawEvent = function (e) {
-        return this.featureToGeoJSON(e.feature);
-    };
-    PointRadiusDrawingControl.prototype.getGeoJSONFromCompleteModifyEvent = function (e) {
-        var feature = e.features.getArray()[0];
-        return this.featureToGeoJSON(feature);
-    };
-    PointRadiusDrawingControl.prototype.featureToGeoJSON = function (inputFeature) {
-        var point;
-        var geometry = inputFeature.getGeometry();
+    PointRadiusDrawingControl.prototype.stopDrawAnimation = function (feature) {
+        cancelAnimationFrame(this.animationFrameId);
+        this.animationFrame = function () { };
+        var point = this.updatePointFromRadiusLine(this.toLine(feature));
+        var pointFeature = new ol.Feature(point);
         var bufferUnit = this.properties.bufferUnit || geometry_1.METERS;
         var radius = distance_1.getDistanceInMeters(this.properties.buffer || 0, bufferUnit);
-        if (geometry.getType() === 'Point') {
-            point = geometry;
-        }
-        else {
-            var circle = geometry;
-            point = new ol.geom.Point(circle.getCenter());
-            radius = this.context.circleRadiusToMeters(circle.getRadius());
-        }
-        var feature = new ol.Feature(point);
         var bestFitRadiusUnit = bufferUnit;
         if (bestFitRadiusUnit === geometry_1.METERS && radius > 1000) {
             bestFitRadiusUnit = geometry_1.KILOMETERS;
         }
         this.setProperties(__assign({}, this.properties, { buffer: distance_1.getDistanceFromMeters(radius, bestFitRadiusUnit), bufferUnit: bestFitRadiusUnit }));
-        var json = this.writeExtendedGeoJSON(feature);
-        return json;
+        var geoJSON = this.writeExtendedGeoJSON(pointFeature);
+        return geoJSON;
     };
-    PointRadiusDrawingControl.prototype.makeFeature = function (geoJSON) {
-        var feature = this.geoFormat.readFeature(geoJSON);
-        var geometry = feature.getGeometry();
-        var point;
-        if (geometry.getType() === 'Point') {
-            point = geometry;
+    PointRadiusDrawingControl.prototype.reorientRadiusLineFeature = function (center) {
+        this.initalCenter = center;
+        var line = this.makeRadiusLineFromPoint(center);
+        var feature = new ol.Feature(line);
+        this.applyPropertiesToFeature(feature);
+        this.context.updateFeature(feature);
+    };
+    PointRadiusDrawingControl.prototype.onCompleteDrawing = function (e) {
+        this.mouseDragActive = false;
+        var feature = this.getFeatureFromDrawEvent(e);
+        var geoJSON = this.stopDrawAnimation(feature);
+        this.applyPropertiesToFeature(feature);
+        this.receiver(geoJSON);
+    };
+    PointRadiusDrawingControl.prototype.onStartDrawing = function (e) {
+        this.mouseDragActive = true;
+        var feature = this.getFeatureFromDrawEvent(e);
+        var source = this.context.getSource();
+        source.getFeatures().forEach(function (f) { return source.removeFeature(f); });
+        this.initalCenter = this.toLine(feature).getCoordinates()[0];
+        this.startDrawAnimation(feature);
+    };
+    PointRadiusDrawingControl.prototype.onStartModify = function (e) {
+        this.mouseDragActive = true;
+        var feature = this.getFeatureModifyEvent(e);
+        var line = this.toLine(feature);
+        var clickedPoint = line.getClosestPoint(e.mapBrowserEvent.coordinate);
+        var distanceMap = line
+            .getCoordinates()
+            .map(function (point) { return turf.distance(point, clickedPoint); });
+        feature.set('hidden', distanceMap[0] < distanceMap[1]);
+        this.startDrawAnimation(feature);
+    };
+    PointRadiusDrawingControl.prototype.onCompleteModify = function (e) {
+        this.mouseDragActive = false;
+        var feature = this.getFeatureModifyEvent(e);
+        feature.set('hidden', false);
+        var geoJSON = this.stopDrawAnimation(feature);
+        var center = this.toLine(feature).getCoordinates()[0];
+        if (!this.pointsEqual(center, this.initalCenter)) {
+            this.reorientRadiusLineFeature(center);
         }
-        else {
-            var circle = geometry;
-            point = new ol.geom.Point(circle.getCenter());
-            feature.set('buffer', distance_1.getDistanceFromMeters(this.context.circleRadiusToMeters(circle.getRadius()), feature.get('bufferUnit') || geometry_1.METERS));
+        this.receiver(geoJSON);
+    };
+    PointRadiusDrawingControl.prototype.makeFeatures = function (geoJSON) {
+        var bufferFeature = this.geoFormat.readFeature(geoJSON);
+        var line = this.makeRadiusLineFromPoint(this.toPoint(bufferFeature).getCoordinates());
+        var feature = new ol.Feature(line);
+        return {
+            feature: feature,
+            bufferFeature: bufferFeature,
+        };
+    };
+    PointRadiusDrawingControl.prototype.makeRadiusLineFromPoint = function (point, bearing) {
+        if (bearing === void 0) { bearing = 90; }
+        var bufferUnit = this.properties.bufferUnit || geometry_1.METERS;
+        var meters = distance_1.getDistanceInMeters(this.properties.buffer || 0, bufferUnit);
+        var destination = turf.rhumbDestination(point, meters, bearing, {
+            units: 'meters',
+        });
+        var end = destination.geometry.coordinates;
+        return new ol.geom.LineString([point, end]);
+    };
+    PointRadiusDrawingControl.prototype.pointsEqual = function (a, b) {
+        return a[0] === b[0] && a[1] === b[1];
+    };
+    PointRadiusDrawingControl.prototype.toLine = function (feature) {
+        return feature.getGeometry();
+    };
+    PointRadiusDrawingControl.prototype.toPoint = function (feature) {
+        return feature.getGeometry();
+    };
+    PointRadiusDrawingControl.prototype.updatePointFromRadiusLine = function (line) {
+        var center = line.getCoordinates()[0];
+        if (this.pointsEqual(center, this.initalCenter)) {
+            var distance = turf.rhumbDistance(line.getCoordinates()[0], line.getCoordinates()[1], {
+                units: 'meters',
+            });
+            var buffer = distance_1.getDistanceFromMeters(distance, this.properties.bufferUnit);
+            this.setProperties(__assign({}, this.properties, { buffer: buffer }));
         }
-        return new ol.Feature(point);
+        return new ol.geom.Point(line.getCoordinates()[0]);
     };
-    PointRadiusDrawingControl.prototype.getGeoType = function () {
-        return 'Circle';
+    PointRadiusDrawingControl.prototype.getFeatureFromDrawEvent = function (e) {
+        return e.feature;
     };
-    PointRadiusDrawingControl.prototype.getStaticStyle = function (_feature) {
+    PointRadiusDrawingControl.prototype.getFeatureModifyEvent = function (e) {
+        return e.features.getArray()[0];
+    };
+    PointRadiusDrawingControl.prototype.setGeo = function (geoJSON) {
+        this.cancelDrawing();
+        this.setProperties(geoJSON.properties || {});
+        var _a = this.makeFeatures(geoJSON), feature = _a.feature, bufferFeature = _a.bufferFeature;
+        this.initalCenter = this.toPoint(bufferFeature).getCoordinates();
+        this.applyPropertiesToFeature(feature);
+        this.applyPropertiesToFeature(bufferFeature);
+        this.context.updateFeature(feature);
+        this.context.updateBufferFeature(bufferFeature, false);
+        this.startDrawingInteraction();
+    };
+    PointRadiusDrawingControl.prototype.getStaticStyle = function () {
         var circleFeature = new ol.Feature(new ol.geom.Circle([0, 0], 1));
         this.applyPropertiesToFeature(circleFeature);
         var style = this.context.getStyle();
@@ -123,7 +193,42 @@ var PointRadiusDrawingControl = /** @class */ (function (_super) {
             return style;
         }
     };
+    PointRadiusDrawingControl.prototype.startDrawing = function () {
+        this.context.removeFeature();
+        this.startDrawingInteraction();
+    };
+    PointRadiusDrawingControl.prototype.startDrawingInteraction = function () {
+        var drawInteraction = new ol.interaction.Draw({
+            type: this.getGeoType(),
+            style: this.getStaticStyle(),
+            maxPoints: 2,
+            source: this.context.getSource(),
+        });
+        this.drawingActive = true;
+        this.context.setModifyInteraction(new ol.interaction.Modify({
+            insertVertexCondition: function () { return false; },
+            deleteCondition: function () { return false; },
+            source: this.context.getSource(),
+        }));
+        this.context.setDrawInteraction(drawInteraction);
+        this.context.setEvent('draw', 'drawend', this.onCompleteDrawing);
+        this.context.setEvent('draw', 'drawstart', this.onStartDrawing);
+        this.context.setEvent('modify', 'modifyend', this.onCompleteModify);
+        this.context.setEvent('modify', 'modifystart', this.onStartModify);
+        this.context.addInteractions();
+    };
+    PointRadiusDrawingControl.prototype.getShape = function () {
+        return 'Point Radius';
+    };
+    PointRadiusDrawingControl.prototype.getGeoType = function () {
+        return 'LineString';
+    };
+    PointRadiusDrawingControl.prototype.cancelDrawing = function () {
+        // uses custom modify interaction
+        this.context.remakeInteractions();
+        _super.prototype.cancelDrawing.call(this);
+    };
     return PointRadiusDrawingControl;
-}(modifiable_drawing_control_1.default));
+}(basic_drawing_control_1.default));
 exports.default = PointRadiusDrawingControl;
 //# sourceMappingURL=point-radius-drawing-control.js.map

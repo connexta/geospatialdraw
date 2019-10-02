@@ -15,5 +15,6 @@ declare class PolygonDrawingControl extends ModifiableDrawingControl {
     constructor(context: DrawingContext, receiver: UpdatedGeoReceiver);
     getShape(): Shape;
     getGeoType(): ol.geom.GeometryType;
+    protected makeEmptyFeature(): ol.Feature;
 }
 export default PolygonDrawingControl;

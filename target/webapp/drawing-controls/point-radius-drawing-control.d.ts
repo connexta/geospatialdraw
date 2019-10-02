@@ -1,29 +1,47 @@
 import * as ol from 'openlayers';
 import DrawingContext from './drawing-context';
 import UpdatedGeoReceiver from './geo-receiver';
-import ModifiableDrawingControl from './modifiable-drawing-control';
+import BasicDrawingControl from './basic-drawing-control';
 import { Shape } from '../shape-utils';
 import { GeometryJSON } from '../geometry';
+declare type DrawingFeatures = {
+    feature: ol.Feature;
+    bufferFeature: ol.Feature;
+};
 /**
  * Drawing Control for a circle/point radius
  */
-declare class PointRadiusDrawingControl extends ModifiableDrawingControl {
+declare class PointRadiusDrawingControl extends BasicDrawingControl {
     private animationFrameId;
     private animationFrame;
+    private initalCenter;
     /**
      * Creates drawing control
      * @param context - Drawing context
      * @param receiver - callback for returning updates to GeometryJSON
      */
     constructor(context: DrawingContext, receiver: UpdatedGeoReceiver);
+    private startDrawAnimation;
+    private stopDrawAnimation;
+    private reorientRadiusLineFeature;
     onCompleteDrawing(e: any): void;
     onStartDrawing(e: any): void;
+    onStartModify(e: any): void;
+    onCompleteModify(e: any): void;
+    makeFeatures(geoJSON: GeometryJSON): DrawingFeatures;
+    private makeRadiusLineFromPoint;
+    private pointsEqual;
+    private toLine;
+    private toPoint;
+    private updatePointFromRadiusLine;
+    private getFeatureFromDrawEvent;
+    private getFeatureModifyEvent;
+    setGeo(geoJSON: GeometryJSON): void;
+    getStaticStyle(): ol.style.Style | ol.style.Style[];
+    startDrawing(): void;
+    private startDrawingInteraction;
     getShape(): Shape;
-    getGeoJSONFromCompleteDrawEvent(e: any): GeometryJSON;
-    getGeoJSONFromCompleteModifyEvent(e: any): GeometryJSON;
-    featureToGeoJSON(inputFeature: ol.Feature): GeometryJSON;
-    makeFeature(geoJSON: GeometryJSON): ol.Feature;
     getGeoType(): ol.geom.GeometryType;
-    getStaticStyle(_feature: ol.Feature): ol.style.Style | ol.style.Style[];
+    cancelDrawing(): void;
 }
 export default PointRadiusDrawingControl;

@@ -1,12 +1,19 @@
 import * as ol from 'openlayers'
+import * as turf from '@turf/turf'
 import { expect } from 'chai'
 import MockDrawingContext from './test/mock-drawing-context'
 import PointRadiusDrawingControl from './point-radius-drawing-control'
 
 describe('PointRadiusDrawingControl', () => {
+  const makeCoordinates = () => [
+    [50, 50],
+    turf.rhumbDestination([50, 50], 70, 90, {
+      units: 'meters',
+    }).geometry.coordinates,
+  ]
   const makeFeature = () =>
     new ol.Feature({
-      geometry: new ol.geom.Circle([50, 50], 70),
+      geometry: new ol.geom.LineString(makeCoordinates()),
       color: 'blue',
       shape: 'Point Radius',
       buffer: 70,
@@ -32,6 +39,7 @@ describe('PointRadiusDrawingControl', () => {
   let recievedGeo = null
   const receiver = geoJSON => {
     recievedGeo = geoJSON
+    recievedGeo.properties.buffer = Math.round(recievedGeo.properties.buffer)
   }
   let control = null
   beforeEach(() => {
@@ -47,12 +55,13 @@ describe('PointRadiusDrawingControl', () => {
   })
   describe('onCompleteDrawing', () => {
     it('default', () => {
+      control.setGeo(makeGeoJSON())
       control.onCompleteDrawing({
         feature: makeFeature(),
       })
       const expected = makeGeoJSON()
       expect(recievedGeo).to.deep.equal(expected)
-      expect(context.getMethodCalls().updateFeature.length).to.equal(1)
+      expect(context.getMethodCalls().updateFeature.length).to.not.equal(0)
     })
     it('startDrawing -> onCompleteDrawing', () => {
       control.startDrawing()
@@ -66,6 +75,7 @@ describe('PointRadiusDrawingControl', () => {
   })
   describe('onCompleteModify', () => {
     it('default', () => {
+      control.setGeo(makeGeoJSON())
       control.onCompleteModify({
         features: {
           getArray: () => [makeFeature()],

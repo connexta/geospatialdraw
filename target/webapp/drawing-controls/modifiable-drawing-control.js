@@ -68,6 +68,11 @@ var ModifiableDrawingControl = /** @class */ (function (_super) {
             return style;
         }
     };
+    ModifiableDrawingControl.prototype.getDefaultStaticStyle = function () {
+        var feature = this.makeEmptyFeature();
+        this.applyPropertiesToFeature(feature);
+        return this.getStaticStyle(feature);
+    };
     ModifiableDrawingControl.prototype.setGeo = function (geoJSON) {
         this.cancelDrawing();
         this.setProperties(geoJSON.properties || {});
@@ -85,6 +90,7 @@ var ModifiableDrawingControl = /** @class */ (function (_super) {
         this.context.removeFeature();
         var drawInteraction = new ol.interaction.Draw({
             type: this.getGeoType(),
+            style: this.getDefaultStaticStyle(),
         });
         this.startDrawingInteraction(drawInteraction);
     };

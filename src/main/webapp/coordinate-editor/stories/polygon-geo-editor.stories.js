@@ -35,7 +35,7 @@ const TableComponent = tableComponentFactory({
   },
 })
 
-const stories = storiesOf('coordinate-editor/PolygonGeoEditor', module)
+const stories = storiesOf('coordinates/PolygonGeoEditor', module)
 
 stories.addParameters({
   info: {

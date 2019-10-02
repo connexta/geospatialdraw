@@ -13,6 +13,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
+var ol = require("openlayers");
 var modifiable_drawing_control_1 = require("./modifiable-drawing-control");
 /**
  * Drawing Control for drawing a polygon
@@ -32,6 +33,9 @@ var PolygonDrawingControl = /** @class */ (function (_super) {
     };
     PolygonDrawingControl.prototype.getGeoType = function () {
         return 'Polygon';
+    };
+    PolygonDrawingControl.prototype.makeEmptyFeature = function () {
+        return new ol.Feature(new ol.geom.Polygon([[[0, 0], [0, 0]]]));
     };
     return PolygonDrawingControl;
 }(modifiable_drawing_control_1.default));
