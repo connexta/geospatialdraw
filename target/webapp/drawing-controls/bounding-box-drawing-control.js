@@ -49,7 +49,7 @@ var BoundingBoxDrawingControl = /** @class */ (function (_super) {
         return 'Bounding Box';
     };
     BoundingBoxDrawingControl.prototype.getDefaultStaticStyle = function () {
-        var feature = new ol.Feature();
+        var feature = new ol.Feature(new ol.geom.Polygon([[[0, 0], [0, 0], [0, 0], [0, 0]]]));
         this.applyPropertiesToFeature(feature);
         var style = this.context.getStyle();
         if (typeof style === 'function') {

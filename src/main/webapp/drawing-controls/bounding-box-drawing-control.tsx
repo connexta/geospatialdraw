@@ -33,7 +33,9 @@ class BoundingBoxDrawingControl extends BasicDrawingControl {
   }
 
   getDefaultStaticStyle(): ol.style.Style | ol.style.Style[] {
-    const feature = new ol.Feature()
+    const feature = new ol.Feature(
+      new ol.geom.Polygon([[[0, 0], [0, 0], [0, 0], [0, 0]]])
+    )
     this.applyPropertiesToFeature(feature)
     const style = this.context.getStyle()
     if (typeof style === 'function') {
