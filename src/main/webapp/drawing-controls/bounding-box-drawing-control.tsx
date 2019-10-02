@@ -32,6 +32,17 @@ class BoundingBoxDrawingControl extends BasicDrawingControl {
     return 'Bounding Box'
   }
 
+  getDefaultStaticStyle(): ol.style.Style | ol.style.Style[] {
+    const feature = new ol.Feature()
+    this.applyPropertiesToFeature(feature)
+    const style = this.context.getStyle()
+    if (typeof style === 'function') {
+      return style(feature, 1)
+    } else {
+      return style
+    }
+  }
+
   setGeo(geoJSON: GeometryJSON): void {
     this.cancelDrawing()
     this.setProperties((geoJSON as GeometryJSON).properties || {})
@@ -40,17 +51,24 @@ class BoundingBoxDrawingControl extends BasicDrawingControl {
     this.applyPropertiesToFeature(feature)
     this.context.updateFeature(feature)
     this.context.updateBufferFeature(feature)
+    const style = this.getDefaultStaticStyle()
     // @ts-ignore ol.interaction.Extent is not in typescript for this version of Open Layers
     const drawInteraction = new ol.interaction.Extent({
       extent,
+      pointerStyle: style,
+      boxStyle: style,
     })
     this.startDrawingInteraction(drawInteraction)
   }
 
   startDrawing(): void {
     this.context.removeFeature()
+    const style = this.getDefaultStaticStyle()
     // @ts-ignore ol.interaction.Extent is not in typescript for this version of Open Layers
-    const drawInteraction = new ol.interaction.Extent()
+    const drawInteraction = new ol.interaction.Extent({
+      pointerStyle: style,
+      boxStyle: style,
+    })
     this.startDrawingInteraction(drawInteraction)
   }
 

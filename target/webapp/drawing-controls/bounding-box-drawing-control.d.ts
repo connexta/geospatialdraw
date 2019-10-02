@@ -19,6 +19,7 @@ declare class BoundingBoxDrawingControl extends BasicDrawingControl {
     constructor(context: DrawingContext, receiver: UpdatedGeoReceiver);
     getGeoType(): ol.geom.GeometryType;
     getShape(): Shape;
+    getDefaultStaticStyle(): ol.style.Style | ol.style.Style[];
     setGeo(geoJSON: GeometryJSON): void;
     startDrawing(): void;
     private startDrawingInteraction;

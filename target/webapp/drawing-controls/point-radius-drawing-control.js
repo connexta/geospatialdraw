@@ -180,15 +180,9 @@ var PointRadiusDrawingControl = /** @class */ (function (_super) {
         this.applyPropertiesToFeature(bufferFeature);
         this.context.updateFeature(feature);
         this.context.updateBufferFeature(bufferFeature, false);
-        var drawInteraction = new ol.interaction.Draw({
-            type: this.getGeoType(),
-            style: this.getStaticStyle(feature),
-            maxPoints: 2,
-            source: this.context.getSource(),
-        });
-        this.startDrawingInteraction(drawInteraction);
+        this.startDrawingInteraction();
     };
-    PointRadiusDrawingControl.prototype.getStaticStyle = function (_feature) {
+    PointRadiusDrawingControl.prototype.getStaticStyle = function () {
         var circleFeature = new ol.Feature(new ol.geom.Circle([0, 0], 1));
         this.applyPropertiesToFeature(circleFeature);
         var style = this.context.getStyle();
@@ -201,14 +195,15 @@ var PointRadiusDrawingControl = /** @class */ (function (_super) {
     };
     PointRadiusDrawingControl.prototype.startDrawing = function () {
         this.context.removeFeature();
+        this.startDrawingInteraction();
+    };
+    PointRadiusDrawingControl.prototype.startDrawingInteraction = function () {
         var drawInteraction = new ol.interaction.Draw({
             type: this.getGeoType(),
+            style: this.getStaticStyle(),
             maxPoints: 2,
             source: this.context.getSource(),
         });
-        this.startDrawingInteraction(drawInteraction);
-    };
-    PointRadiusDrawingControl.prototype.startDrawingInteraction = function (drawInteraction) {
         this.drawingActive = true;
         this.context.setModifyInteraction(new ol.interaction.Modify({
             insertVertexCondition: function () { return false; },

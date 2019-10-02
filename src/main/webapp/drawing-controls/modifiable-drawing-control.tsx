@@ -65,6 +65,12 @@ abstract class ModifiableDrawingControl extends BasicDrawingControl {
     }
   }
 
+  getDefaultStaticStyle(): ol.style.Style | ol.style.Style[] {
+    const feature = new ol.Feature()
+    this.applyPropertiesToFeature(feature)
+    return this.getStaticStyle(feature)
+  }
+
   setGeo(geoJSON: GeometryJSON): void {
     this.cancelDrawing()
     this.setProperties((geoJSON as GeometryJSON).properties || {})
@@ -83,6 +89,7 @@ abstract class ModifiableDrawingControl extends BasicDrawingControl {
     this.context.removeFeature()
     const drawInteraction = new ol.interaction.Draw({
       type: this.getGeoType(),
+      style: this.getDefaultStaticStyle(),
     })
     this.startDrawingInteraction(drawInteraction)
   }

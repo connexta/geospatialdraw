@@ -37,7 +37,7 @@ declare class PointRadiusDrawingControl extends BasicDrawingControl {
     private getFeatureFromDrawEvent;
     private getFeatureModifyEvent;
     setGeo(geoJSON: GeometryJSON): void;
-    getStaticStyle(_feature: ol.Feature): ol.style.Style | ol.style.Style[];
+    getStaticStyle(): ol.style.Style | ol.style.Style[];
     startDrawing(): void;
     private startDrawingInteraction;
     getShape(): Shape;

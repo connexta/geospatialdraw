@@ -205,16 +205,10 @@ class PointRadiusDrawingControl extends BasicDrawingControl {
     this.applyPropertiesToFeature(bufferFeature)
     this.context.updateFeature(feature)
     this.context.updateBufferFeature(bufferFeature, false)
-    const drawInteraction = new ol.interaction.Draw({
-      type: this.getGeoType(),
-      style: this.getStaticStyle(feature),
-      maxPoints: 2,
-      source: this.context.getSource(),
-    })
-    this.startDrawingInteraction(drawInteraction)
+    this.startDrawingInteraction()
   }
 
-  getStaticStyle(_feature: ol.Feature): ol.style.Style | ol.style.Style[] {
+  getStaticStyle(): ol.style.Style | ol.style.Style[] {
     const circleFeature = new ol.Feature(new ol.geom.Circle([0, 0], 1))
     this.applyPropertiesToFeature(circleFeature)
     const style = this.context.getStyle()
@@ -227,17 +221,16 @@ class PointRadiusDrawingControl extends BasicDrawingControl {
 
   startDrawing(): void {
     this.context.removeFeature()
+    this.startDrawingInteraction()
+  }
+
+  private startDrawingInteraction(): void {
     const drawInteraction = new ol.interaction.Draw({
       type: this.getGeoType(),
+      style: this.getStaticStyle(),
       maxPoints: 2,
       source: this.context.getSource(),
     })
-    this.startDrawingInteraction(drawInteraction)
-  }
-
-  private startDrawingInteraction(
-    drawInteraction: ol.interaction.Interaction
-  ): void {
     this.drawingActive = true
     this.context.setModifyInteraction(
       new ol.interaction.Modify({

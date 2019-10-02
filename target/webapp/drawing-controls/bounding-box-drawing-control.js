@@ -48,6 +48,17 @@ var BoundingBoxDrawingControl = /** @class */ (function (_super) {
     BoundingBoxDrawingControl.prototype.getShape = function () {
         return 'Bounding Box';
     };
+    BoundingBoxDrawingControl.prototype.getDefaultStaticStyle = function () {
+        var feature = new ol.Feature();
+        this.applyPropertiesToFeature(feature);
+        var style = this.context.getStyle();
+        if (typeof style === 'function') {
+            return style(feature, 1);
+        }
+        else {
+            return style;
+        }
+    };
     BoundingBoxDrawingControl.prototype.setGeo = function (geoJSON) {
         this.cancelDrawing();
         this.setProperties(geoJSON.properties || {});
@@ -56,16 +67,23 @@ var BoundingBoxDrawingControl = /** @class */ (function (_super) {
         this.applyPropertiesToFeature(feature);
         this.context.updateFeature(feature);
         this.context.updateBufferFeature(feature);
+        var style = this.getDefaultStaticStyle();
         // @ts-ignore ol.interaction.Extent is not in typescript for this version of Open Layers
         var drawInteraction = new ol.interaction.Extent({
             extent: extent,
+            pointerStyle: style,
+            boxStyle: style,
         });
         this.startDrawingInteraction(drawInteraction);
     };
     BoundingBoxDrawingControl.prototype.startDrawing = function () {
         this.context.removeFeature();
+        var style = this.getDefaultStaticStyle();
         // @ts-ignore ol.interaction.Extent is not in typescript for this version of Open Layers
-        var drawInteraction = new ol.interaction.Extent();
+        var drawInteraction = new ol.interaction.Extent({
+            pointerStyle: style,
+            boxStyle: style,
+        });
         this.startDrawingInteraction(drawInteraction);
     };
     BoundingBoxDrawingControl.prototype.startDrawingInteraction = function (drawInteraction) {
