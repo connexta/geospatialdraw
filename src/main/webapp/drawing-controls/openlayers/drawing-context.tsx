@@ -1,5 +1,5 @@
 import * as ol from 'openlayers'
-import { GeometryJSON, makeBufferedGeo } from '../geometry'
+import { GeometryJSON, makeBufferedGeo } from '../../geometry'
 
 type EventHandler = (e: any) => void
 

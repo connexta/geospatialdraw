@@ -1,8 +1,8 @@
 import * as ol from 'openlayers'
 import DrawingContext from './drawing-context'
-import UpdatedGeoReceiver from './geo-receiver'
+import UpdatedGeoReceiver from '../geo-receiver'
 import BasicDrawingControl from './basic-drawing-control'
-import { GeometryJSON } from '../geometry'
+import { GeometryJSON } from '../../geometry'
 
 abstract class ModifiableDrawingControl extends BasicDrawingControl {
   protected constructor(context: DrawingContext, receiver: UpdatedGeoReceiver) {

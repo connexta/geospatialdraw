@@ -17,6 +17,7 @@ import {
   lengthUnitList,
   tableComponentFactory,
 } from '../internal/storybook-helpers'
+import { openlayers } from '../drawing-controls'
 import DrawingMenu from './drawing-menu'
 import styled from 'styled-components'
 import { makeEmptyGeometry, KILOMETERS, METERS } from '../geometry'
@@ -147,6 +148,9 @@ const renderMap = DrawingMenuWithMap => (
   </React.Fragment>
 )
 
+const makeToolbox = map =>
+  new openlayers.DrawingToolbox({ map, drawingStyle: STYLE })
+
 stories.add('full featured', () => {
   const title = text('title', 'Untitled')
   const saveAndContinue = boolean('saveAndContinue', false)
@@ -158,7 +162,7 @@ stories.add('full featured', () => {
     <MenuContainer class="menu-container">
       <DrawingMenu
         shape={shape}
-        map={map}
+        toolbox={makeToolbox(map)}
         isActive={isActive}
         showCoordinateEditor={showCoordinateEditor}
         saveAndContinue={saveAndContinue}
@@ -169,7 +173,6 @@ stories.add('full featured', () => {
         onOk={action('Ok')}
         onSetShape={action('setShape')}
         onUpdate={action('update')}
-        mapStyle={STYLE}
       />
     </MenuContainer>
   )
@@ -236,7 +239,7 @@ stories.add('editing a geo', () => {
     <MenuContainer class="menu-container">
       <DrawingMenu
         shape={shape}
-        map={map}
+        toolbox={makeToolbox(map)}
         isActive={isActive}
         showCoordinateEditor={showCoordinateEditor}
         saveAndContinue={saveAndContinue}
@@ -247,7 +250,6 @@ stories.add('editing a geo', () => {
         onOk={action('Ok')}
         onSetShape={action('setShape')}
         onUpdate={action('update')}
-        mapStyle={STYLE}
       />
     </MenuContainer>
   )
@@ -263,14 +265,13 @@ stories.add('simplified', () => {
     <MenuContainer class="menu-container">
       <DrawingMenu
         shape={shape}
-        map={map}
+        toolbox={makeToolbox(map)}
         isActive={isActive}
         geometry={null}
         onCancel={action('Cancel')}
         onOk={action('Ok')}
         onSetShape={action('setShape')}
         onUpdate={action('update')}
-        mapStyle={STYLE}
       />
     </MenuContainer>
   )
@@ -286,7 +287,7 @@ stories.add('minimal', () => {
     <MenuContainer class="menu-container">
       <DrawingMenu
         shape={shape}
-        map={map}
+        toolbox={makeToolbox(map)}
         disabledShapes={['Bounding Box', 'Point Radius', 'Point']}
         isActive={isActive}
         geometry={null}
@@ -294,7 +295,6 @@ stories.add('minimal', () => {
         onOk={action('Ok')}
         onSetShape={action('setShape')}
         onUpdate={action('update')}
-        mapStyle={STYLE}
       />
     </MenuContainer>
   )

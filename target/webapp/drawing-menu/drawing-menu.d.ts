@@ -1,12 +1,11 @@
 import * as React from 'react';
-import * as ol from 'openlayers';
 import { Shape } from '../shape-utils';
-import { DrawingContext, DrawingControl, UpdatedGeoReceiver } from '../drawing-controls';
+import { DrawingToolbox, UpdatedGeoReceiver } from '../drawing-controls';
 import { HTMLAttributes } from '../internal/html';
 import { GeometryJSON } from '../geometry';
 declare type Props = HTMLAttributes & {
     shape: Shape | null;
-    map: ol.Map;
+    toolbox: DrawingToolbox;
     isActive: boolean;
     showCoordinateEditor?: boolean;
     saveAndContinue?: boolean;
@@ -18,12 +17,8 @@ declare type Props = HTMLAttributes & {
     onSetShape: (shape: Shape) => void;
     onUpdate: UpdatedGeoReceiver;
     disabledShapes?: Shape[];
-    mapStyle: ol.StyleFunction | ol.style.Style | ol.style.Style[];
 };
-declare type DrawingControlMap = Map<Shape, DrawingControl>;
 declare class DrawingMenu extends React.Component<Props> {
-    drawingContext: DrawingContext;
-    controlsMap: DrawingControlMap;
     setShape: (shape: Shape) => void;
     acceptEdit: () => void;
     cancelClick: () => void;

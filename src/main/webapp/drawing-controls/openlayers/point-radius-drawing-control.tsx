@@ -1,14 +1,14 @@
 import * as ol from 'openlayers'
 import * as turf from '@turf/turf'
 import DrawingContext from './drawing-context'
-import UpdatedGeoReceiver from './geo-receiver'
+import UpdatedGeoReceiver from '../geo-receiver'
 import BasicDrawingControl from './basic-drawing-control'
-import { Shape } from '../shape-utils'
-import { GeometryJSON, METERS, KILOMETERS } from '../geometry'
+import { Shape } from '../../shape-utils'
+import { GeometryJSON, METERS, KILOMETERS } from '../../geometry'
 import {
   getDistanceInMeters,
   getDistanceFromMeters,
-} from '../internal/distance'
+} from '../../internal/distance'
 
 type DrawingFeatures = {
   feature: ol.Feature
@@ -16,7 +16,7 @@ type DrawingFeatures = {
 }
 
 /**
- * Drawing Control for a circle/point radius
+ * Drawing Control for a circle/point radius on an Open Layers Map
  */
 class PointRadiusDrawingControl extends BasicDrawingControl {
   private animationFrameId: number

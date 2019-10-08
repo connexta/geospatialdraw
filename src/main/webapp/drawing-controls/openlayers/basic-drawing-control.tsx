@@ -1,15 +1,15 @@
 import * as ol from 'openlayers'
 import DrawingContext from './drawing-context'
-import UpdatedGeoReceiver from './geo-receiver'
-import DrawingControl from './drawing-control'
-import { Shape } from '../shape-utils'
+import UpdatedGeoReceiver from '../geo-receiver'
+import DrawingControl from '../drawing-control'
+import { Shape } from '../../shape-utils'
 import {
   GeometryJSON,
   GeometryJSONProperties,
   makeBufferedGeo,
   makeEmptyGeometry,
   geoToExtent,
-} from '../geometry'
+} from '../../geometry'
 
 type GeoProps = GeometryJSONProperties & {
   [index: string]: any
@@ -26,6 +26,8 @@ abstract class BasicDrawingControl implements DrawingControl {
   abstract setGeo(geoJSON: GeometryJSON): void
 
   abstract startDrawing(): void
+
+  abstract getShape(): Shape
 
   protected constructor(context: DrawingContext, receiver: UpdatedGeoReceiver) {
     this.context = context
@@ -57,8 +59,6 @@ abstract class BasicDrawingControl implements DrawingControl {
       }
     })
   }
-
-  protected abstract getShape(): Shape
 
   protected abstract getGeoType(): ol.geom.GeometryType
 

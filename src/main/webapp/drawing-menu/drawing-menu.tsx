@@ -1,17 +1,11 @@
 import * as React from 'react'
-import * as ol from 'openlayers'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faThList } from '@fortawesome/free-solid-svg-icons'
 import styled from 'styled-components'
 import { Shape } from '../shape-utils'
 import {
-  BoundingBoxDrawingControl,
-  DrawingContext,
+  DrawingToolbox,
   DrawingControl,
-  LineDrawingControl,
-  PointDrawingControl,
-  PointRadiusDrawingControl,
-  PolygonDrawingControl,
   UpdatedGeoReceiver,
 } from '../drawing-controls'
 import { transparentize, readableColor } from 'polished'
@@ -25,7 +19,7 @@ import { GeometryJSON } from '../geometry'
 
 type Props = HTMLAttributes & {
   shape: Shape | null
-  map: ol.Map
+  toolbox: DrawingToolbox
   isActive: boolean
   showCoordinateEditor?: boolean
   saveAndContinue?: boolean
@@ -37,10 +31,7 @@ type Props = HTMLAttributes & {
   onSetShape: (shape: Shape) => void
   onUpdate: UpdatedGeoReceiver
   disabledShapes?: Shape[]
-  mapStyle: ol.StyleFunction | ol.style.Style | ol.style.Style[]
 }
-
-type DrawingControlMap = Map<Shape, DrawingControl>
 
 const InvisibleBackground = styled.div`
   display: none;
@@ -142,39 +133,12 @@ const DrawingBackground = styled.div`
 `
 
 class DrawingMenu extends React.Component<Props> {
-  drawingContext: DrawingContext
-  controlsMap: DrawingControlMap
   setShape: (shape: Shape) => void
   acceptEdit: () => void
   cancelClick: () => void
 
   constructor(props: Props) {
     super(props)
-    this.drawingContext = new DrawingContext({
-      map: this.props.map,
-      drawingStyle: props.mapStyle,
-    })
-    this.controlsMap = new Map<Shape, DrawingControl>()
-    this.controlsMap.set(
-      'Polygon',
-      new PolygonDrawingControl(this.drawingContext, this.props.onUpdate)
-    )
-    this.controlsMap.set(
-      'Line',
-      new LineDrawingControl(this.drawingContext, this.props.onUpdate)
-    )
-    this.controlsMap.set(
-      'Point Radius',
-      new PointRadiusDrawingControl(this.drawingContext, this.props.onUpdate)
-    )
-    this.controlsMap.set(
-      'Point',
-      new PointDrawingControl(this.drawingContext, this.props.onUpdate)
-    )
-    this.controlsMap.set(
-      'Bounding Box',
-      new BoundingBoxDrawingControl(this.drawingContext, this.props.onUpdate)
-    )
     this.setShape = (shape: Shape) => {
       this.props.onSetShape(shape)
     }
@@ -191,35 +155,28 @@ class DrawingMenu extends React.Component<Props> {
   drawShape() {
     if (this.props.isActive && this.props.shape !== null) {
       this.cancelShapeDrawing()
-      const control = this.controlsMap.get(this.props.shape)
-      if (control !== undefined) {
-        control.startDrawing()
-        if (this.props.geometry !== null) {
-          control.setGeo(this.props.geometry)
-        }
+      const control = this.props.toolbox.getToolForShape(this.props.shape)
+      control.startDrawing()
+      if (this.props.geometry !== null) {
+        control.setGeo(this.props.geometry)
       }
     }
   }
 
   cancelShapeDrawing() {
-    this.controlsMap.forEach((control: DrawingControl, _shape: Shape) => {
+    this.props.toolbox.getToolsList().forEach((control: DrawingControl) => {
       control.cancelDrawing()
     })
   }
 
   setDrawingActive(active: boolean) {
-    const control = this.controlsMap.get(this.props.shape)
-    if (control !== undefined) {
-      control.setActive(active)
-    }
+    const control = this.props.toolbox.getToolForShape(this.props.shape)
+    control.setActive(active)
   }
 
   isDrawing(): boolean {
-    const control = this.controlsMap.get(this.props.shape)
-    if (control !== undefined) {
-      return control.isDrawing()
-    }
-    return false
+    const control = this.props.toolbox.getToolForShape(this.props.shape)
+    return control.isDrawing()
   }
 
   componentDidMount() {

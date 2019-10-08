@@ -1,4 +1,5 @@
 import { GeometryJSON } from '../geometry'
+import { Shape } from '../shape-utils'
 
 /**
  * Drawing controls create drawing interactions and provides
@@ -49,6 +50,11 @@ interface DrawingControl {
    * @returns true if the drawing interaction has been started
    */
   isDrawing(): boolean
+
+  /**
+   * @returns shape that drawing tool applies too
+   */
+  getShape(): Shape
 }
 
 export default DrawingControl

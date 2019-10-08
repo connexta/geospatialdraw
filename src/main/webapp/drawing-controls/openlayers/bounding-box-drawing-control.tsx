@@ -1,17 +1,17 @@
 import * as ol from 'openlayers'
 import * as turf from '@turf/turf'
 import DrawingContext from './drawing-context'
-import UpdatedGeoReceiver from './geo-receiver'
+import UpdatedGeoReceiver from '../geo-receiver'
 import BasicDrawingControl from './basic-drawing-control'
-import { Shape } from '../shape-utils'
-import { GeometryJSON, Extent } from '../geometry'
+import { Shape } from '../../shape-utils'
+import { GeometryJSON, Extent } from '../../geometry'
 
 type ExtentEvent = {
   extent: Extent
 }
 
 /**
- * Drawing Control for drawing a bounding box
+ * Drawing Control for drawing a bounding box on an Open Layers Map
  */
 class BoundingBoxDrawingControl extends BasicDrawingControl {
   /**

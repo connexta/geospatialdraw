@@ -1,11 +1,11 @@
 import * as ol from 'openlayers'
 import DrawingContext from './drawing-context'
-import UpdatedGeoReceiver from './geo-receiver'
+import UpdatedGeoReceiver from '../geo-receiver'
 import ModifiableDrawingControl from './modifiable-drawing-control'
-import { Shape } from '../shape-utils'
+import { Shape } from '../../shape-utils'
 
 /**
- * Drawing Control for drawing a line
+ * Drawing Control for drawing a line on an Open Layers Map
  */
 class LineDrawingControl extends ModifiableDrawingControl {
   /**
