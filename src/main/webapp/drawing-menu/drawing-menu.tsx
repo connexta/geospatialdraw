@@ -183,13 +183,19 @@ class DrawingMenu extends React.Component<Props> {
     if (this.props.isActive && !this.props.showCoordinateEditor) {
       this.drawShape()
     }
+    this.props.toolbox.setListener(this.props.onUpdate)
   }
 
   componentWillUnmount() {
+    this.props.toolbox.removeListener()
     this.cancelShapeDrawing()
   }
 
   componentDidUpdate(prevProps: Props) {
+    if (prevProps.toolbox !== this.props.toolbox) {
+      prevProps.toolbox.removeListener()
+      this.props.toolbox.setListener(this.props.onUpdate)
+    }
     if (prevProps.shape !== this.props.shape) {
       this.cancelShapeDrawing()
       this.drawShape()
@@ -228,7 +234,6 @@ class DrawingMenu extends React.Component<Props> {
   render() {
     const {
       shape,
-      map,
       isActive,
       geometry,
       onCancel,
