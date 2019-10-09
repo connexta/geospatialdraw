@@ -43,7 +43,6 @@ var React = require("react");
 var react_fontawesome_1 = require("@fortawesome/react-fontawesome");
 var free_solid_svg_icons_1 = require("@fortawesome/free-solid-svg-icons");
 var styled_components_1 = require("styled-components");
-var drawing_controls_1 = require("../drawing-controls");
 var polished_1 = require("polished");
 var bbox_1 = require("./icons/bbox");
 var circle_1 = require("./icons/circle");
@@ -75,16 +74,6 @@ var DrawingMenu = /** @class */ (function (_super) {
     __extends(DrawingMenu, _super);
     function DrawingMenu(props) {
         var _this = _super.call(this, props) || this;
-        _this.drawingContext = new drawing_controls_1.DrawingContext({
-            map: _this.props.map,
-            drawingStyle: props.mapStyle,
-        });
-        _this.controlsMap = new Map();
-        _this.controlsMap.set('Polygon', new drawing_controls_1.PolygonDrawingControl(_this.drawingContext, _this.props.onUpdate));
-        _this.controlsMap.set('Line', new drawing_controls_1.LineDrawingControl(_this.drawingContext, _this.props.onUpdate));
-        _this.controlsMap.set('Point Radius', new drawing_controls_1.PointRadiusDrawingControl(_this.drawingContext, _this.props.onUpdate));
-        _this.controlsMap.set('Point', new drawing_controls_1.PointDrawingControl(_this.drawingContext, _this.props.onUpdate));
-        _this.controlsMap.set('Bounding Box', new drawing_controls_1.BoundingBoxDrawingControl(_this.drawingContext, _this.props.onUpdate));
         _this.setShape = function (shape) {
             _this.props.onSetShape(shape);
         };
@@ -101,32 +90,25 @@ var DrawingMenu = /** @class */ (function (_super) {
     DrawingMenu.prototype.drawShape = function () {
         if (this.props.isActive && this.props.shape !== null) {
             this.cancelShapeDrawing();
-            var control = this.controlsMap.get(this.props.shape);
-            if (control !== undefined) {
-                control.startDrawing();
-                if (this.props.geometry !== null) {
-                    control.setGeo(this.props.geometry);
-                }
+            var control = this.props.toolbox.getToolForShape(this.props.shape);
+            control.startDrawing();
+            if (this.props.geometry !== null) {
+                control.setGeo(this.props.geometry);
             }
         }
     };
     DrawingMenu.prototype.cancelShapeDrawing = function () {
-        this.controlsMap.forEach(function (control, _shape) {
+        this.props.toolbox.getToolsList().forEach(function (control) {
             control.cancelDrawing();
         });
     };
     DrawingMenu.prototype.setDrawingActive = function (active) {
-        var control = this.controlsMap.get(this.props.shape);
-        if (control !== undefined) {
-            control.setActive(active);
-        }
+        var control = this.props.toolbox.getToolForShape(this.props.shape);
+        control.setActive(active);
     };
     DrawingMenu.prototype.isDrawing = function () {
-        var control = this.controlsMap.get(this.props.shape);
-        if (control !== undefined) {
-            return control.isDrawing();
-        }
-        return false;
+        var control = this.props.toolbox.getToolForShape(this.props.shape);
+        return control.isDrawing();
     };
     DrawingMenu.prototype.componentDidMount = function () {
         if (this.props.isActive && !this.props.showCoordinateEditor) {

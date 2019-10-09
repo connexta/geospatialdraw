@@ -28,7 +28,7 @@ var ol = require("openlayers");
 var turf = require("@turf/turf");
 var basic_drawing_control_1 = require("./basic-drawing-control");
 /**
- * Drawing Control for drawing a bounding box
+ * Drawing Control for drawing a bounding box on an Open Layers Map
  */
 var BoundingBoxDrawingControl = /** @class */ (function (_super) {
     __extends(BoundingBoxDrawingControl, _super);

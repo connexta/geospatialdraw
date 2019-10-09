@@ -45,9 +45,9 @@ declare const bboxToExtent: (bbox: turf.helpers.BBox) => [number, number, number
 /**
  * Calculates the 2D extent of a GeometryJSON object
  *
- * @param geo - GeometryJSON object
+ * @param geo - GeometryJSON or Geometry object
  *
  * @returns Extent
  */
-declare const geoToExtent: (geo: GeometryJSON) => [number, number, number, number];
+declare const geoToExtent: (geo: turf.helpers.Point | turf.helpers.LineString | turf.helpers.Polygon | GeometryJSON) => [number, number, number, number];
 export { bboxToExtent, geoToExtent, makeGeometry, makeBufferedGeo, makeEmptyGeometry, };

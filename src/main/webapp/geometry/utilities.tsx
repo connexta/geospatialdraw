@@ -157,11 +157,11 @@ const bboxToExtent = (bbox: turf.BBox): Extent => [
 /**
  * Calculates the 2D extent of a GeometryJSON object
  *
- * @param geo - GeometryJSON object
+ * @param geo - GeometryJSON or Geometry object
  *
  * @returns Extent
  */
-const geoToExtent = (geo: GeometryJSON): Extent => {
+const geoToExtent = (geo: GeometryJSON | Geometry): Extent => {
   return bboxToExtent(turf.bbox(geo))
 }
 

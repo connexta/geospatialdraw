@@ -1,16 +1,10 @@
 import * as ol from 'openlayers';
-import DrawingToolbox from '../drawing-toolbox';
-import DrawingControl from '../drawing-control';
-import { Shape } from '../../shape-utils';
-import UpdatedGeoReceiver from '../geo-receiver';
+import BasicDrawingToolbox from '../basic-drawing-toolbox';
 /**
  * Open Layers drawing toolbox
  */
-declare class OpenLayersDrawingToolbox implements DrawingToolbox {
+declare class OpenLayersDrawingToolbox extends BasicDrawingToolbox {
     private drawingContext;
-    private toolbox;
-    private listener;
-    private toolboxListener;
     /**
      * Constructs an instance of Open Layers drawing toolbox
      * @param map - reference to openlayers map
@@ -20,9 +14,5 @@ declare class OpenLayersDrawingToolbox implements DrawingToolbox {
         map: ol.Map;
         drawingStyle: ol.style.Style | ol.StyleFunction | ol.style.Style[];
     });
-    getToolForShape(shape: Shape): DrawingControl;
-    getToolsList(): DrawingControl[];
-    setListener(listener: UpdatedGeoReceiver): void;
-    removeListener(): void;
 }
 export default OpenLayersDrawingToolbox;

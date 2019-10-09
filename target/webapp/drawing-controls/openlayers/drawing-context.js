@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var ol = require("openlayers");
-var geometry_1 = require("../geometry");
+var geometry_1 = require("../../geometry");
 /**
  * Open Layers drawing context provides a layer between the drawing controls
  * and the openlayers map, normalizing interactions with the openlayers map

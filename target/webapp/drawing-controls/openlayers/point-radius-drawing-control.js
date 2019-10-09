@@ -27,10 +27,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var ol = require("openlayers");
 var turf = require("@turf/turf");
 var basic_drawing_control_1 = require("./basic-drawing-control");
-var geometry_1 = require("../geometry");
-var distance_1 = require("../internal/distance");
+var geometry_1 = require("../../geometry");
+var distance_1 = require("../../internal/distance");
 /**
- * Drawing Control for a circle/point radius
+ * Drawing Control for a circle/point radius on an Open Layers Map
  */
 var PointRadiusDrawingControl = /** @class */ (function (_super) {
     __extends(PointRadiusDrawingControl, _super);

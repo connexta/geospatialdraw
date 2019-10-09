@@ -16,7 +16,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var ol = require("openlayers");
 var modifiable_drawing_control_1 = require("./modifiable-drawing-control");
 /**
- * Drawing Control for drawing a point
+ * Drawing Control for drawing a point on an Open Layers Map
  */
 var PointDrawingControl = /** @class */ (function (_super) {
     __extends(PointDrawingControl, _super);

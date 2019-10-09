@@ -141,7 +141,7 @@ exports.bboxToExtent = bboxToExtent;
 /**
  * Calculates the 2D extent of a GeometryJSON object
  *
- * @param geo - GeometryJSON object
+ * @param geo - GeometryJSON or Geometry object
  *
  * @returns Extent
  */

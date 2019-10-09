@@ -12,7 +12,7 @@ var __assign = (this && this.__assign) || function () {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var ol = require("openlayers");
-var geometry_1 = require("../geometry");
+var geometry_1 = require("../../geometry");
 var BasicDrawingControl = /** @class */ (function () {
     function BasicDrawingControl(context, receiver) {
         this.context = context;
