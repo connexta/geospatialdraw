@@ -49,5 +49,5 @@ declare const bboxToExtent: (bbox: turf.helpers.BBox) => [number, number, number
  *
  * @returns Extent
  */
-declare const geoToExtent: (geo: turf.helpers.Point | turf.helpers.LineString | turf.helpers.Polygon | GeometryJSON) => [number, number, number, number];
+declare const geoToExtent: (geo: GeometryJSON | turf.helpers.Polygon | turf.helpers.Point | turf.helpers.LineString) => [number, number, number, number];
 export { bboxToExtent, geoToExtent, makeGeometry, makeBufferedGeo, makeEmptyGeometry, };
