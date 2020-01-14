@@ -1,0 +1,52 @@
+{
+  "compilerOptions": {
+    "allowJs": false,
+    "allowSyntheticDefaultImports": true,
+    "declaration": true,
+    "emitDecoratorMetadata": true,
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "sourceMap": true,
+    "strictNullChecks": true,
+    "jsx": "react",
+    "lib": ["es6", "dom", "es2017", "es2018"],
+    "target": "es5",
+    "moduleResolution": "node",
+    "module": "CommonJS",
+    "outDir": "./target/webapp"
+  },
+  "typedocOptions": {
+    "name": "GeospatialDraw",
+    "mode": "modules",
+    "out": "./target/storybook/docs",
+    "categorizeByGroup": true,
+    "excludePrivate": true,
+    "excludeProtected": true,
+    "exclude": [
+      "**/internal/**",
+      "**/coordinates/presentation/colors.*",
+      "**/coordinates/presentation/common-styles.*",
+      "**/coordinates/presentation/*-input.*",
+      "**/coordinates/presentation/length-editor.*",
+      "**/coordinates/geometry/base-geometry.*",
+      "**/drawing/**/basic-*",
+      "**/drawing/openlayers/modifiable-*"
+    ]
+  },
+  "include": ["./src/main/webapp/**/*.tsx"],
+  "exclude": [
+    "node_modules",
+    "build",
+    "scripts",
+    "acceptance-tests",
+    "webpack",
+    "jest",
+    "src/setupTests.ts"
+  ]
+}

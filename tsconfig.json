@@ -1,26 +1,39 @@
 {
   "compilerOptions": {
-    "jsx": "react",
     "allowJs": false,
-    "sourceMap": true,
+    "allowSyntheticDefaultImports": true,
+    "declaration": true,
+    "emitDecoratorMetadata": true,
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "forceConsistentCasingInFileNames": true,
     "noImplicitAny": true,
+    "noImplicitReturns": true,
     "noImplicitThis": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
+    "sourceMap": true,
     "strictNullChecks": true,
+    "jsx": "react",
     "lib": ["es6", "dom", "es2017", "es2018"],
     "target": "es5",
-    "declaration": true,
     "moduleResolution": "node",
     "module": "CommonJS",
-    "outDir": "target/webapp"
+    "outDir": "./bin"
   },
   "typedocOptions": {
+    "name": "GeospatialDraw",
     "mode": "modules",
-    "out": "./target/storybook/docs",
-    "categorizeByGroup": true
+    "out": "./docs",
+    "categorizeByGroup": true,
+    "excludePrivate": true,
+    "excludeProtected": true,
+    "stripInternal": true,
+    "exclude": [
+      "**/internal/**"
+    ]
   },
-  "include": ["src/main/webapp/**/*.tsx"],
+  "include": ["lib/**/*.tsx"],
   "exclude": [
     "node_modules",
     "build",

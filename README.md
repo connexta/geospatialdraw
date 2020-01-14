@@ -1,78 +1,39 @@
 # GeospatialDraw
+
 ## Geospatial map drawing library
 
 Library of tools to draw and edit geometric shapes on a map.
 
-**Note** To enable links run `yarn docs`
+GeospatialDraw standardizes on *GeometryJSON* (see documentation below) as the format for all geometric data. Type definitions and methods for manipulating GeometryJSON are located in `lib/geometry`
 
-## Packages
+Tools for creating drawing interactions for geometric shapes on a map are provided using OpenLayers 6.x in the `lib/drawing`
 
-**geometry**
-:  GeospatialDraw extends GeoJSON to communicate geometric shapes by adding properties to `Feature` JSON objects. That format is defined in the geometry package.
+Boilerplate code for generating UI components for manipulating GeometryJSON is provided in `lib/coordinates`
 
- * Geometry
-   * [GeometryJSON](https://unpkg.com/geospatialdraw@0.4.0/target/storybook/docs/modules/_geometry_geometry_.html#geometryjson)
-   * [GeometryJSONProperties](https://unpkg.com/geospatialdraw@0.4.0/target/storybook/docs/modules/_geometry_geometry_.html#geometryjsonproperties)
-   * [Geometry](https://unpkg.com/geospatialdraw@0.4.0/target/storybook/docs/modules/_geometry_geometry_.html#geometry)
-   * [BufferShape](https://unpkg.com/geospatialdraw@0.4.0/target/storybook/docs/modules/_geometry_geometry_.html#buffershape)
-   * [Extent](https://unpkg.com/geospatialdraw@0.4.0/target/storybook/docs/modules/_geometry_geometry_.html#extent)
-   * [BUFFER_SHAPE_PROPERTY](https://unpkg.com/geospatialdraw@0.4.0/target/storybook/docs/modules/_geometry_geometry_.html#buffer_shape_property)
-   * [CIRCLE_BUFFER_PROPERTY_VALUE](https://unpkg.com/geospatialdraw@0.4.0/target/storybook/docs/modules/_geometry_geometry_.html#circle_buffer_property_value)
-   * [POLYGON_LINE_BUFFER_PROPERTY_VALUE](https://unpkg.com/geospatialdraw@0.4.0/target/storybook/docs/modules/_geometry_geometry_.html#polygon_line_buffer_property_value)
- * Utilities
-   * [bboxToExtent](https://unpkg.com/geospatialdraw@0.4.0/target/storybook/docs/modules/_geometry_utilities_.html#bboxtoextent)
-   * [geoToExtent](https://unpkg.com/geospatialdraw@0.4.0/target/storybook/docs/modules/_geometry_utilities_.html#geotoextent)
-   * [makeGeometry](https://unpkg.com/geospatialdraw@0.4.0/target/storybook/docs/modules/_geometry_utilities_.html#makegeometry)
-   * [makeBufferedGeo](https://unpkg.com/geospatialdraw@0.4.0/target/storybook/docs/modules/_geometry_utilities_.html#makebufferedgeo)
-   * [makeEmptyGeometry](https://unpkg.com/geospatialdraw@0.4.0/target/storybook/docs/modules/_geometry_utilities_.html#makeemptygeometry)
- * Units
-   * [LengthUnit](https://unpkg.com/geospatialdraw@0.4.0/target/storybook/docs/modules/_geometry_units_.html#lengthunit)
-   * [FEET](https://unpkg.com/geospatialdraw@0.4.0/target/storybook/docs/modules/_geometry_units_.html#feet)
-   * [KILOMETERS](https://unpkg.com/geospatialdraw@0.4.0/target/storybook/docs/modules/_geometry_units_.html#kilometers)
-   * [METERS](https://unpkg.com/geospatialdraw@0.4.0/target/storybook/docs/modules/_geometry_units_.html#meters)
-   * [MILES](https://unpkg.com/geospatialdraw@0.4.0/target/storybook/docs/modules/_geometry_units_.html#miles)
-   * [NAUTICAL_MILES](https://unpkg.com/geospatialdraw@0.4.0/target/storybook/docs/modules/_geometry_units_.html#nautical_miles)
-   * [YARDS](https://unpkg.com/geospatialdraw@0.4.0/target/storybook/docs/modules/_geometry_units_.html#yards)
- * Shape Factory
-   * [makeBBoxGeo](https://unpkg.com/geospatialdraw@0.4.0/target/storybook/docs/modules/_geometry_shape_factory_.html#makebboxgeo)
-   * [makeLineGeo](https://unpkg.com/geospatialdraw@0.4.0/target/storybook/docs/modules/_geometry_shape_factory_.html#makelinegeo)
-   * [makePointGeo](https://unpkg.com/geospatialdraw@0.4.0/target/storybook/docs/modules/_geometry_shape_factory_.html#makepointgeo)
-   * [makePointRadiusGeo](https://unpkg.com/geospatialdraw@0.4.0/target/storybook/docs/modules/_geometry_shape_factory_.html#makepointradiusgeo)
-   * [makePolygonGeo](https://unpkg.com/geospatialdraw@0.4.0/target/storybook/docs/modules/_geometry_shape_factory_.html#makepolygongeo)
+Boilerplate code for generating a drawing menu to draw GeometryJSON on a map is provided in `lib/menu`
 
-**shapes**
-: The GeospatialDraw GeoJSON format only supports a limited set of geometric shapes. To aid in identifying the correct geometric shape a shape detector is provided in the shapes package.
+An OpenLayers GeometryJSON renderer is offered in `lib/renderer`
 
- * [Shape](https://unpkg.com/geospatialdraw@0.4.0/target/storybook/docs/modules/_shape_utils_shape_.html#shape)
- * [ShapeDetector](https://unpkg.com/geospatialdraw@0.4.0/target/storybook/docs/classes/_shape_utils_shape_detector_.shapedetector.html)
+Shape manipulation methods are provided in `lib/shapes`
 
-**coordinates**
-: In addition to drawing geometries on the map GeospatialDraw also has a library of components for editing the coordinates of these geometries directly. These components are in the coordinates package.
+## Documentation
 
-*For docs see: [Components Library](#components-library)*
+Documentation: https://unpkg.com/geospatialdraw@0.5.3/docs/index.html
 
-**drawing**
-: Drawing shapes on the map is supported with drawing tools in the drawing package.
+## UI Components
 
- * [UpdatedGeoReceiver](https://unpkg.com/geospatialdraw@0.4.0/target/storybook/docs/modules/_drawing_controls_geo_receiver_.html#updatedgeoreceiver)
- * [DrawingContext](https://unpkg.com/geospatialdraw@0.4.0/target/storybook/docs/classes/_drawing_controls_drawing_context_.drawingcontext.html)
- * [DrawingControl](https://unpkg.com/geospatialdraw@0.4.0/target/storybook/docs/interfaces/_drawing_controls_drawing_control_.drawingcontrol.html)
- * [BoundingBoxDrawingControl](https://unpkg.com/geospatialdraw@0.4.0/target/storybook/docs/classes/_drawing_controls_bounding_box_drawing_control_.boundingboxdrawingcontrol.html)
- * [LineDrawingControl](https://unpkg.com/geospatialdraw@0.4.0/target/storybook/docs/classes/_drawing_controls_line_drawing_control_.linedrawingcontrol.html)
- * [PointDrawingControl](https://unpkg.com/geospatialdraw@0.4.0/target/storybook/docs/classes/_drawing_controls_point_drawing_control_.pointdrawingcontrol.html)
- * [PointRadiusDrawingControl](https://unpkg.com/geospatialdraw@0.4.0/target/storybook/docs/classes/_drawing_controls_point_radius_drawing_control_.pointradiusdrawingcontrol.html)
- * [PolygonDrawingControl](https://unpkg.com/geospatialdraw@0.4.0/target/storybook/docs/classes/_drawing_controls_polygon_drawing_control_.polygondrawingcontrol.html)
+See `ui` folder and `geospatialdraw-ui` package for example UI Components.
 
-**menu**
-: To facilitate a smooth UX with map drawing a map drawing menu is provided in the menu package.
+## Installation
 
-*For docs see: [Components Library](#components-library)*
+`npm install geospatialdraw`
 
-**renderer**
-: A renderer is provided in the renderer package that can take an array of GeospatialDraw GeoJSON objects and render them on a map.
+## Development
 
- * [Renderer](https://unpkg.com/geospatialdraw@0.4.0/target/storybook/docs/classes/_renderer_renderer_.renderer.html)
+`yarn build:all`
 
-## Components Library
+## Deploy
 
-Browse components in [Storybook](https://unpkg.com/geospatialdraw@0.4.0/target/storybook/index.html)
+**Note:** Be certain to update version number in `package.json` and `README.md` documentation link.
+
+`yarn publish`
