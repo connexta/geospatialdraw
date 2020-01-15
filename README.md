@@ -9,18 +9,20 @@ For the map interface a suit of classes are provided which create custom interac
 
 Editing the coordinates of the various geometric shapes is supported in the units of Latitude/Longitude in decimal format, degrees minutes seconds format, and coordinates in UTM, UPS, USNG and MGRS. A library of React hooks and functions make the process of developing a UI for editing these coordinates on *GeometryJSON* objects much easier.
 
-# Folders
+# Packages
 
- * lib/drawing - Tools for creating drawing interactions for geometric shapes on a map.
- * lib/coordinates - Boilerplate code for generating UI components for manipulating GeometryJSON in all of the supported coordinate formats.
- * lib/menu - Boilerplate code for generating a drawing menu for 'lib/drawing'.
- * lib/renderer - An OpenLayers GeometryJSON renderer.
- * lib/shapes - Methods and type definitions for manipulating and identifying geometric shapes in GeometryJSON.
- * lib/geometry - Methods and type definitions for manipulating GeometryJSON.
+Usage `import 'geospatialdraw/bin/...'`
+
+ * `drawing` - Tools for creating drawing interactions for geometric shapes on a map.
+ * `coordinates` - Boilerplate code for generating UI components for manipulating GeometryJSON in all of the supported coordinate formats.
+ * `menu` - Boilerplate code for generating a drawing menu for 'lib/drawing'.
+ * `renderer` - An OpenLayers GeometryJSON renderer.
+ * `shapes` - Methods and type definitions for manipulating and identifying geometric shapes in GeometryJSON.
+ * `geometry` - Methods and type definitions for manipulating GeometryJSON.
 
 ## Documentation
 
-Documentation: https://unpkg.com/geospatialdraw@0.5.5/docs/index.html
+[Typedoc documentation](https://unpkg.com/geospatialdraw@0.5.5/docs/index.html)
 
 ## UI Components
 
