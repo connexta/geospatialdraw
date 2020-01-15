@@ -1,6 +1,6 @@
 {
   "name": "geospatialdraw-ui",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Geospatial Map Drawing Library UI",
   "types": "./target/webapp/index.d.ts",
   "main": "./target/webapp/index.js",
@@ -53,17 +53,13 @@
     "polished": "3.4.2",
     "react-dom": "16.9.0",
     "usng.js": "0.4.2",
-    "geospatialdraw": "0.5.4",
+    "geospatialdraw": "0.5.5",
     "styled-components": "4.3.2"
   },
   "devDependencies": {
     "@connexta/ace": "git://github.com/connexta/ace.git#fc1f71c1404b21424988198dada600e885f66135",
     "@emotion/core": "10.0.22",
     "@emotion/styled": "10.0.23",
-    "@material-ui/core": "4.6.0",
-    "@material-ui/icons": "4.5.1",
-    "@material-ui/lab": "4.0.0-alpha.31",
-    "@material-ui/pickers": "3.2.7",
     "@turf/nearest-point-to-line": "6.0.0",
     "@turf/point-to-line-distance": "6.0.0",
     "@types/ol": "5.3.6",

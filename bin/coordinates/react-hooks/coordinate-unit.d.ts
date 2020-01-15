@@ -12,13 +12,13 @@ declare type Props = {
  * Example usage:
  * ```
  * const coordinates = useCoordinateUnit({ lat, lon, coordinateUnit })
- * return <Row>
- * {
- *   coordinates.map(text => (
- *     <Column>{text}</Column>
- *   ))
- * }
- * </Row>
+ * return (
+ *   <Row>{
+ *     coordinates.map(text => (
+ *       <Column>{text}</Column>
+ *     ))
+ *   }</Row>
+ * )
  * ```
  * @param object - coordinate properties
  * @returns array of formatted strings divided at the point in which they should be semantically separated.
