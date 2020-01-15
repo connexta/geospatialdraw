@@ -26,7 +26,7 @@ Usage `import 'geospatialdraw/bin/...'`
 
 ## UI Components
 
-See `ui` folder and `geospatialdraw-ui` package for example UI Components.
+See [ui folder](ui/README.md) and `geospatialdraw-ui` package for example UI Components.
 
 ## Installation
 

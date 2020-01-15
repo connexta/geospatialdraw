@@ -16,3 +16,17 @@ Usage `import 'geospatialdraw/bin/...'`
 ## Storybook
 
 [Storybook link](https://unpkg.com/geospatialdraw-ui@0.2.0/target/storybook/index.html)
+
+## Installation
+
+`npm install geospatialdraw-ui`
+
+## Development
+
+`yarn build:all`
+
+## Deploy
+
+**Note:** Be certain to update version number in `package.json` and the two `README.md` documentation links.
+
+`yarn publish`
