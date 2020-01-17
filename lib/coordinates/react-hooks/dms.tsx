@@ -26,11 +26,11 @@ const useDMSCoordinates = (
       lat: dmsToDecimal(value.lat),
       lon: dmsToDecimal(value.lon),
     }
-    const coordiantesAreValid = isValidLatLon(coordinates)
-    if (coordiantesAreValid) {
+    const coordinatesAreValid = isValidLatLon(coordinates)
+    if (coordinatesAreValid) {
       setCoordinates(coordinates)
     }
-    setIsValid(coordiantesAreValid)
+    setIsValid(coordinatesAreValid)
   }
   const dmsString = dmsCoordinateToString(
     dmsCoordinates.lat,

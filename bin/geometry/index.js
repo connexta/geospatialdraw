@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var geometry_1 = require("./geometry");
+exports.LABEL_CLASSNAME = geometry_1.LABEL_CLASSNAME;
 exports.BUFFER_CLASSNAME = geometry_1.BUFFER_CLASSNAME;
 exports.HIDDEN_CLASSNAME = geometry_1.HIDDEN_CLASSNAME;
 var utilities_1 = require("./utilities");
@@ -28,6 +29,11 @@ exports.makeLineGeo = shape_factory_1.makeLineGeo;
 exports.makePointGeo = shape_factory_1.makePointGeo;
 exports.makePointRadiusGeo = shape_factory_1.makePointRadiusGeo;
 exports.makePolygonGeo = shape_factory_1.makePolygonGeo;
+var measurements_1 = require("./measurements");
+exports.optimizedUnitForLength = measurements_1.optimizedUnitForLength;
+exports.optimizedUnitForDistanceBetweenPoints = measurements_1.optimizedUnitForDistanceBetweenPoints;
+exports.distanceBetweenPoints = measurements_1.distanceBetweenPoints;
+exports.formatNumber = measurements_1.formatNumber;
 var memo_1 = __importDefault(require("./memo"));
 exports.useGeometryJSONMemo = memo_1.default;
 //# sourceMappingURL=index.js.map

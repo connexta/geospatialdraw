@@ -1,6 +1,6 @@
 {
   "name": "geospatialdraw",
-  "version": "0.5.5",
+  "version": "0.6.0-alpha.9",
   "description": "Geospatial Map Drawing Library",
   "types": "bin/index.d.ts",
   "main": "bin/index.js",
@@ -29,18 +29,19 @@
     "url": "git://github.com/connexta/geospatialdraw.git"
   },
   "engines": {
-    "node": ">=0.10.5"
+    "node": ">=8.0.0"
   },
   "scripts": {
-    "fmt": "prettier --write '{./lib/**/*.js,./lib/**/*.tsx}'",
-    "pretest": "prettier --check '{./lib/**/*.js,./lib/**/*.tsx}'",
+    "fmt": "prettier --write '{./lib/**/*.js,./tests/**/*.js,./lib/**/*.tsx}'",
+    "test:fmt": "prettier --check '{./lib/**/*.js,./tests/**/*.js,./lib/**/*.tsx}'",
+    "pretest": "yarn run test:fmt && yarn run build",
     "test": "mocha -r esm -r jsdom-global/register ./tests",
     "prebuild": "rimraf ./bin && rimraf ./docs",
     "build": "tsc -p tsconfig.json",
     "build:docs": "typedoc",
-    "build:verify": "yarn run fmt && yarn run build && yarn run test",
+    "build:verify": "yarn run fmt && yarn run test",
     "build:all": "yarn run build:verify && yarn run build:docs",
-    "prepublish": "yarn build:all"
+    "prepublishOnly": "yarn build:all"
   },
   "dependencies": {
     "@turf/turf": "5.1.6",
@@ -48,27 +49,21 @@
     "usng.js": "0.4.2"
   },
   "devDependencies": {
-    "@emotion/core": "10.0.22",
-    "@emotion/styled": "10.0.23",
     "@turf/nearest-point-to-line": "6.0.0",
     "@turf/point-to-line-distance": "6.0.0",
-    "@types/ol": "5.3.6",
-    "@types/styled-components": "4.1.8",
+    "@types/ol": "6.1.0",
+    "@types/react": "16.9.17",
     "canvas": "2.6.1",
     "chai": "4.2.0",
-    "emotion-theming": "10.0.19",
-    "emotion": "10.0.23",
-    "enzyme-adapter-react-16": "1.15.1",
-    "enzyme": "3.10.0",
+    "enzyme": "3.11.0",
+    "enzyme-adapter-react-16": "1.15.2",
     "esm": "3.2.25",
-    "jsdom-global": "3.0.2",
     "jsdom": "15.2.1",
+    "jsdom-global": "3.0.2",
     "mocha": "7.0.0",
     "ol": "6.0.1",
     "prettier": "1.19.1",
-    "prismjs": "1.17.1",
     "react-dom": "16.9.0",
-    "recompose": "0.30.0",
     "rimraf": "3.0.0",
     "typedoc": "0.15.0",
     "typescript-bundle": "1.0.16"

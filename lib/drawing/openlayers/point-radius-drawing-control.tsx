@@ -13,11 +13,12 @@ import BasicDrawingControl from './basic-drawing-control'
 import { Shape, POINT_RADIUS } from '../../shapes/shape'
 import { GeometryJSON, HIDDEN_CLASSNAME } from '../../geometry/geometry'
 import { getBufferPropOrDefault } from '../../geometry/utilities'
-import { METERS, KILOMETERS } from '../../geometry/units'
+import { abbreviateUnit } from '../../geometry/units'
 import {
   getDistanceInMeters,
   getDistanceFromMeters,
 } from '../../internal/distance'
+import { optimizedUnitForLength } from '../../geometry/measurements'
 
 type DrawingFeatures = {
   feature: Feature
@@ -59,6 +60,7 @@ class PointRadiusDrawingControl extends BasicDrawingControl {
         )
         this.applyPropertiesToFeature(pointFeature)
         this.context.updateBufferFeature(pointFeature, false)
+        this.updateLabel(feature)
       }
       this.animationFrameId = requestAnimationFrame(this.animationFrame)
     }
@@ -70,17 +72,18 @@ class PointRadiusDrawingControl extends BasicDrawingControl {
     this.animationFrame = () => {}
     const point = this.updatePointFromRadiusLine(this.toLine(feature))
     const pointFeature = new Feature(point)
-    const { width, unit } = getBufferPropOrDefault(this.properties)
-    const radius = getDistanceInMeters(width, unit)
-    let bestFitRadiusUnit = unit
-    if (bestFitRadiusUnit === METERS && radius > 1000) {
-      bestFitRadiusUnit = KILOMETERS
-    }
+    const { width: originalWidth, unit: originalUnit } = getBufferPropOrDefault(
+      this.properties
+    )
+    const { length: width, unit } = optimizedUnitForLength({
+      unit: originalUnit,
+      length: originalWidth,
+    })
     this.setProperties({
       ...this.properties,
       buffer: {
-        width: getDistanceFromMeters(radius, bestFitRadiusUnit),
-        unit: bestFitRadiusUnit,
+        width,
+        unit,
       },
     })
     const geoJSON: GeometryJSON = this.writeExtendedGeoJSON(
@@ -110,7 +113,10 @@ class PointRadiusDrawingControl extends BasicDrawingControl {
     const feature = this.getFeatureFromDrawEvent(e)
     const source = this.context.getSource()
     source.getFeatures().forEach(f => source.removeFeature(f))
-    this.initalCenter = this.toLine(feature).getCoordinates()[0]
+    this.initalCenter = this.toLine(feature).getCoordinates()[0] as [
+      number,
+      number
+    ]
     this.startDrawAnimation(feature)
   }
 
@@ -136,7 +142,7 @@ class PointRadiusDrawingControl extends BasicDrawingControl {
     }
     feature.unset('class')
     const geoJSON = this.stopDrawAnimation(feature)
-    const center = this.toLine(feature).getCoordinates()[0]
+    const center = this.toLine(feature).getCoordinates()[0] as [number, number]
     if (!this.pointsEqual(center, this.initalCenter)) {
       this.reorientRadiusLineFeature(center)
     }
@@ -184,7 +190,7 @@ class PointRadiusDrawingControl extends BasicDrawingControl {
   }
 
   private updatePointFromRadiusLine(line: LineString): Point {
-    const center = line.getCoordinates()[0]
+    const center = line.getCoordinates()[0] as [number, number]
     if (this.pointsEqual(center, this.initalCenter)) {
       const distance = turf.rhumbDistance(
         line.getCoordinates()[0],
@@ -226,6 +232,7 @@ class PointRadiusDrawingControl extends BasicDrawingControl {
     this.applyPropertiesToFeature(bufferFeature)
     this.context.updateFeature(feature)
     this.context.updateBufferFeature(bufferFeature, false)
+    this.updateLabel(feature)
     this.startDrawingInteraction()
   }
 
@@ -280,6 +287,36 @@ class PointRadiusDrawingControl extends BasicDrawingControl {
     // uses custom modify interaction
     this.context.remakeInteractions()
     super.cancelDrawing()
+  }
+
+  protected updateLabel(feature: Feature): void {
+    const geometry = feature.getGeometry()
+    const { unit: bufferUnit, width: bufferWidth } = getBufferPropOrDefault(
+      this.properties
+    )
+    const { unit, length } = optimizedUnitForLength({
+      unit: bufferUnit,
+      length: bufferWidth,
+    })
+    if (geometry) {
+      const point = turf.rhumbDestination(
+        (geometry as LineString).getCoordinates()[0],
+        getDistanceInMeters(length, unit),
+        180,
+        {
+          units: 'meters',
+        }
+      )
+      const coordinates = (point.geometry as turf.Point).coordinates as [
+        number,
+        number
+      ]
+      const area = Math.PI * length * length
+      const text = `${this.formatLabelNumber(length)} ${abbreviateUnit(
+        unit
+      )}\n${this.formatLabelNumber(area)} ${abbreviateUnit(unit)}\xB2`
+      this.context.updateLabel(coordinates, text)
+    }
   }
 }
 

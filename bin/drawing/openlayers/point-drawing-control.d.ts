@@ -18,5 +18,6 @@ declare class PointDrawingControl extends ModifiableDrawingControl {
     getGeoType(): GeometryType;
     cancelDrawing(): void;
     protected makeEmptyFeature(): Feature;
+    protected updateLabel(_feature: Feature): void;
 }
 export default PointDrawingControl;

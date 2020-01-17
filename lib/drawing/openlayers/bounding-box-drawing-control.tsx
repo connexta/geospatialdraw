@@ -11,6 +11,12 @@ import UpdatedGeoReceiver from '../geo-receiver'
 import BasicDrawingControl from './basic-drawing-control'
 import { Shape, BOUNDING_BOX } from '../../shapes/shape'
 import { GeometryJSON, Extent } from '../../geometry/geometry'
+import { abbreviateUnit } from '../../geometry/units'
+import {
+  optimizedUnitForDistanceBetweenPoints,
+  distanceBetweenPoints,
+} from '../../geometry/measurements'
+import { getBufferPropOrDefault } from '../../geometry/utilities'
 
 type ExtentEvent = {
   extent: Extent
@@ -105,6 +111,7 @@ class BoundingBoxDrawingControl extends BasicDrawingControl {
       this.applyPropertiesToFeature(feature)
       this.context.updateFeature(feature)
       this.context.updateBufferFeature(feature)
+      this.updateLabel(feature)
       const style = this.getDefaultStaticStyle()
       const drawInteraction = new BBoxInteraction({
         extent,
@@ -141,6 +148,7 @@ class BoundingBoxDrawingControl extends BasicDrawingControl {
       this.applyPropertiesToFeature(feature)
       this.context.updateFeature(feature)
       this.context.updateBufferFeature(feature)
+      this.updateLabel(feature)
       this.cachedGeo = geoJSON
     }
   }
@@ -156,6 +164,31 @@ class BoundingBoxDrawingControl extends BasicDrawingControl {
       },
       geometry: bboxPolygon.geometry as turf.Polygon,
     }
+  }
+
+  protected updateLabel(feature: Feature): void {
+    const geometry = feature.getGeometry()
+    const extent = geometry ? geometry.getExtent() : [0, 0, 0, 0]
+    const minX = extent[0]
+    const minY = extent[1]
+    const maxX = extent[2]
+    const maxY = extent[3]
+    const { unit: bufferUnit } = getBufferPropOrDefault(this.properties)
+    const { unit } = optimizedUnitForDistanceBetweenPoints(
+      [minX, minY],
+      [maxX, maxY],
+      bufferUnit
+    )
+    const length = distanceBetweenPoints([minX, minY], [maxX, minY], unit)
+    const width = distanceBetweenPoints([minX, minY], [minX, maxY], unit)
+    const area = length * width
+    const text = `${this.formatLabelNumber(length)} ${abbreviateUnit(
+      unit
+    )} x ${this.formatLabelNumber(width)} ${abbreviateUnit(
+      unit
+    )}\n${this.formatLabelNumber(area)} ${abbreviateUnit(unit)}\xB2`
+    const coordinates: [number, number] = [(maxX - minX) / 2 + minX, minY]
+    this.context.updateLabel(coordinates, text)
   }
 }
 

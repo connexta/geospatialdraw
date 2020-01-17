@@ -3,11 +3,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var Point_1 = __importDefault(require("ol/geom/Point"));
+var Feature_1 = __importDefault(require("ol/Feature"));
 var Vector_1 = __importDefault(require("ol/layer/Vector"));
 var Vector_2 = __importDefault(require("ol/source/Vector"));
 var Snap_1 = __importDefault(require("ol/interaction/Snap"));
 var Modify_1 = __importDefault(require("ol/interaction/Modify"));
 var GeoJSON_1 = __importDefault(require("ol/format/GeoJSON"));
+var geometry_1 = require("../../geometry/geometry");
 var utilities_1 = require("../../geometry/utilities");
 /**
  * Open Layers drawing context provides a layer between the drawing controls
@@ -32,14 +35,20 @@ var DrawingContext = /** @class */ (function () {
         this.drawLayer = new Vector_1.default({
             source: new Vector_2.default(),
             style: drawingStyle,
-            zIndex: 2,
+            zIndex: 3,
             updateWhileInteracting: true,
+        });
+        var labelLayer = new Vector_1.default({
+            source: new Vector_2.default(),
+            style: drawingStyle,
+            zIndex: 2,
         });
         this.bufferLayer = new Vector_1.default({
             source: new Vector_2.default(),
             style: drawingStyle,
             zIndex: 1,
         });
+        this.map.addLayer(labelLayer);
         this.map.addLayer(this.bufferLayer);
         this.map.addLayer(this.drawLayer);
         this.modify = new Modify_1.default({
@@ -48,6 +57,12 @@ var DrawingContext = /** @class */ (function () {
         this.snap = new Snap_1.default({
             source: this.drawLayer.getSource(),
         });
+        this.labelFeature = new Feature_1.default({
+            geometry: new Point_1.default([0, 0]),
+            class: [geometry_1.HIDDEN_CLASSNAME, geometry_1.LABEL_CLASSNAME],
+            text: '',
+        });
+        labelLayer.getSource().addFeature(this.labelFeature);
     }
     DrawingContext.prototype.getStyle = function () {
         return this.style;
@@ -58,6 +73,15 @@ var DrawingContext = /** @class */ (function () {
     DrawingContext.prototype.updateFeature = function (feature) {
         this.removeFeature();
         this.drawLayer.getSource().addFeature(feature);
+    };
+    DrawingContext.prototype.hideLabel = function () {
+        this.labelFeature.set('class', [geometry_1.HIDDEN_CLASSNAME, geometry_1.LABEL_CLASSNAME]);
+    };
+    DrawingContext.prototype.updateLabel = function (coordinates, text) {
+        var point = this.labelFeature.getGeometry();
+        point.setCoordinates(coordinates);
+        this.labelFeature.set('text', text);
+        this.labelFeature.set('class', [geometry_1.LABEL_CLASSNAME]);
     };
     DrawingContext.prototype.updateBufferFeature = function (feature, animate) {
         if (animate === void 0) { animate = true; }

@@ -8,4 +8,9 @@ declare const METERS: LengthUnit;
 declare const MILES: LengthUnit;
 declare const NAUTICAL_MILES: LengthUnit;
 declare const YARDS: LengthUnit;
-export { LengthUnit, FEET, KILOMETERS, METERS, MILES, NAUTICAL_MILES, YARDS };
+declare type Length = {
+    length: number;
+    unit: LengthUnit;
+};
+declare const abbreviateUnit: (unit: LengthUnit) => string;
+export { abbreviateUnit, LengthUnit, Length, FEET, KILOMETERS, METERS, MILES, NAUTICAL_MILES, YARDS, };

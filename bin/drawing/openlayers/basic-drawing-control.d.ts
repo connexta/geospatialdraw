@@ -29,5 +29,6 @@ declare abstract class BasicDrawingControl implements DrawingControl {
     cancelDrawing(): void;
     isInputBlocked(): boolean;
     isDrawing(): boolean;
+    protected formatLabelNumber(n: number): string;
 }
 export default BasicDrawingControl;

@@ -1,3 +1,4 @@
+import Feature from 'ol/Feature';
 import Style from 'ol/style/Style';
 import GeometryType from 'ol/geom/GeometryType';
 import DrawingContext from './drawing-context';
@@ -29,5 +30,6 @@ declare class BoundingBoxDrawingControl extends BasicDrawingControl {
     private startDrawingInteraction;
     extentChanged(e: ExtentEvent): void;
     extentToGeoJSON(bbox: Extent): GeometryJSON;
+    protected updateLabel(feature: Feature): void;
 }
 export default BoundingBoxDrawingControl;

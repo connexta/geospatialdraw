@@ -36,6 +36,8 @@ class PointDrawingControl extends ModifiableDrawingControl {
   protected makeEmptyFeature(): Feature {
     return new Feature(new Point([0, 0]))
   }
+
+  protected updateLabel(_feature: Feature): void {}
 }
 
 export default PointDrawingControl

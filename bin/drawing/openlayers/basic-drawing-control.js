@@ -15,6 +15,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var GeoJSON_1 = __importDefault(require("ol/format/GeoJSON"));
+var measurements_1 = require("../../geometry/measurements");
 var utilities_1 = require("../../geometry/utilities");
 var units_1 = require("../../geometry/units");
 var BasicDrawingControl = /** @class */ (function () {
@@ -56,6 +57,7 @@ var BasicDrawingControl = /** @class */ (function () {
         return __assign({}, geo, { bbox: utilities_1.geoToExtent(bufferedGeo), properties: __assign({}, this.properties, { shape: shape }) });
     };
     BasicDrawingControl.prototype.cancelDrawing = function () {
+        this.context.hideLabel();
         this.context.removeListeners();
         this.context.removeInteractions();
         this.drawingActive = false;
@@ -65,6 +67,9 @@ var BasicDrawingControl = /** @class */ (function () {
     };
     BasicDrawingControl.prototype.isDrawing = function () {
         return this.drawingActive;
+    };
+    BasicDrawingControl.prototype.formatLabelNumber = function (n) {
+        return measurements_1.formatNumber(3, 5, n);
     };
     return BasicDrawingControl;
 }());

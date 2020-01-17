@@ -3,7 +3,8 @@ const Feature = require('ol/Feature').default
 const Point = require('ol/geom/Point').default
 const { expect } = require('chai')
 const MockDrawingContext = require('./lib/mock-drawing-context').default
-const PointDrawingControl = require('../bin/drawing/openlayers/point-drawing-control').default
+const PointDrawingControl = require('../bin/drawing/openlayers/point-drawing-control')
+  .default
 const { POINT } = require('../bin/shapes')
 const { METERS } = require('../bin/geometry')
 

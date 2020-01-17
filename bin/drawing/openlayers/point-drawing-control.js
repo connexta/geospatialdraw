@@ -48,6 +48,7 @@ var PointDrawingControl = /** @class */ (function (_super) {
     PointDrawingControl.prototype.makeEmptyFeature = function () {
         return new Feature_1.default(new Point_1.default([0, 0]));
     };
+    PointDrawingControl.prototype.updateLabel = function (_feature) { };
     return PointDrawingControl;
 }(modifiable_drawing_control_1.default));
 exports.default = PointDrawingControl;

@@ -4,6 +4,7 @@ import Style from 'ol/style/Style'
 import Fill from 'ol/style/Fill'
 import Circle from 'ol/style/Circle'
 import Stroke from 'ol/style/Stroke'
+import Text from 'ol/style/Text'
 import {
   storiesOf,
   action,
@@ -23,7 +24,10 @@ import {
 import DrawingToolbox from 'geospatialdraw/bin/drawing/openlayers/drawing-toolbox'
 import DrawingMenu from './drawing-menu'
 import styled from 'styled-components'
-import { HIDDEN_CLASSNAME } from 'geospatialdraw/bin/geometry/geometry'
+import {
+  HIDDEN_CLASSNAME,
+  LABEL_CLASSNAME,
+} from 'geospatialdraw/bin/geometry/geometry'
 import { makeEmptyGeometry } from 'geospatialdraw/bin/geometry/utilities'
 import { KILOMETERS, METERS } from 'geospatialdraw/bin/geometry/units'
 import {
@@ -52,21 +56,38 @@ const featureColor = feature =>
     : feature.get('color') || 'blue'
 
 const STYLE = feature =>
-  new Style({
-    stroke: new Stroke({
-      color: featureColor(feature),
-      width: 2,
-    }),
-    fill: new Fill({
-      color: 'rgba(0, 0, 0, 0)',
-    }),
-    image: new Circle({
-      radius: 4,
-      fill: new Fill({
-        color: featureColor(feature),
-      }),
-    }),
-  })
+  featureHasClass(feature, LABEL_CLASSNAME)
+    ? new Style({
+        text: new Text({
+          text: feature.get('text'),
+          font: 'bold 14px/1 verdana',
+          offsetY: 18,
+          placement: 'point',
+          textBaseline: 'middle',
+          stroke: new Stroke({
+            color: 'rgba(0, 0, 0, 1)',
+            width: 1.2,
+          }),
+          fill: new Fill({
+            color: 'rgba(255, 255, 255, 1)',
+          }),
+        }),
+      })
+    : new Style({
+        stroke: new Stroke({
+          color: featureColor(feature),
+          width: 2,
+        }),
+        fill: new Fill({
+          color: 'rgba(0, 0, 0, 0)',
+        }),
+        image: new Circle({
+          radius: 4,
+          fill: new Fill({
+            color: featureColor(feature),
+          }),
+        }),
+      })
 
 const TableComponent = tableComponentFactory({
   shape: {
@@ -227,6 +248,7 @@ stories.add('editing a geo', () => {
       geoJSON.geometry.coordinates = turf.bboxPolygon(
         geoJSON.bbox
       ).geometry.coordinates
+      geoJSON.properties.buffer = { width: 0, unit }
       break
     case LINE:
       geoJSON.geometry.coordinates = [

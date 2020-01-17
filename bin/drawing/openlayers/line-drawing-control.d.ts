@@ -2,12 +2,12 @@ import Feature from 'ol/Feature';
 import GeometryType from 'ol/geom/GeometryType';
 import DrawingContext from './drawing-context';
 import UpdatedGeoReceiver from '../geo-receiver';
-import ModifiableDrawingControl from './modifiable-drawing-control';
+import CoordinateListDrawingControl from './coordinate-list-drawing-control';
 import { Shape } from '../../shapes/shape';
 /**
  * Drawing Control for drawing a line on an Open Layers Map
  */
-declare class LineDrawingControl extends ModifiableDrawingControl {
+declare class LineDrawingControl extends CoordinateListDrawingControl {
     /**
      * Creates drawing control
      * @param context - Drawing context
@@ -17,5 +17,6 @@ declare class LineDrawingControl extends ModifiableDrawingControl {
     getShape(): Shape;
     getGeoType(): GeometryType;
     protected makeEmptyFeature(): Feature;
+    protected updateLabel(feature: Feature): void;
 }
 export default LineDrawingControl;

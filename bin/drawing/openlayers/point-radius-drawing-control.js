@@ -48,6 +48,7 @@ var geometry_1 = require("../../geometry/geometry");
 var utilities_1 = require("../../geometry/utilities");
 var units_1 = require("../../geometry/units");
 var distance_1 = require("../../internal/distance");
+var measurements_1 = require("../../geometry/measurements");
 /**
  * Drawing Control for a circle/point radius on an Open Layers Map
  */
@@ -79,6 +80,7 @@ var PointRadiusDrawingControl = /** @class */ (function (_super) {
                 var pointFeature = new Feature_1.default(_this.updatePointFromRadiusLine(_this.toLine(feature)));
                 _this.applyPropertiesToFeature(pointFeature);
                 _this.context.updateBufferFeature(pointFeature, false);
+                _this.updateLabel(feature);
             }
             _this.animationFrameId = requestAnimationFrame(_this.animationFrame);
         };
@@ -89,15 +91,14 @@ var PointRadiusDrawingControl = /** @class */ (function (_super) {
         this.animationFrame = function () { };
         var point = this.updatePointFromRadiusLine(this.toLine(feature));
         var pointFeature = new Feature_1.default(point);
-        var _a = utilities_1.getBufferPropOrDefault(this.properties), width = _a.width, unit = _a.unit;
-        var radius = distance_1.getDistanceInMeters(width, unit);
-        var bestFitRadiusUnit = unit;
-        if (bestFitRadiusUnit === units_1.METERS && radius > 1000) {
-            bestFitRadiusUnit = units_1.KILOMETERS;
-        }
+        var _a = utilities_1.getBufferPropOrDefault(this.properties), originalWidth = _a.width, originalUnit = _a.unit;
+        var _b = measurements_1.optimizedUnitForLength({
+            unit: originalUnit,
+            length: originalWidth,
+        }), width = _b.length, unit = _b.unit;
         this.setProperties(__assign({}, this.properties, { buffer: {
-                width: distance_1.getDistanceFromMeters(radius, bestFitRadiusUnit),
-                unit: bestFitRadiusUnit,
+                width: width,
+                unit: unit,
             } }));
         var geoJSON = this.writeExtendedGeoJSON(pointFeature);
         return geoJSON;
@@ -209,6 +210,7 @@ var PointRadiusDrawingControl = /** @class */ (function (_super) {
         this.applyPropertiesToFeature(bufferFeature);
         this.context.updateFeature(feature);
         this.context.updateBufferFeature(bufferFeature, false);
+        this.updateLabel(feature);
         this.startDrawingInteraction();
     };
     PointRadiusDrawingControl.prototype.getStaticStyle = function () {
@@ -256,6 +258,23 @@ var PointRadiusDrawingControl = /** @class */ (function (_super) {
         // uses custom modify interaction
         this.context.remakeInteractions();
         _super.prototype.cancelDrawing.call(this);
+    };
+    PointRadiusDrawingControl.prototype.updateLabel = function (feature) {
+        var geometry = feature.getGeometry();
+        var _a = utilities_1.getBufferPropOrDefault(this.properties), bufferUnit = _a.unit, bufferWidth = _a.width;
+        var _b = measurements_1.optimizedUnitForLength({
+            unit: bufferUnit,
+            length: bufferWidth,
+        }), unit = _b.unit, length = _b.length;
+        if (geometry) {
+            var point = turf.rhumbDestination(geometry.getCoordinates()[0], distance_1.getDistanceInMeters(length, unit), 180, {
+                units: 'meters',
+            });
+            var coordinates = point.geometry.coordinates;
+            var area = Math.PI * length * length;
+            var text = this.formatLabelNumber(length) + " " + units_1.abbreviateUnit(unit) + "\n" + this.formatLabelNumber(area) + " " + units_1.abbreviateUnit(unit) + "\u00B2";
+            this.context.updateLabel(coordinates, text);
+        }
     };
     return PointRadiusDrawingControl;
 }(basic_drawing_control_1.default));

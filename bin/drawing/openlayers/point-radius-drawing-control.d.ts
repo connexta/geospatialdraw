@@ -45,5 +45,6 @@ declare class PointRadiusDrawingControl extends BasicDrawingControl {
     getShape(): Shape;
     getGeoType(): GeometryType;
     cancelDrawing(): void;
+    protected updateLabel(feature: Feature): void;
 }
 export default PointRadiusDrawingControl;

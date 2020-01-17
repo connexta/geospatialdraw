@@ -43,6 +43,12 @@ exports.DEFAULT_GEOMETRY = DEFAULT_GEOMETRY;
 var BUFFER_CLASSNAME = 'buffer';
 exports.BUFFER_CLASSNAME = BUFFER_CLASSNAME;
 /**
+ * Class name added to feature "class" property to identify label features
+ * in user defined styles.
+ */
+var LABEL_CLASSNAME = 'label';
+exports.LABEL_CLASSNAME = LABEL_CLASSNAME;
+/**
  * Class name added to feature "class" property to identify hidden features
  * in user defined styles.
  */

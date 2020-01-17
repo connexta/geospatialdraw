@@ -32,7 +32,7 @@ declare type GeometryJSONProperties = {
      */
     shape: Shape;
     /**
-     * Buffer properties
+     * Buffer property
      */
     buffer?: Buffer;
     /**
@@ -63,8 +63,13 @@ declare const DEFAULT_GEOMETRY: {
  */
 declare const BUFFER_CLASSNAME = "buffer";
 /**
+ * Class name added to feature "class" property to identify label features
+ * in user defined styles.
+ */
+declare const LABEL_CLASSNAME = "label";
+/**
  * Class name added to feature "class" property to identify hidden features
  * in user defined styles.
  */
 declare const HIDDEN_CLASSNAME = "hidden";
-export { Buffer, GeometryJSON, GeometryJSONProperties, Geometry, Extent, BUFFER_CLASSNAME, HIDDEN_CLASSNAME, DEFAULT_GEOMETRY, DEFAULT_PROPERTIES, };
+export { Buffer, GeometryJSON, GeometryJSONProperties, Geometry, Extent, LABEL_CLASSNAME, BUFFER_CLASSNAME, HIDDEN_CLASSNAME, DEFAULT_GEOMETRY, DEFAULT_PROPERTIES, };

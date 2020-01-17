@@ -22,19 +22,17 @@ var ModifiableDrawingControl = /** @class */ (function (_super) {
     __extends(ModifiableDrawingControl, _super);
     function ModifiableDrawingControl(context, receiver) {
         var _this = _super.call(this, context, receiver) || this;
-        _this.onCompleteDrawing = _this.onCompleteDrawing.bind(_this);
         _this.onStartDrawing = _this.onStartDrawing.bind(_this);
+        _this.onCompleteDrawing = _this.onCompleteDrawing.bind(_this);
+        _this.onStartModify = _this.onStartModify.bind(_this);
         _this.onCompleteModify = _this.onCompleteModify.bind(_this);
         return _this;
     }
-    ModifiableDrawingControl.prototype.getGeoJSONFromCompleteDrawEvent = function (e) {
-        return this.writeExtendedGeoJSON(e.feature);
-    };
-    ModifiableDrawingControl.prototype.getGeoJSONFromCompleteModifyEvent = function (e) {
-        return this.writeExtendedGeoJSON(e.features.getArray()[0]);
+    ModifiableDrawingControl.prototype.onStartDrawing = function (_e) {
+        this.inputBlocked = true;
     };
     ModifiableDrawingControl.prototype.onCompleteDrawing = function (e) {
-        var geoJSON = this.getGeoJSONFromCompleteDrawEvent(e);
+        var geoJSON = this.writeExtendedGeoJSON(e.feature);
         this.inputBlocked = false;
         var feature = this.makeFeature(geoJSON);
         this.applyPropertiesToFeature(feature);
@@ -42,16 +40,14 @@ var ModifiableDrawingControl = /** @class */ (function (_super) {
         this.context.updateBufferFeature(feature);
         this.receiver(geoJSON);
     };
-    ModifiableDrawingControl.prototype.onStartDrawing = function (_e) {
-        this.inputBlocked = true;
-    };
     ModifiableDrawingControl.prototype.onStartModify = function (_e) {
         this.inputBlocked = true;
     };
     ModifiableDrawingControl.prototype.onCompleteModify = function (e) {
         this.inputBlocked = false;
         this.context.updateBufferFeature(e.features.getArray()[0]);
-        this.receiver(this.getGeoJSONFromCompleteModifyEvent(e));
+        var geoJSON = this.writeExtendedGeoJSON(e.features.getArray()[0]);
+        this.receiver(geoJSON);
     };
     ModifiableDrawingControl.prototype.makeFeature = function (geoJSON) {
         var feature = this.geoFormat.readFeature(geoJSON);
@@ -82,6 +78,7 @@ var ModifiableDrawingControl = /** @class */ (function (_super) {
         this.applyPropertiesToFeature(feature);
         this.context.updateFeature(feature);
         this.context.updateBufferFeature(feature);
+        this.updateLabel(feature);
         var drawInteraction = new Draw_1.default({
             type: this.getGeoType(),
             style: this.getStaticStyle(feature),

@@ -44,7 +44,7 @@
     "build:docs": "ace storybook --static && typedoc",
     "build:verify": "yarn run fmt && yarn run test && yarn run build",
     "build:all": "yarn run build:verify && yarn run build:docs",
-    "prepublish": "yarn build:all",
+    "prepublishOnly": "yarn build:all",
     "m2": "yarn install:m2",
     "install:m2": "ace clean && ace bundle && ace package && ace install"
   },
@@ -53,7 +53,7 @@
     "polished": "3.4.2",
     "react-dom": "16.9.0",
     "usng.js": "0.4.2",
-    "geospatialdraw": "0.5.5",
+    "geospatialdraw": "0.6.0-alpha.9",
     "styled-components": "4.3.2"
   },
   "devDependencies": {

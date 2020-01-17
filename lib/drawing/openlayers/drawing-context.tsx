@@ -1,4 +1,5 @@
 import Map from 'ol/Map'
+import Point from 'ol/geom/Point'
 import Feature from 'ol/Feature'
 import Vector from 'ol/layer/Vector'
 import VectorSource from 'ol/source/Vector'
@@ -7,7 +8,11 @@ import Modify from 'ol/interaction/Modify'
 import Interaction from 'ol/interaction/Interaction'
 import { StyleLike } from 'ol/style/Style'
 import GeoJSON from 'ol/format/GeoJSON'
-import { GeometryJSON } from '../../geometry/geometry'
+import {
+  GeometryJSON,
+  HIDDEN_CLASSNAME,
+  LABEL_CLASSNAME,
+} from '../../geometry/geometry'
 import { makeBufferedGeo } from '../../geometry/utilities'
 
 type EventHandler = (e: any) => void
@@ -28,6 +33,7 @@ type ListenerRecord = {
 class DrawingContext {
   private map: Map
   private drawLayer: Vector
+  private labelFeature: Feature
   private bufferLayer: Vector
   private modify: Modify
   private snap: Snap
@@ -53,14 +59,20 @@ class DrawingContext {
     this.drawLayer = new Vector({
       source: new VectorSource(),
       style: drawingStyle,
-      zIndex: 2,
+      zIndex: 3,
       updateWhileInteracting: true,
+    })
+    const labelLayer = new Vector({
+      source: new VectorSource(),
+      style: drawingStyle,
+      zIndex: 2,
     })
     this.bufferLayer = new Vector({
       source: new VectorSource(),
       style: drawingStyle,
       zIndex: 1,
     })
+    this.map.addLayer(labelLayer)
     this.map.addLayer(this.bufferLayer)
     this.map.addLayer(this.drawLayer)
     this.modify = new Modify({
@@ -69,6 +81,12 @@ class DrawingContext {
     this.snap = new Snap({
       source: this.drawLayer.getSource(),
     })
+    this.labelFeature = new Feature({
+      geometry: new Point([0, 0]),
+      class: [HIDDEN_CLASSNAME, LABEL_CLASSNAME],
+      text: '',
+    })
+    labelLayer.getSource().addFeature(this.labelFeature)
   }
 
   getStyle(): StyleLike {
@@ -82,6 +100,17 @@ class DrawingContext {
   updateFeature(feature: Feature): void {
     this.removeFeature()
     this.drawLayer.getSource().addFeature(feature)
+  }
+
+  hideLabel(): void {
+    this.labelFeature.set('class', [HIDDEN_CLASSNAME, LABEL_CLASSNAME])
+  }
+
+  updateLabel(coordinates: [number, number], text: string): void {
+    const point = this.labelFeature.getGeometry() as Point
+    point.setCoordinates(coordinates)
+    this.labelFeature.set('text', text)
+    this.labelFeature.set('class', [LABEL_CLASSNAME])
   }
 
   updateBufferFeature(feature: Feature, animate: boolean = true): void {

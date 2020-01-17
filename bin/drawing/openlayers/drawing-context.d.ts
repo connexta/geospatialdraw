@@ -14,6 +14,7 @@ declare type ListenerTarget = 'draw' | 'snap' | 'modify' | 'map';
 declare class DrawingContext {
     private map;
     private drawLayer;
+    private labelFeature;
     private bufferLayer;
     private modify;
     private snap;
@@ -34,6 +35,8 @@ declare class DrawingContext {
     getStyle(): StyleLike;
     removeFeature(): void;
     updateFeature(feature: Feature): void;
+    hideLabel(): void;
+    updateLabel(coordinates: [number, number], text: string): void;
     updateBufferFeature(feature: Feature, animate?: boolean): void;
     protected bufferUpdateEvent(): void;
     setModifyInteraction(modify: Modify): void;

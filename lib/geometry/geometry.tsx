@@ -21,7 +21,6 @@ type Buffer = {
    */
   unit: LengthUnit
 }
-
 /**
  * Custom GeoJSON properties used in GeometryJSON
  */
@@ -35,7 +34,7 @@ type GeometryJSONProperties = {
    */
   shape: Shape
   /**
-   * Buffer properties
+   * Buffer property
    */
   buffer?: Buffer
   /**
@@ -102,6 +101,12 @@ const DEFAULT_GEOMETRY: { [shape in Shape]: Geometry } = {
 const BUFFER_CLASSNAME = 'buffer'
 
 /**
+ * Class name added to feature "class" property to identify label features
+ * in user defined styles.
+ */
+const LABEL_CLASSNAME = 'label'
+
+/**
  * Class name added to feature "class" property to identify hidden features
  * in user defined styles.
  */
@@ -113,6 +118,7 @@ export {
   GeometryJSONProperties,
   Geometry,
   Extent,
+  LABEL_CLASSNAME,
   BUFFER_CLASSNAME,
   HIDDEN_CLASSNAME,
   DEFAULT_GEOMETRY,

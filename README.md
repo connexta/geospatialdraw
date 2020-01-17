@@ -22,7 +22,7 @@ Usage `import 'geospatialdraw/bin/...'`
 
 ## Documentation
 
-[Typedoc documentation](https://unpkg.com/geospatialdraw@0.5.5/docs/index.html)
+[Typedoc documentation](https://unpkg.com/geospatialdraw@0.6.0/docs/index.html)
 
 ## UI Components
 

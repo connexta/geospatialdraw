@@ -1,5 +1,6 @@
 import Feature from 'ol/Feature'
-import Draw from 'ol/interaction/Draw'
+import Draw, { DrawEvent } from 'ol/interaction/Draw'
+import { ModifyEvent } from 'ol/interaction/Modify'
 import Interaction from 'ol/interaction/Interaction'
 import Style from 'ol/style/Style'
 import DrawingContext from './drawing-context'
@@ -10,21 +11,18 @@ import { GeometryJSON } from '../../geometry/geometry'
 abstract class ModifiableDrawingControl extends BasicDrawingControl {
   protected constructor(context: DrawingContext, receiver: UpdatedGeoReceiver) {
     super(context, receiver)
-    this.onCompleteDrawing = this.onCompleteDrawing.bind(this)
     this.onStartDrawing = this.onStartDrawing.bind(this)
+    this.onCompleteDrawing = this.onCompleteDrawing.bind(this)
+    this.onStartModify = this.onStartModify.bind(this)
     this.onCompleteModify = this.onCompleteModify.bind(this)
   }
 
-  getGeoJSONFromCompleteDrawEvent(e: any): GeometryJSON {
-    return this.writeExtendedGeoJSON(e.feature)
+  onStartDrawing(_e: DrawEvent) {
+    this.inputBlocked = true
   }
 
-  getGeoJSONFromCompleteModifyEvent(e: any): GeometryJSON {
-    return this.writeExtendedGeoJSON(e.features.getArray()[0])
-  }
-
-  onCompleteDrawing(e: any) {
-    const geoJSON = this.getGeoJSONFromCompleteDrawEvent(e)
+  onCompleteDrawing(e: DrawEvent) {
+    const geoJSON = this.writeExtendedGeoJSON(e.feature)
     this.inputBlocked = false
     const feature = this.makeFeature(geoJSON)
     this.applyPropertiesToFeature(feature)
@@ -33,18 +31,15 @@ abstract class ModifiableDrawingControl extends BasicDrawingControl {
     this.receiver(geoJSON)
   }
 
-  onStartDrawing(_e: any) {
+  onStartModify(_e: ModifyEvent) {
     this.inputBlocked = true
   }
 
-  onStartModify(_e: any) {
-    this.inputBlocked = true
-  }
-
-  onCompleteModify(e: any) {
+  onCompleteModify(e: ModifyEvent) {
     this.inputBlocked = false
     this.context.updateBufferFeature(e.features.getArray()[0])
-    this.receiver(this.getGeoJSONFromCompleteModifyEvent(e))
+    const geoJSON = this.writeExtendedGeoJSON(e.features.getArray()[0])
+    this.receiver(geoJSON)
   }
 
   makeFeature(geoJSON: GeometryJSON): Feature {
@@ -82,6 +77,7 @@ abstract class ModifiableDrawingControl extends BasicDrawingControl {
     this.applyPropertiesToFeature(feature)
     this.context.updateFeature(feature)
     this.context.updateBufferFeature(feature)
+    this.updateLabel(feature)
     const drawInteraction = new Draw({
       type: this.getGeoType(),
       style: this.getStaticStyle(feature),
@@ -107,6 +103,8 @@ abstract class ModifiableDrawingControl extends BasicDrawingControl {
     this.context.setEvent('modify', 'modifystart', this.onStartModify)
     this.context.addInteractions()
   }
+
+  protected abstract updateLabel(feature: Feature): void
 }
 
 export default ModifiableDrawingControl

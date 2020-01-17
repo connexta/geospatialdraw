@@ -3,7 +3,8 @@ const Feature = require('ol/Feature').default
 const Polygon = require('ol/geom/Polygon').default
 const { expect } = require('chai')
 const MockDrawingContext = require('./lib/mock-drawing-context').default
-const PolygonDrawingControl = require('../bin/drawing/openlayers/polygon-drawing-control').default
+const PolygonDrawingControl = require('../bin/drawing/openlayers/polygon-drawing-control')
+  .default
 const { POLYGON } = require('../bin/shapes')
 const { METERS } = require('../bin/geometry')
 

@@ -24,11 +24,11 @@ var useDMSCoordinates = function (initCoordinates) {
             lat: dms_formatting_1.dmsToDecimal(value.lat),
             lon: dms_formatting_1.dmsToDecimal(value.lon),
         };
-        var coordiantesAreValid = coordinate_converter_1.isValidLatLon(coordinates);
-        if (coordiantesAreValid) {
+        var coordinatesAreValid = coordinate_converter_1.isValidLatLon(coordinates);
+        if (coordinatesAreValid) {
             setCoordinates(coordinates);
         }
-        setIsValid(coordiantesAreValid);
+        setIsValid(coordinatesAreValid);
     };
     var dmsString = dms_formatting_1.dmsCoordinateToString(dmsCoordinates.lat, dmsCoordinates.lon);
     sync_coordinates_1.default(initCoordinates, coordinates, function (value) {

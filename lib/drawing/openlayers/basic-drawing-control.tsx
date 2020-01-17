@@ -6,6 +6,7 @@ import UpdatedGeoReceiver from '../geo-receiver'
 import DrawingControl from '../drawing-control'
 import { Shape } from '../../shapes/shape'
 import { GeometryJSON, GeometryJSONProperties } from '../../geometry/geometry'
+import { formatNumber } from '../../geometry/measurements'
 import {
   makeBufferedGeo,
   makeEmptyGeometry,
@@ -96,6 +97,7 @@ abstract class BasicDrawingControl implements DrawingControl {
   }
 
   cancelDrawing(): void {
+    this.context.hideLabel()
     this.context.removeListeners()
     this.context.removeInteractions()
     this.drawingActive = false
@@ -107,6 +109,10 @@ abstract class BasicDrawingControl implements DrawingControl {
 
   isDrawing(): boolean {
     return this.drawingActive
+  }
+
+  protected formatLabelNumber(n: number): string {
+    return formatNumber(3, 5, n)
   }
 }
 

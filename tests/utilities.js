@@ -4,7 +4,7 @@ const {
   makeGeometry,
   makeBufferedGeo,
   combineExtents,
-} =  require('../bin/geometry/utilities')
+} = require('../bin/geometry/utilities')
 const { LINE, POINT_RADIUS } = require('../bin/shapes')
 
 describe('geometry', () => {

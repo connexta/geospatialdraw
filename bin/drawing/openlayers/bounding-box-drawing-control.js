@@ -52,6 +52,9 @@ var Polygon_1 = __importDefault(require("ol/geom/Polygon"));
 var turf = __importStar(require("@turf/turf"));
 var basic_drawing_control_1 = __importDefault(require("./basic-drawing-control"));
 var shape_1 = require("../../shapes/shape");
+var units_1 = require("../../geometry/units");
+var measurements_1 = require("../../geometry/measurements");
+var utilities_1 = require("../../geometry/utilities");
 var BBoxInteraction = /** @class */ (function (_super) {
     __extends(BBoxInteraction, _super);
     function BBoxInteraction(_a) {
@@ -130,6 +133,7 @@ var BoundingBoxDrawingControl = /** @class */ (function (_super) {
             this.applyPropertiesToFeature(feature);
             this.context.updateFeature(feature);
             this.context.updateBufferFeature(feature);
+            this.updateLabel(feature);
             var style = this.getDefaultStaticStyle();
             var drawInteraction = new BBoxInteraction({
                 extent: extent,
@@ -163,6 +167,7 @@ var BoundingBoxDrawingControl = /** @class */ (function (_super) {
             this.applyPropertiesToFeature(feature);
             this.context.updateFeature(feature);
             this.context.updateBufferFeature(feature);
+            this.updateLabel(feature);
             this.cachedGeo = geoJSON;
         }
     };
@@ -174,6 +179,22 @@ var BoundingBoxDrawingControl = /** @class */ (function (_super) {
             properties: __assign({}, this.properties, { shape: this.getShape() }),
             geometry: bboxPolygon.geometry,
         };
+    };
+    BoundingBoxDrawingControl.prototype.updateLabel = function (feature) {
+        var geometry = feature.getGeometry();
+        var extent = geometry ? geometry.getExtent() : [0, 0, 0, 0];
+        var minX = extent[0];
+        var minY = extent[1];
+        var maxX = extent[2];
+        var maxY = extent[3];
+        var bufferUnit = utilities_1.getBufferPropOrDefault(this.properties).unit;
+        var unit = measurements_1.optimizedUnitForDistanceBetweenPoints([minX, minY], [maxX, maxY], bufferUnit).unit;
+        var length = measurements_1.distanceBetweenPoints([minX, minY], [maxX, minY], unit);
+        var width = measurements_1.distanceBetweenPoints([minX, minY], [minX, maxY], unit);
+        var area = length * width;
+        var text = this.formatLabelNumber(length) + " " + units_1.abbreviateUnit(unit) + " x " + this.formatLabelNumber(width) + " " + units_1.abbreviateUnit(unit) + "\n" + this.formatLabelNumber(area) + " " + units_1.abbreviateUnit(unit) + "\u00B2";
+        var coordinates = [(maxX - minX) / 2 + minX, minY];
+        this.context.updateLabel(coordinates, text);
     };
     return BoundingBoxDrawingControl;
 }(basic_drawing_control_1.default));
