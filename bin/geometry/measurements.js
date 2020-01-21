@@ -35,6 +35,9 @@ var distanceBetweenPoints = function (a, b, unit) {
     return distance_1.getDistanceFromMeters(distance, unit);
 };
 exports.distanceBetweenPoints = distanceBetweenPoints;
+/**
+ * Returns a unit and length that best fits the value range of the input unit and length
+ */
 var optimizedUnitForLength = function (_a) {
     var unit = _a.unit, length = _a.length;
     return unit === units_1.METERS && length > 1500
@@ -42,6 +45,9 @@ var optimizedUnitForLength = function (_a) {
         : { unit: unit, length: length };
 };
 exports.optimizedUnitForLength = optimizedUnitForLength;
+/**
+ * Caclulates distance between two points on a map on returns the optimizedUnitForLength value for it
+ */
 var optimizedUnitForDistanceBetweenPoints = function (a, b, unit) {
     return optimizedUnitForLength({
         length: distanceBetweenPoints(a, b, unit),

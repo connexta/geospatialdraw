@@ -35,13 +35,13 @@ var DrawingContext = /** @class */ (function () {
         this.drawLayer = new Vector_1.default({
             source: new Vector_2.default(),
             style: drawingStyle,
-            zIndex: 3,
+            zIndex: 2,
             updateWhileInteracting: true,
         });
         var labelLayer = new Vector_1.default({
             source: new Vector_2.default(),
             style: drawingStyle,
-            zIndex: 2,
+            zIndex: 3,
         });
         this.bufferLayer = new Vector_1.default({
             source: new Vector_2.default(),

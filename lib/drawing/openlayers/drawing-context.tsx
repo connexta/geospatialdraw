@@ -59,13 +59,13 @@ class DrawingContext {
     this.drawLayer = new Vector({
       source: new VectorSource(),
       style: drawingStyle,
-      zIndex: 3,
+      zIndex: 2,
       updateWhileInteracting: true,
     })
     const labelLayer = new Vector({
       source: new VectorSource(),
       style: drawingStyle,
-      zIndex: 2,
+      zIndex: 3,
     })
     this.bufferLayer = new Vector({
       source: new VectorSource(),

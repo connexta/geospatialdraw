@@ -15,6 +15,12 @@ declare const formatNumber: (precision: number, maxStandardLength: number, n: nu
  * @returns distance in specified unit
  */
 declare const distanceBetweenPoints: (a: [number, number], b: [number, number], unit: LengthUnit) => number;
+/**
+ * Returns a unit and length that best fits the value range of the input unit and length
+ */
 declare const optimizedUnitForLength: ({ unit, length }: Length) => Length;
+/**
+ * Caclulates distance between two points on a map on returns the optimizedUnitForLength value for it
+ */
 declare const optimizedUnitForDistanceBetweenPoints: (a: [number, number], b: [number, number], unit: LengthUnit) => Length;
 export { optimizedUnitForLength, optimizedUnitForDistanceBetweenPoints, distanceBetweenPoints, formatNumber, };

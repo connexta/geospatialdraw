@@ -38,11 +38,17 @@ const distanceBetweenPoints = (
   return getDistanceFromMeters(distance, unit)
 }
 
+/**
+ * Returns a unit and length that best fits the value range of the input unit and length
+ */
 const optimizedUnitForLength = ({ unit, length }: Length): Length =>
   unit === METERS && length > 1500
     ? { unit: KILOMETERS, length: getDistanceFromMeters(length, KILOMETERS) }
     : { unit, length }
 
+/**
+ * Caclulates distance between two points on a map on returns the optimizedUnitForLength value for it
+ */
 const optimizedUnitForDistanceBetweenPoints = (
   a: [number, number],
   b: [number, number],
