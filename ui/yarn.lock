@@ -8117,10 +8117,8 @@ geojson-rbush@2.1.0:
     "@turf/meta" "*"
     rbush "*"
 
-geospatialdraw@0.6.0-alpha.9:
-  version "0.6.0-alpha.9"
-  resolved "https://registry.yarnpkg.com/geospatialdraw/-/geospatialdraw-0.6.0-alpha.9.tgz#418b0043ab73d762b3f69ef3dad8d9d02720f96c"
-  integrity sha512-U2kfz8emowd4zgczhdKi98d1djcnlJ5oLI2nboFF48dzS7v/bJHn3xZL4ieIFPAbHgVP1uYhB2YWJoF49bXrYg==
+"geospatialdraw@file:..":
+  version "0.6.0-alpha.13.1"
   dependencies:
     "@turf/turf" "5.1.6"
     react "16.9.0"

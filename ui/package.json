@@ -49,12 +49,12 @@
     "install:m2": "ace clean && ace bundle && ace package && ace install"
   },
   "dependencies": {
+    "geospatialdraw": "file:../",
     "ol": "6.0.1",
     "polished": "3.4.2",
     "react-dom": "16.9.0",
-    "usng.js": "0.4.2",
-    "geospatialdraw": "0.6.0-alpha.9",
-    "styled-components": "4.3.2"
+    "styled-components": "4.3.2",
+    "usng.js": "0.4.2"
   },
   "devDependencies": {
     "@connexta/ace": "git://github.com/connexta/ace.git#fc1f71c1404b21424988198dada600e885f66135",

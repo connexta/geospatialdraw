@@ -17,6 +17,7 @@ declare class PolygonDrawingControl extends CoordinateListDrawingControl {
     getShape(): Shape;
     getGeoType(): GeometryType;
     protected makeEmptyFeature(): Feature;
-    protected updateLabel(feature: Feature): void;
+    protected updateLabelAtPoint(feature: Feature, pointIndex: number): void;
+    protected getFeatureCoordinates(feature: Feature): [number, number][];
 }
 export default PolygonDrawingControl;

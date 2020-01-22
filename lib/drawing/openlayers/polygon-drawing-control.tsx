@@ -46,14 +46,9 @@ class PolygonDrawingControl extends CoordinateListDrawingControl {
     )
   }
 
-  protected updateLabel(feature: Feature): void {
-    const geometry = feature.getGeometry()
-    const coordinates: [number, number][] = geometry
-      ? ((geometry as Polygon).getCoordinates()[0] as [number, number][])
-      : []
-    if (coordinates.length > 1) {
+  protected updateLabelAtPoint(feature: Feature, pointIndex: number): void {
+    if (pointIndex >= 0) {
       const { unit: bufferUnit } = getBufferPropOrDefault(this.properties)
-      const point = coordinates[coordinates.length - 2]
       const json = this.featureToGeo(feature)
       const lengthInBufferUnit = getDistanceFromMeters(
         turf.length(json),
@@ -67,8 +62,19 @@ class PolygonDrawingControl extends CoordinateListDrawingControl {
       const text = `${this.formatLabelNumber(length)} ${abbreviateUnit(
         unit
       )}\n ${this.formatLabelNumber(area)} ${abbreviateUnit(unit)}\xB2`
-      this.context.updateLabel(point, text)
+      this.context.updateLabel(this.getPointAtIndex(feature, pointIndex), text)
     }
+  }
+
+  protected getFeatureCoordinates(feature: Feature): [number, number][] {
+    let coordinates = [
+      ...((feature.getGeometry() as Polygon).getCoordinates()[0] as [
+        number,
+        number
+      ][]),
+    ]
+    coordinates.splice(-1)
+    return coordinates
   }
 }
 

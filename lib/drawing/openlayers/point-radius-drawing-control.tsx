@@ -6,6 +6,8 @@ import Style from 'ol/style/Style'
 import Draw from 'ol/interaction/Draw'
 import Modify from 'ol/interaction/Modify'
 import GeometryType from 'ol/geom/GeometryType'
+import { DrawEvent } from 'ol/interaction/Draw'
+import { ModifyEvent } from 'ol/interaction/Modify'
 import * as turf from '@turf/turf'
 import DrawingContext from './drawing-context'
 import UpdatedGeoReceiver from '../geo-receiver'
@@ -100,17 +102,17 @@ class PointRadiusDrawingControl extends BasicDrawingControl {
     this.context.updateFeature(feature)
   }
 
-  onCompleteDrawing(e: any) {
+  onCompleteDrawing(e: DrawEvent) {
     this.inputBlocked = false
-    const feature = this.getFeatureFromDrawEvent(e)
+    const feature = e.feature
     const geoJSON = this.stopDrawAnimation(feature)
     this.applyPropertiesToFeature(feature)
     this.receiver(geoJSON)
   }
 
-  onStartDrawing(e: any) {
+  onStartDrawing(e: DrawEvent) {
     this.inputBlocked = true
-    const feature = this.getFeatureFromDrawEvent(e)
+    const feature = e.feature
     const source = this.context.getSource()
     source.getFeatures().forEach(f => source.removeFeature(f))
     this.initalCenter = this.toLine(feature).getCoordinates()[0] as [
@@ -120,9 +122,9 @@ class PointRadiusDrawingControl extends BasicDrawingControl {
     this.startDrawAnimation(feature)
   }
 
-  onStartModify(e: any) {
+  onStartModify(e: ModifyEvent) {
     this.inputBlocked = true
-    const feature = this.getFeatureModifyEvent(e)
+    const feature = e.features.getArray()[0]
     const line = this.toLine(feature)
     const clickedPoint = line.getClosestPoint(e.mapBrowserEvent.coordinate)
     const distanceMap = line
@@ -133,9 +135,9 @@ class PointRadiusDrawingControl extends BasicDrawingControl {
     this.startDrawAnimation(feature)
   }
 
-  onCompleteModify(e: any) {
+  onCompleteModify(e: ModifyEvent) {
     this.inputBlocked = false
-    const feature = this.getFeatureModifyEvent(e)
+    const feature = e.features.getArray()[0]
     const g = feature.getGeometry()
     if (g) {
       g.getType()
@@ -210,14 +212,6 @@ class PointRadiusDrawingControl extends BasicDrawingControl {
       })
     }
     return new Point(line.getCoordinates()[0])
-  }
-
-  private getFeatureFromDrawEvent(e: any): Feature {
-    return e.feature
-  }
-
-  private getFeatureModifyEvent(e: any): Feature {
-    return e.features.getArray()[0]
   }
 
   setGeo(geoJSON: GeometryJSON): void {

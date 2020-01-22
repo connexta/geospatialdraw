@@ -60,14 +60,9 @@ var PolygonDrawingControl = /** @class */ (function (_super) {
             ],
         ]));
     };
-    PolygonDrawingControl.prototype.updateLabel = function (feature) {
-        var geometry = feature.getGeometry();
-        var coordinates = geometry
-            ? geometry.getCoordinates()[0]
-            : [];
-        if (coordinates.length > 1) {
+    PolygonDrawingControl.prototype.updateLabelAtPoint = function (feature, pointIndex) {
+        if (pointIndex >= 0) {
             var bufferUnit = utilities_1.getBufferPropOrDefault(this.properties).unit;
-            var point = coordinates[coordinates.length - 2];
             var json = this.featureToGeo(feature);
             var lengthInBufferUnit = distance_1.getDistanceFromMeters(turf.length(json), bufferUnit);
             var _a = measurements_1.optimizedUnitForLength({
@@ -76,8 +71,13 @@ var PolygonDrawingControl = /** @class */ (function (_super) {
             }), unit = _a.unit, length_1 = _a.length;
             var area = distance_1.getSquareDistanceFromMeters(turf.area(json), unit);
             var text = this.formatLabelNumber(length_1) + " " + units_1.abbreviateUnit(unit) + "\n " + this.formatLabelNumber(area) + " " + units_1.abbreviateUnit(unit) + "\u00B2";
-            this.context.updateLabel(point, text);
+            this.context.updateLabel(this.getPointAtIndex(feature, pointIndex), text);
         }
+    };
+    PolygonDrawingControl.prototype.getFeatureCoordinates = function (feature) {
+        var coordinates = feature.getGeometry().getCoordinates()[0].slice();
+        coordinates.splice(-1);
+        return coordinates;
     };
     return PolygonDrawingControl;
 }(coordinate_list_drawing_control_1.default));

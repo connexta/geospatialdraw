@@ -112,14 +112,14 @@ var PointRadiusDrawingControl = /** @class */ (function (_super) {
     };
     PointRadiusDrawingControl.prototype.onCompleteDrawing = function (e) {
         this.inputBlocked = false;
-        var feature = this.getFeatureFromDrawEvent(e);
+        var feature = e.feature;
         var geoJSON = this.stopDrawAnimation(feature);
         this.applyPropertiesToFeature(feature);
         this.receiver(geoJSON);
     };
     PointRadiusDrawingControl.prototype.onStartDrawing = function (e) {
         this.inputBlocked = true;
-        var feature = this.getFeatureFromDrawEvent(e);
+        var feature = e.feature;
         var source = this.context.getSource();
         source.getFeatures().forEach(function (f) { return source.removeFeature(f); });
         this.initalCenter = this.toLine(feature).getCoordinates()[0];
@@ -127,7 +127,7 @@ var PointRadiusDrawingControl = /** @class */ (function (_super) {
     };
     PointRadiusDrawingControl.prototype.onStartModify = function (e) {
         this.inputBlocked = true;
-        var feature = this.getFeatureModifyEvent(e);
+        var feature = e.features.getArray()[0];
         var line = this.toLine(feature);
         var clickedPoint = line.getClosestPoint(e.mapBrowserEvent.coordinate);
         var distanceMap = line
@@ -139,7 +139,7 @@ var PointRadiusDrawingControl = /** @class */ (function (_super) {
     };
     PointRadiusDrawingControl.prototype.onCompleteModify = function (e) {
         this.inputBlocked = false;
-        var feature = this.getFeatureModifyEvent(e);
+        var feature = e.features.getArray()[0];
         var g = feature.getGeometry();
         if (g) {
             g.getType();
@@ -194,12 +194,6 @@ var PointRadiusDrawingControl = /** @class */ (function (_super) {
                 } }));
         }
         return new Point_1.default(line.getCoordinates()[0]);
-    };
-    PointRadiusDrawingControl.prototype.getFeatureFromDrawEvent = function (e) {
-        return e.feature;
-    };
-    PointRadiusDrawingControl.prototype.getFeatureModifyEvent = function (e) {
-        return e.features.getArray()[0];
     };
     PointRadiusDrawingControl.prototype.setGeo = function (geoJSON) {
         this.cancelDrawing();

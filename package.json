@@ -1,6 +1,6 @@
 {
   "name": "geospatialdraw",
-  "version": "0.6.0-alpha.9",
+  "version": "0.6.0-alpha.13.1",
   "description": "Geospatial Map Drawing Library",
   "types": "bin/index.d.ts",
   "main": "bin/index.js",

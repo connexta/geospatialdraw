@@ -36,14 +36,9 @@ class LineDrawingControl extends CoordinateListDrawingControl {
     return new Feature(new LineString([[0, 0]]))
   }
 
-  protected updateLabel(feature: Feature): void {
-    const geometry = feature.getGeometry()
-    const coordinates: [number, number][] = geometry
-      ? ((geometry as LineString).getCoordinates() as [number, number][])
-      : []
-    if (coordinates.length > 0) {
+  protected updateLabelAtPoint(feature: Feature, pointIndex: number): void {
+    if (pointIndex >= 0) {
       const { unit: bufferUnit } = getBufferPropOrDefault(this.properties)
-      const point = coordinates[coordinates.length - 1]
       const json = this.featureToGeo(feature)
       const lengthInBufferUnit = getDistanceFromMeters(
         turf.length(json),
@@ -54,8 +49,17 @@ class LineDrawingControl extends CoordinateListDrawingControl {
         length: lengthInBufferUnit,
       })
       const text = `${this.formatLabelNumber(length)} ${abbreviateUnit(unit)}`
-      this.context.updateLabel(point, text)
+      this.context.updateLabel(this.getPointAtIndex(feature, pointIndex), text)
     }
+  }
+
+  protected getFeatureCoordinates(feature: Feature): [number, number][] {
+    return [
+      ...((feature.getGeometry() as LineString).getCoordinates() as [
+        number,
+        number
+      ][]),
+    ]
   }
 }
 

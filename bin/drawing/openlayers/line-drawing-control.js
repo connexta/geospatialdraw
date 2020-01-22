@@ -55,14 +55,9 @@ var LineDrawingControl = /** @class */ (function (_super) {
     LineDrawingControl.prototype.makeEmptyFeature = function () {
         return new Feature_1.default(new LineString_1.default([[0, 0]]));
     };
-    LineDrawingControl.prototype.updateLabel = function (feature) {
-        var geometry = feature.getGeometry();
-        var coordinates = geometry
-            ? geometry.getCoordinates()
-            : [];
-        if (coordinates.length > 0) {
+    LineDrawingControl.prototype.updateLabelAtPoint = function (feature, pointIndex) {
+        if (pointIndex >= 0) {
             var bufferUnit = utilities_1.getBufferPropOrDefault(this.properties).unit;
-            var point = coordinates[coordinates.length - 1];
             var json = this.featureToGeo(feature);
             var lengthInBufferUnit = distance_1.getDistanceFromMeters(turf.length(json), bufferUnit);
             var _a = measurements_1.optimizedUnitForLength({
@@ -70,8 +65,11 @@ var LineDrawingControl = /** @class */ (function (_super) {
                 length: lengthInBufferUnit,
             }), unit = _a.unit, length_1 = _a.length;
             var text = this.formatLabelNumber(length_1) + " " + units_1.abbreviateUnit(unit);
-            this.context.updateLabel(point, text);
+            this.context.updateLabel(this.getPointAtIndex(feature, pointIndex), text);
         }
+    };
+    LineDrawingControl.prototype.getFeatureCoordinates = function (feature) {
+        return feature.getGeometry().getCoordinates().slice();
     };
     return LineDrawingControl;
 }(coordinate_list_drawing_control_1.default));
