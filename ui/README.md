@@ -15,7 +15,7 @@ Usage `import 'geospatialdraw/bin/...'`
 
 ## Storybook
 
-[Storybook link](https://unpkg.com/geospatialdraw-ui@0.2.0/target/storybook/index.html)
+[Storybook site](https://unpkg.com/geospatialdraw-ui@0.2.0/target/storybook/index.html)
 
 ## Installation
 

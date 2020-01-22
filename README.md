@@ -9,7 +9,7 @@ For the map interface a suit of classes are provided which create custom interac
 
 Editing the coordinates of the various geometric shapes is supported in the units of Latitude/Longitude in decimal format, degrees minutes seconds format, and coordinates in UTM, UPS, USNG and MGRS. A library of React hooks and functions make the process of developing a UI for editing these coordinates on *GeometryJSON* objects much easier.
 
-# Packages
+## Packages
 
 Usage `import 'geospatialdraw/bin/...'`
 
@@ -22,7 +22,7 @@ Usage `import 'geospatialdraw/bin/...'`
 
 ## Documentation
 
-[Typedoc documentation](https://unpkg.com/geospatialdraw@0.5.5/docs/index.html)
+[Typedoc documentation](https://unpkg.com/geospatialdraw@0.5.6/docs/index.html)
 
 ## UI Components
 

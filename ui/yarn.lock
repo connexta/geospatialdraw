@@ -8117,10 +8117,10 @@ geojson-rbush@2.1.0:
     "@turf/meta" "*"
     rbush "*"
 
-geospatialdraw@0.5.5:
-  version "0.5.5"
-  resolved "https://registry.yarnpkg.com/geospatialdraw/-/geospatialdraw-0.5.5.tgz#ecc862dad8f0d086e1c55766e5a102de2d7771a9"
-  integrity sha512-FL58sw+qaYHcUExa0jLiTeI+3INuzi7c5Nf2nTcvE7bf3MWVo/9TYFhOKBUFkq1QsWG3OemFufmIrBRvVcduIw==
+geospatialdraw@0.5.6:
+  version "0.5.6"
+  resolved "https://registry.yarnpkg.com/geospatialdraw/-/geospatialdraw-0.5.6.tgz#629e663cf5f0701ee2bdbee65791098dd73d8aa6"
+  integrity sha512-uxIxGAzhG7pOrzrVprNdilDPNia+BHOr7ZyMPupDJsvFkFKuLN9fmghWuRgYcD/HQSuryfsRJbasfdKEKsyOFg==
   dependencies:
     "@turf/turf" "5.1.6"
     react "16.9.0"
