@@ -4,8 +4,8 @@ const {
   makeGeometry,
   makeBufferedGeo,
   combineExtents,
-} =  require('../bin/geometry/utilities')
-const { LINE, POINT_RADIUS } = require('../bin/shapes')
+} = require('../distribution/geometry/utilities')
+const { LINE, POINT_RADIUS } = require('../distribution/shapes')
 
 describe('geometry', () => {
   describe('makeBufferedGeo', () => {

@@ -1,5 +1,5 @@
 const { expect } = require('chai')
-const formatting = require('../bin/coordinates/dms-formatting')
+const formatting = require('../distribution/coordinates/dms-formatting')
 
 describe('dms-formatting', () => {
   const positiveDMSList = [

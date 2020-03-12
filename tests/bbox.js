@@ -3,10 +3,10 @@ const {
   geoToBBoxProps,
   coordinatePairToBBox,
   bboxToCoordinatePair,
-} = require('../bin/coordinates/geometry/bbox')
+} = require('../distribution/coordinates/geometry/bbox')
 const { expect } = require('chai')
-const { makeEmptyGeometry } = require('../bin/geometry')
-const { POLYGON } = require('../bin/shapes')
+const { makeEmptyGeometry } = require('../distribution/geometry')
+const { POLYGON } = require('../distribution/shapes')
 
 describe('bboxPropsToGeo', () => {
   it('default', () => {

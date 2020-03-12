@@ -1,5 +1,6 @@
 const { testHook } = require('./lib/react-tests')
-const useCoordinateList = require('../bin/coordinates/react-hooks/coordinate-list').default
+const useCoordinateList = require('../distribution/coordinates/react-hooks/coordinate-list')
+  .default
 const { expect } = require('chai')
 
 describe('useCoordinateList', () => {

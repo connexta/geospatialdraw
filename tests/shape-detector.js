@@ -3,8 +3,14 @@ const Point = require('ol/geom/Point').default
 const Polygon = require('ol/geom/Polygon').default
 const Feature = require('ol/Feature').default
 const { expect } = require('chai')
-const ShapeDetector = require('../bin/shapes/shape-detector').default
-const { LINE, POLYGON, BOUNDING_BOX, POINT_RADIUS, POINT } = require('../bin/shapes')
+const ShapeDetector = require('../distribution/shapes/shape-detector').default
+const {
+  LINE,
+  POLYGON,
+  BOUNDING_BOX,
+  POINT_RADIUS,
+  POINT,
+} = require('../distribution/shapes')
 
 describe('ShapeDetector', () => {
   let shapeDetector = null

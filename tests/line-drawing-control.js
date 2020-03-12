@@ -3,9 +3,10 @@ const Feature = require('ol/Feature').default
 const LineString = require('ol/geom/LineString').default
 const { expect } = require('chai')
 const MockDrawingContext = require('./lib/mock-drawing-context').default
-const LineDrawingControl = require('../bin/drawing/openlayers/line-drawing-control').default
-const { LINE } = require('../bin/shapes')
-const { METERS } = require('../bin/geometry')
+const LineDrawingControl = require('../distribution/drawing/openlayers/line-drawing-control')
+  .default
+const { LINE } = require('../distribution/shapes')
+const { METERS } = require('../distribution/geometry')
 
 describe('LineDrawingControl', () => {
   const makeFeature = () =>

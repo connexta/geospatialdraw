@@ -19,19 +19,17 @@
     "target": "es5",
     "moduleResolution": "node",
     "module": "CommonJS",
-    "outDir": "./bin"
+    "outDir": "./distribution"
   },
   "typedocOptions": {
     "name": "GeospatialDraw",
     "mode": "modules",
-    "out": "./docs",
+    "out": "./distribution/docs",
     "categorizeByGroup": true,
     "excludePrivate": true,
     "excludeProtected": true,
     "stripInternal": true,
-    "exclude": [
-      "**/internal/**"
-    ]
+    "exclude": ["**/internal/**"]
   },
   "include": ["lib/**/*.tsx"],
   "exclude": [
