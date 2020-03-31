@@ -5,8 +5,9 @@ const ExtentInteraction = require('ol/interaction/Extent').default
 const Polygon = require('ol/geom/Polygon').default
 const { expect } = require('chai')
 const MockMap = require('./lib/mock-map').default
-const DrawingContext = require('../bin/drawing/openlayers/drawing-context').default
-const { makeEmptyGeometry } = require('../bin/geometry')
+const DrawingContext = require('../distribution/drawing/openlayers/drawing-context')
+  .default
+const { makeEmptyGeometry } = require('../distribution/geometry')
 
 const DRAW_LAYER_INDEX = 1
 const BUFFER_LAYER_INDEX = 0

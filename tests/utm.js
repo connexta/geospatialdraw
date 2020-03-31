@@ -1,5 +1,7 @@
 const { testHook } = require('./lib/react-tests')
-const { useUTMCoordinates } = require('../bin/coordinates/react-hooks/utm')
+const {
+  useUTMCoordinates,
+} = require('../distribution/coordinates/react-hooks/utm')
 const { expect } = require('chai')
 
 describe('useUTMCoordinates', () => {

@@ -1,6 +1,7 @@
 {
   "name": "geospatialdraw",
   "version": "0.5.7",
+  "private": true,
   "description": "Geospatial Map Drawing Library",
   "types": "bin/index.d.ts",
   "main": "bin/index.js",
@@ -32,15 +33,16 @@
     "node": ">=0.10.5"
   },
   "scripts": {
+    "copy:package": "cpx package.json distribution && json -I -f distribution/package.json -e 'this.private=false'",
     "fmt": "prettier --write '{./lib/**/*.js,./lib/**/*.tsx}'",
     "pretest": "prettier --check '{./lib/**/*.js,./lib/**/*.tsx}'",
     "test": "mocha -r esm -r jsdom-global/register ./tests",
-    "prebuild": "rimraf ./bin && rimraf ./docs",
+    "prebuild": "rimraf ./distribution && yarn copy:package",
     "build": "tsc -p tsconfig.json",
     "build:docs": "typedoc",
     "build:verify": "yarn run fmt && yarn run build && yarn run test",
     "build:all": "yarn run build:verify && yarn run build:docs",
-    "prepublish": "yarn build:all"
+    "publish:npm": "yarn build:all && npm publish distribution"
   },
   "dependencies": {
     "@turf/turf": "5.1.6",
@@ -55,6 +57,7 @@
     "@types/styled-components": "4.1.8",
     "canvas": "2.6.1",
     "chai": "4.2.0",
+    "cpx": "1.5.0",
     "emotion-theming": "10.0.19",
     "emotion": "10.0.23",
     "enzyme-adapter-react-16": "1.15.1",
@@ -62,6 +65,7 @@
     "esm": "3.2.25",
     "jsdom-global": "3.0.2",
     "jsdom": "15.2.1",
+    "json": "9.0.6",
     "mocha": "7.0.0",
     "ol": "6.0.1",
     "prettier": "1.19.1",

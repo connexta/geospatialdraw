@@ -1,5 +1,6 @@
 const { testHook } = require('./lib/react-tests')
-const useDMSCoordinates = require('../bin/coordinates/react-hooks/dms').default
+const useDMSCoordinates = require('../distribution/coordinates/react-hooks/dms')
+  .default
 const { expect } = require('chai')
 
 describe('useDMSCoordinates', () => {

@@ -1,6 +1,7 @@
 const { testHook } = require('./lib/react-tests')
 const { expect } = require('chai')
-const useNumberInput = require('../bin/coordinates/react-hooks/number').default
+const useNumberInput = require('../distribution/coordinates/react-hooks/number')
+  .default
 
 describe('useNumberInput', () => {
   it('no constraints', () => {

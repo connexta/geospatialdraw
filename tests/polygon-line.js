@@ -4,10 +4,10 @@ const {
   linePropsToGeo,
   geoToPolygonProps,
   geoToLineProps,
-} = require('../bin/coordinates/geometry/polygon-line')
+} = require('../distribution/coordinates/geometry/polygon-line')
 const { expect } = require('chai')
-const { makeEmptyGeometry, METERS } = require('../bin/geometry')
-const { POLYGON, LINE } = require('../bin/shapes')
+const { makeEmptyGeometry, METERS } = require('../distribution/geometry')
+const { POLYGON, LINE } = require('../distribution/shapes')
 
 describe('polygonPropsToGeo', () => {
   it('default', () => {

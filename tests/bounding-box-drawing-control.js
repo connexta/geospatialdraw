@@ -1,9 +1,10 @@
 require('./lib/ol-tests')
 const { expect } = require('chai')
 const MockDrawingContext = require('./lib/mock-drawing-context').default
-const BoundingBoxDrawingControl = require('../bin/drawing/openlayers/bounding-box-drawing-control').default
-const { BOUNDING_BOX, POLYGON } = require('../bin/shapes')
-const { METERS } = require('../bin/geometry')
+const BoundingBoxDrawingControl = require('../distribution/drawing/openlayers/bounding-box-drawing-control')
+  .default
+const { BOUNDING_BOX, POLYGON } = require('../distribution/shapes')
+const { METERS } = require('../distribution/geometry')
 
 describe('BoundingBoxDrawingControl', () => {
   const makePolygonJSON = () => ({

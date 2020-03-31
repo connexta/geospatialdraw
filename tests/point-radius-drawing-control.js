@@ -4,9 +4,10 @@ const LineString = require('ol/geom/LineString').default
 const turf = require('@turf/turf')
 const { expect } = require('chai')
 const MockDrawingContext = require('./lib/mock-drawing-context').default
-const PointRadiusDrawingControl = require('../bin/drawing/openlayers/point-radius-drawing-control').default
-const { POINT_RADIUS } = require('../bin/shapes')
-const { METERS } = require('../bin/geometry')
+const PointRadiusDrawingControl = require('../distribution/drawing/openlayers/point-radius-drawing-control')
+  .default
+const { POINT_RADIUS } = require('../distribution/shapes')
+const { METERS } = require('../distribution/geometry')
 
 describe('PointRadiusDrawingControl', () => {
   const makeCoordinates = () => [

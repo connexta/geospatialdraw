@@ -1,5 +1,5 @@
 const { expect } = require('chai')
-const Renderer = require('../bin/renderer/renderer').default
+const Renderer = require('../distribution/renderer/renderer').default
 
 describe('-Renderer', () => {
   function MockMap() {

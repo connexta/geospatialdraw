@@ -1,5 +1,6 @@
 const { testHook } = require('./lib/react-tests')
-const useUSNGCoordinates = require('../bin/coordinates/react-hooks/usng').default
+const useUSNGCoordinates = require('../distribution/coordinates/react-hooks/usng')
+  .default
 const { expect } = require('chai')
 
 describe('useUSNGCoordinates', () => {

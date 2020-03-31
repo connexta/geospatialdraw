@@ -5,7 +5,7 @@ const {
   makePointGeo,
   makePointRadiusGeo,
   makePolygonGeo,
-} = require('../bin/geometry/shape-factory')
+} = require('../distribution/geometry/shape-factory')
 
 describe('shape-factory', () => {
   describe('makePointGeo', () => {

@@ -3,10 +3,10 @@ const {
   pointRadiusPropsToGeo,
   geoToPointProps,
   geoToPointRadiusProps,
-} = require('../bin/coordinates/geometry/point-circle')
+} = require('../distribution/coordinates/geometry/point-circle')
 const { expect } = require('chai')
-const { makeEmptyGeometry, MILES, METERS } = require('../bin/geometry')
-const { POINT, POINT_RADIUS } = require('../bin/shapes')
+const { makeEmptyGeometry, MILES, METERS } = require('../distribution/geometry')
+const { POINT, POINT_RADIUS } = require('../distribution/shapes')
 
 describe('pointPropsToGeo', () => {
   it('default', () => {

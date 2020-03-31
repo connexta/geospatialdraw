@@ -1,7 +1,7 @@
 const { testHook } = require('./lib/react-tests')
 const { expect } = require('chai')
-const useGeometryJSONMemo = require('../bin/geometry/memo').default
-const { makeBBoxGeo } = require('../bin/geometry/shape-factory')
+const useGeometryJSONMemo = require('../distribution/geometry/memo').default
+const { makeBBoxGeo } = require('../distribution/geometry/shape-factory')
 const React = require('react').default
 const { useEffect } = require('react')
 
