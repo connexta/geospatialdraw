@@ -1,6 +1,6 @@
 {
   "name": "geospatialdraw",
-  "version": "0.5.7",
+  "version": "0.5.8",
   "private": true,
   "description": "Geospatial Map Drawing Library",
   "types": "bin/index.d.ts",
