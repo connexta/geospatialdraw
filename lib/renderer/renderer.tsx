@@ -86,9 +86,7 @@ class Renderer {
    */
   panToGeoList(geometryList: GeometryJSON[]) {
     if (geometryList.length > 0) {
-      this.panToExtent(
-        combineExtents(geometryList.map(geometry => geometry.bbox))
-      )
+      this.panToExtent(combineExtents(geometryList.map(this.getExtent)))
     }
   }
 
