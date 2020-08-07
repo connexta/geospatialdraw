@@ -69,7 +69,7 @@
     "emotion-theming": "10.0.19",
     "enzyme": "3.10.0",
     "enzyme-adapter-react-16": "1.15.1",
-    "prismjs": "1.17.1",
+    "prismjs": "1.21.0",
     "recompose": "0.30.0",
     "rimraf": "3.0.0",
     "styled-components": "4.3.2",
