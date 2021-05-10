@@ -230,6 +230,8 @@ class PointRadiusDrawingControl extends BasicDrawingControl {
       style: this.getStaticStyle(),
       maxPoints: 2,
       source: this.context.getSource(),
+      condition: ol.events.condition.always,
+      freehandCondition: ol.events.condition.never,
     })
     this.drawingActive = true
     this.context.setModifyInteraction(
