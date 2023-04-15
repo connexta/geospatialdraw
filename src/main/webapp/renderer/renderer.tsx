@@ -1,6 +1,8 @@
 import * as ol from 'openlayers'
 import { GeometryJSON, Extent } from '../geometry'
 import { makeBufferedGeo } from '../geometry'
+import * as _ from 'lodash'
+import { adjustGeoCoordsForAntimeridian } from '../geometry/utilities'
 
 /**
  * Renders Renderable objects on an Open Layers Map
@@ -47,7 +49,12 @@ class Renderer {
   }
 
   private makeGeometryFeature(geometry: GeometryJSON): ol.Feature {
-    const buffered = makeBufferedGeo(geometry)
+    const copy = _.cloneDeep(geometry)
+    adjustGeoCoordsForAntimeridian(copy)
+    const buffered = makeBufferedGeo(copy)
+    // Must adjust the coordinates again because buffering undoes the
+    // adjustments we made above.
+    adjustGeoCoordsForAntimeridian(buffered)
     return this.geoFormat.readFeature(buffered)
   }
 
@@ -113,12 +120,22 @@ class Renderer {
   }
 
   private getExtent(geometry: GeometryJSON): Extent {
+    let extent
     if (geometry.bbox) {
-      return geometry.bbox
+      extent = _.clone(geometry.bbox)
     } else {
       const feature = this.geoFormat.readFeature(geometry)
-      return feature.getGeometry().getExtent()
+      extent = _.clone(feature.getGeometry().getExtent())
     }
+    const minX = extent[0]
+    const maxX = extent[2]
+    const width = Math.abs(maxX - minX)
+    const crossesAntimeridian = width > 180
+    if (crossesAntimeridian) {
+      extent[0] = maxX
+      extent[2] = minX + 360
+    }
+    return extent
   }
 
   /**
