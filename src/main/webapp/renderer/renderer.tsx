@@ -119,7 +119,7 @@ class Renderer {
     })
   }
 
-  private getExtent(geometry: GeometryJSON): Extent {
+  getExtent(geometry: GeometryJSON): Extent {
     let extent
     if (geometry.bbox) {
       extent = _.clone(geometry.bbox)
