@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import { makeGeometry } from './utilities'
+import { makeGeometry, adjustGeoCoordsForAntimeridian } from './utilities'
 
 describe('geometry', () => {
   describe('makeGeometry', () => {
@@ -103,6 +103,36 @@ describe('geometry', () => {
       expect(geometry.bbox[1]).to.equal(30)
       expect(geometry.bbox[2]).to.equal(10)
       expect(geometry.bbox[3]).to.equal(30)
+    })
+  })
+  describe('adjustGeoCoordsForAntimeridian', () => {
+    it('adjusts LineStrings that cross the antimeridian', () => {
+      const geometry = makeGeometry(
+        'identifier',
+        {
+          type: 'LineString',
+          coordinates: [[170, 0], [-170, 0]],
+        },
+        'purple',
+        'Line'
+      )
+      adjustGeoCoordsForAntimeridian(geometry)
+      expect(geometry.geometry.coordinates).to.deep.equal([[170, 0], [190, 0]])
+    })
+    it('adjusts Polygons that cross the antimeridian', () => {
+      const geometry = makeGeometry(
+        'identifier',
+        {
+          type: 'Polygon',
+          coordinates: [[[170, 0], [170, 10], [-170, 10], [-170, 0], [170, 0]]],
+        },
+        'purple',
+        'Polygon'
+      )
+      adjustGeoCoordsForAntimeridian(geometry)
+      expect(geometry.geometry.coordinates).to.deep.equal([
+        [[170, 0], [170, 10], [190, 10], [190, 0], [170, 0]],
+      ])
     })
   })
 })

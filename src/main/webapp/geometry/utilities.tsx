@@ -1,4 +1,5 @@
 import * as turf from '@turf/turf'
+import { Position, Polygon, LineString } from '@turf/turf'
 import * as _ from 'lodash'
 import { Shape } from '../shape-utils'
 import { LengthUnit, METERS } from './units'
@@ -165,10 +166,44 @@ const geoToExtent = (geo: GeometryJSON): Extent => {
   return bboxToExtent(turf.bbox(geo))
 }
 
+const convertCoordsToDisplay = (coordinates: Position[]) => {
+  const coords = _.cloneDeep(coordinates)
+  coords.forEach(coord => {
+    if (coord[0] < 0) {
+      coord[0] += 360
+    }
+  })
+  return coords
+}
+
+/**
+ * If the geo crosses the antimeridian, this will updates its coordinates so
+ * that no longitudes are negative. Typically used before displaying a geo on
+ * a map. The coordinates are updated in place.
+ *
+ * @param geo - GeometryJSON object
+ */
+const adjustGeoCoordsForAntimeridian = (geo: GeometryJSON) => {
+  const geometry = geo.geometry
+  const bbox = geo.bbox || turf.bbox(geo.geometry)
+  const width = Math.abs(bbox[0] - bbox[2])
+  const crossesAntimeridian = width > 180
+  if (crossesAntimeridian) {
+    if (geometry.type === 'LineString') {
+      const lineStringCoords = (geometry as LineString).coordinates
+      geometry.coordinates = convertCoordsToDisplay(lineStringCoords)
+    } else if (geometry.type === 'Polygon') {
+      const coords = (geometry as Polygon).coordinates[0]
+      geometry.coordinates[0] = convertCoordsToDisplay(coords)
+    }
+  }
+}
+
 export {
   bboxToExtent,
   geoToExtent,
   makeGeometry,
   makeBufferedGeo,
   makeEmptyGeometry,
+  adjustGeoCoordsForAntimeridian,
 }

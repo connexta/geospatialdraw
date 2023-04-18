@@ -1,5 +1,6 @@
 import * as ol from 'openlayers'
 import { GeometryJSON, makeBufferedGeo } from '../geometry'
+import { adjustGeoCoordsForAntimeridian } from '../geometry/utilities'
 
 type EventHandler = (e: any) => void
 
@@ -78,7 +79,10 @@ class DrawingContext {
 
   updateFeature(feature: ol.Feature): void {
     this.removeFeature()
-    this.drawLayer.getSource().addFeature(feature)
+    const geo: GeometryJSON = JSON.parse(this.geoFormat.writeFeature(feature))
+    adjustGeoCoordsForAntimeridian(geo)
+    const adjustedFeature = this.geoFormat.readFeature(geo)
+    this.drawLayer.getSource().addFeature(adjustedFeature)
   }
 
   updateBufferFeature(feature: ol.Feature, animate: boolean = true): void {
@@ -86,7 +90,11 @@ class DrawingContext {
     const buffer: number | undefined = feature.get('buffer')
     if (buffer !== undefined && buffer > 0) {
       const geo: GeometryJSON = JSON.parse(this.geoFormat.writeFeature(feature))
+      adjustGeoCoordsForAntimeridian(geo)
       const bufferedGeo = makeBufferedGeo(geo)
+      // Must adjust the coordinates again because buffering undoes the
+      // adjustments we made above.
+      adjustGeoCoordsForAntimeridian(bufferedGeo)
       const bufferFeature = this.geoFormat.readFeature(bufferedGeo)
       this.bufferLayer.getSource().addFeature(bufferFeature)
       if (animate) {

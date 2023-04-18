@@ -111,4 +111,13 @@ define('-Renderer', () => {
       expect(map.layer.getSource().getFeatures().length).to.equal(0)
     })
   })
+  define('getExtent', () => {
+    it('adjusts for antimeridian crossing', () => {
+      const map = new MockMap()
+      const renderer = new Renderer(map)
+      const bbox = [-170, 0, 170, 10]
+      const extent = renderer.getExtent({ bbox })
+      expect(extent).to.deep.equal([170, 0, 190, 10])
+    })
+  })
 })
