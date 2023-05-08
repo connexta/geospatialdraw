@@ -1,8 +1,15 @@
 import * as ol from 'openlayers'
-import { GeometryJSON, Extent } from '../geometry'
+import { GeometryJSON, Extent, LengthUnit, Geometry } from '../geometry'
 import { makeBufferedGeo } from '../geometry'
 import * as _ from 'lodash'
 import { adjustGeoCoordsForAntimeridian } from '../geometry/utilities'
+
+type BufferedGeo = {
+  buffered: GeometryJSON
+  original: Geometry
+  buffer?: number
+  bufferUnit: LengthUnit
+}
 
 /**
  * Renders Renderable objects on an Open Layers Map
@@ -12,6 +19,7 @@ class Renderer {
   private vectorLayer: ol.layer.Vector
   private geoFormat: ol.format.GeoJSON
   private maxZoom: number
+  private bufferCache: { [id: string]: BufferedGeo }
 
   /**
    * Constructs renderer
@@ -36,6 +44,7 @@ class Renderer {
     })
     this.vectorLayer.setStyle(style)
     this.map.addLayer(this.vectorLayer)
+    this.bufferCache = {}
   }
 
   /**
@@ -48,10 +57,31 @@ class Renderer {
     }
   }
 
+  private getBufferedGeo(geometry: GeometryJSON): GeometryJSON {
+    const cached = this.bufferCache[geometry.properties.id]
+    if (
+      cached &&
+      _.isEqual(cached.original.coordinates, geometry.geometry.coordinates) &&
+      cached.buffer === geometry.properties.buffer &&
+      cached.bufferUnit === geometry.properties.bufferUnit
+    ) {
+      return cached.buffered
+    } else {
+      const bufferedGeo = makeBufferedGeo(geometry)
+      this.bufferCache[geometry.properties.id] = {
+        original: geometry.geometry,
+        buffered: bufferedGeo,
+        buffer: geometry.properties.buffer,
+        bufferUnit: geometry.properties.bufferUnit,
+      }
+      return bufferedGeo
+    }
+  }
+
   private makeGeometryFeature(geometry: GeometryJSON): ol.Feature {
     const copy = _.cloneDeep(geometry)
     adjustGeoCoordsForAntimeridian(copy)
-    const buffered = makeBufferedGeo(copy)
+    const buffered = this.getBufferedGeo(copy)
     // Must adjust the coordinates again because buffering undoes the
     // adjustments we made above.
     adjustGeoCoordsForAntimeridian(buffered)
