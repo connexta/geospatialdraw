@@ -52,9 +52,9 @@ class Renderer {
    * @param geometryList - array of geometry JSON
    */
   renderList(geometryList: GeometryJSON[]): void {
-    for (const geometry of geometryList) {
-      this.addGeo(geometry)
-    }
+    const boundMakeGeometryFeature = this.makeGeometryFeature.bind(this)
+    const features = geometryList.map(boundMakeGeometryFeature) as ol.Feature[]
+    this.vectorLayer.getSource().addFeatures(features)
   }
 
   private getBufferedGeo(geometry: GeometryJSON): GeometryJSON {
@@ -85,7 +85,9 @@ class Renderer {
     // Must adjust the coordinates again because buffering undoes the
     // adjustments we made above.
     adjustGeoCoordsForAntimeridian(buffered)
-    return this.geoFormat.readFeature(buffered)
+    const feature = this.geoFormat.readFeature(buffered)
+    feature.setId(geometry.properties.id)
+    return feature
   }
 
   /**
@@ -94,7 +96,6 @@ class Renderer {
    */
   addGeo(geometry: GeometryJSON): void {
     const feature = this.makeGeometryFeature(geometry)
-    feature.setId(geometry.properties.id)
     // Note: In the future we may want to optimize performance
     // here by using feature ids to update only what has
     // changed and remove only what has been removed.
