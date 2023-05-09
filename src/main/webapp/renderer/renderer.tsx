@@ -1,8 +1,15 @@
 import * as ol from 'openlayers'
-import { GeometryJSON, Extent } from '../geometry'
+import { GeometryJSON, Extent, LengthUnit, Geometry } from '../geometry'
 import { makeBufferedGeo } from '../geometry'
 import * as _ from 'lodash'
 import { adjustGeoCoordsForAntimeridian } from '../geometry/utilities'
+
+type BufferedGeo = {
+  buffered: GeometryJSON
+  original: Geometry
+  buffer?: number
+  bufferUnit: LengthUnit
+}
 
 /**
  * Renders Renderable objects on an Open Layers Map
@@ -12,6 +19,7 @@ class Renderer {
   private vectorLayer: ol.layer.Vector
   private geoFormat: ol.format.GeoJSON
   private maxZoom: number
+  private bufferCache: { [id: string]: BufferedGeo }
 
   /**
    * Constructs renderer
@@ -36,6 +44,7 @@ class Renderer {
     })
     this.vectorLayer.setStyle(style)
     this.map.addLayer(this.vectorLayer)
+    this.bufferCache = {}
   }
 
   /**
@@ -43,19 +52,42 @@ class Renderer {
    * @param geometryList - array of geometry JSON
    */
   renderList(geometryList: GeometryJSON[]): void {
-    for (const geometry of geometryList) {
-      this.addGeo(geometry)
+    const boundMakeGeometryFeature = this.makeGeometryFeature.bind(this)
+    const features = geometryList.map(boundMakeGeometryFeature) as ol.Feature[]
+    this.vectorLayer.getSource().addFeatures(features)
+  }
+
+  private getBufferedGeo(geometry: GeometryJSON): GeometryJSON {
+    const cached = this.bufferCache[geometry.properties.id]
+    if (
+      cached &&
+      _.isEqual(cached.original.coordinates, geometry.geometry.coordinates) &&
+      cached.buffer === geometry.properties.buffer &&
+      cached.bufferUnit === geometry.properties.bufferUnit
+    ) {
+      return cached.buffered
+    } else {
+      const bufferedGeo = makeBufferedGeo(geometry)
+      this.bufferCache[geometry.properties.id] = {
+        original: geometry.geometry,
+        buffered: bufferedGeo,
+        buffer: geometry.properties.buffer,
+        bufferUnit: geometry.properties.bufferUnit,
+      }
+      return bufferedGeo
     }
   }
 
   private makeGeometryFeature(geometry: GeometryJSON): ol.Feature {
     const copy = _.cloneDeep(geometry)
     adjustGeoCoordsForAntimeridian(copy)
-    const buffered = makeBufferedGeo(copy)
+    const buffered = this.getBufferedGeo(copy)
     // Must adjust the coordinates again because buffering undoes the
     // adjustments we made above.
     adjustGeoCoordsForAntimeridian(buffered)
-    return this.geoFormat.readFeature(buffered)
+    const feature = this.geoFormat.readFeature(buffered)
+    feature.setId(geometry.properties.id)
+    return feature
   }
 
   /**
@@ -64,7 +96,6 @@ class Renderer {
    */
   addGeo(geometry: GeometryJSON): void {
     const feature = this.makeGeometryFeature(geometry)
-    feature.setId(geometry.properties.id)
     // Note: In the future we may want to optimize performance
     // here by using feature ids to update only what has
     // changed and remove only what has been removed.
