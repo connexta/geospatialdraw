@@ -65,6 +65,7 @@ class Renderer {
       cached.buffer === geometry.properties.buffer &&
       cached.bufferUnit === geometry.properties.bufferUnit
     ) {
+      cached.buffered.properties.color = geometry.properties.color
       return cached.buffered
     } else {
       const bufferedGeo = makeBufferedGeo(geometry)
