@@ -52,6 +52,7 @@
     "@fortawesome/fontawesome-svg-core": "1.2.21",
     "@fortawesome/free-solid-svg-icons": "5.10.1",
     "@fortawesome/react-fontawesome": "0.1.4",
+    "@turf/buffer": "6.5.0",
     "@turf/nearest-point-to-line": "6.0.0",
     "@turf/point-to-line-distance": "6.0.0",
     "@turf/turf": "5.1.6",

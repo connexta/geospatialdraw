@@ -1,5 +1,6 @@
 import * as turf from '@turf/turf'
 import { Position, Polygon, LineString } from '@turf/turf'
+import buffer from '@turf/buffer'
 import * as _ from 'lodash'
 import { Shape } from '../shape-utils'
 import { LengthUnit, METERS } from './units'
@@ -124,7 +125,7 @@ const makeBufferedGeo = (geo: GeometryJSON): GeometryJSON => {
         bufferedGeo = geo
       }
     } else {
-      bufferedGeo = turf.buffer(geo, radius, {
+      bufferedGeo = buffer(geo, radius, {
         units: 'meters',
       })
     }
