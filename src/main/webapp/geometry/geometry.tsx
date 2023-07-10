@@ -37,7 +37,7 @@ type GeometryJSONProperties = {
 const DEFAULT_PROPERTIES: GeometryJSONProperties = {
   shape: 'Polygon',
   id: '',
-  color: 'blue',
+  color: '#996600',
   buffer: 0,
   bufferUnit: METERS,
 }

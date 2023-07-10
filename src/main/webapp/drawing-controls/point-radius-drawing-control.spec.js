@@ -14,7 +14,7 @@ describe('PointRadiusDrawingControl', () => {
   const makeFeature = () =>
     new ol.Feature({
       geometry: new ol.geom.LineString(makeCoordinates()),
-      color: 'blue',
+      color: '#996600',
       shape: 'Point Radius',
       buffer: 70,
       bufferUnit: 'meters',
@@ -23,7 +23,7 @@ describe('PointRadiusDrawingControl', () => {
   const makeGeoJSON = () => ({
     type: 'Feature',
     properties: {
-      color: 'blue',
+      color: '#996600',
       shape: 'Point Radius',
       buffer: 70,
       bufferUnit: 'meters',

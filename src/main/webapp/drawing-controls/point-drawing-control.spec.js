@@ -7,7 +7,7 @@ describe('PointDrawingControl', () => {
   const makeFeature = () =>
     new ol.Feature({
       geometry: new ol.geom.Point([50, 50]),
-      color: 'blue',
+      color: '#996600',
       shape: 'Point',
       id: '',
       buffer: 0,
@@ -16,7 +16,7 @@ describe('PointDrawingControl', () => {
   const makeGeoJSON = () => ({
     type: 'Feature',
     properties: {
-      color: 'blue',
+      color: '#996600',
       shape: 'Point',
       id: '',
       buffer: 0,
