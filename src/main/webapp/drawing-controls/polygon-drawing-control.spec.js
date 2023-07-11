@@ -7,7 +7,7 @@ describe('PolygonDrawingControl', () => {
   const makeFeature = () =>
     new ol.Feature({
       geometry: new ol.geom.Polygon([[[50, 50], [10, 10], [20, 20], [50, 50]]]),
-      color: 'blue',
+      color: '#996600',
       shape: 'Polygon',
       id: '',
       buffer: 0,
@@ -16,7 +16,7 @@ describe('PolygonDrawingControl', () => {
   const makeGeoJSON = () => ({
     type: 'Feature',
     properties: {
-      color: 'blue',
+      color: '#996600',
       shape: 'Polygon',
       id: '',
       buffer: 0,
@@ -63,7 +63,7 @@ describe('PolygonDrawingControl', () => {
         feature: makeFeature(),
       })
       const expected = makeGeoJSON()
-      expected.properties.color = 'blue'
+      expected.properties.color = '#996600'
       expect(recievedGeo).to.deep.equal(expected)
     })
   })

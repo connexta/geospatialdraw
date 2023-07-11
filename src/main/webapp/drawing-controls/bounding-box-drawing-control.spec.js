@@ -6,7 +6,7 @@ describe('BoundingBoxDrawingControl', () => {
   const makePolygonJSON = () => ({
     type: 'Feature',
     properties: {
-      color: 'blue',
+      color: '#996600',
       shape: 'Bounding Box',
       id: 'identifier',
       buffer: 0,
@@ -76,7 +76,7 @@ describe('BoundingBoxDrawingControl', () => {
     const makeExpectedJSON = () => ({
       type: 'Feature',
       properties: {
-        color: 'blue',
+        color: '#996600',
         shape: 'Bounding Box',
         id: '',
         buffer: 0,
@@ -115,7 +115,7 @@ describe('BoundingBoxDrawingControl', () => {
       })
       const expected = makeExpectedJSON()
       expected.properties.id = 'identifier'
-      expected.properties.color = 'blue'
+      expected.properties.color = '#996600'
       expect(updated).to.deep.equal(expected)
     })
   })

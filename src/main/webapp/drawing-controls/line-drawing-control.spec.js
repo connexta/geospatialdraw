@@ -7,7 +7,7 @@ describe('LineDrawingControl', () => {
   const makeFeature = () =>
     new ol.Feature({
       geometry: new ol.geom.LineString([[50, 50], [10, 10], [20, 20]]),
-      color: 'blue',
+      color: '#996600',
       shape: 'Line',
       id: '',
       buffer: 0,
@@ -16,7 +16,7 @@ describe('LineDrawingControl', () => {
   const makeGeoJSON = () => ({
     type: 'Feature',
     properties: {
-      color: 'blue',
+      color: '#996600',
       shape: 'Line',
       id: '',
       buffer: 0,
@@ -62,7 +62,7 @@ describe('LineDrawingControl', () => {
         feature: makeFeature(),
       })
       const expected = makeGeoJSON()
-      expected.properties.color = 'blue'
+      expected.properties.color = '#996600'
       expect(recievedGeo).to.deep.equal(expected)
     })
   })

@@ -28,7 +28,7 @@ define('-Renderer', () => {
           },
           properties: {
             name: 'Dinagat Islands',
-            color: 'blue',
+            color: '#996600',
           },
         },
         {
@@ -65,7 +65,7 @@ define('-Renderer', () => {
         },
         properties: {
           name: 'Dinagat Islands',
-          color: 'blue',
+          color: '#996600',
         },
       })
       expect(map.layer.getSource().getFeatures().length).to.equal(1)
@@ -84,7 +84,7 @@ define('-Renderer', () => {
           },
           properties: {
             name: 'Dinagat Islands',
-            color: 'blue',
+            color: '#996600',
           },
         },
         {
